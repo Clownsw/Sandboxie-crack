@@ -428,6 +428,12 @@ _FX NTSTATUS Conf_Read(ULONG session_id)
         }
     }
 
+    //
+    // cache some config
+    //
+
+    Log_LogMessageEvents = Conf_Get_Boolean(NULL, L"LogMessageEvents", 0, FALSE);
+
     return status;
 }
 
@@ -1013,10 +1019,10 @@ _FX NTSTATUS Conf_Merge_Template(
             }
 
             nset = Mem_Alloc(data->pool, sizeof(CONF_SETTING));
-            nset->from_template = TRUE;
-            nset->template_handled = FALSE;
             if (! nset)
                 return STATUS_INSUFFICIENT_RESOURCES;
+            nset->from_template = TRUE;
+            nset->template_handled = FALSE;
             nset->name = Mem_AllocString(data->pool, oset->name);
             if (! nset->name)
                 return STATUS_INSUFFICIENT_RESOURCES;
@@ -1419,7 +1425,10 @@ _FX NTSTATUS Conf_Api_Reload(PROCESS *proc, ULONG64 *parms)
 
     if (proc)
         return STATUS_NOT_IMPLEMENTED;
-    
+
+    if (!MyIsCallerSigned())
+        return STATUS_ACCESS_DENIED;
+
     flags = (ULONG)parms[2];
 
     if (flags & SBIE_CONF_FLAG_RELOAD_CERT) {
@@ -1502,8 +1511,8 @@ _FX NTSTATUS Conf_Api_Reload(PROCESS *proc, ULONG64 *parms)
             }
         }
 
-        void Syscall_Update_Lockdown();
-        Syscall_Update_Lockdown();
+        void Syscall_Update_Config();
+        Syscall_Update_Config();
 
         /*
 #ifdef HOOK_WIN32K

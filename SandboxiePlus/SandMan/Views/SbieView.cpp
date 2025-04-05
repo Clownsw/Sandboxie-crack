@@ -17,6 +17,7 @@
 #include "../MiscHelpers/Archive/Archive.h"
 #include "../Windows/SettingsWindow.h"
 #include "../Windows/CompressDialog.h"
+#include "../Windows/ExtractDialog.h"
 
 #include "qt_windows.h"
 #include "qwindowdefs_win.h"
@@ -197,6 +198,10 @@ void CSbieView::CreateMenu()
 		m_iMenuRun = m_pMenuRun->actions().count();
 	m_pMenuEmptyBox = m_pMenuBox->addAction(CSandMan::GetIcon("EmptyAll"), tr("Terminate All Programs"), this, SLOT(OnSandBoxAction()));
 	m_pMenuBox->addSeparator();
+	m_pMenuMount = m_pMenuBox->addAction(CSandMan::GetIcon("LockOpen"), tr("Mount Box Image"), this, SLOT(OnSandBoxAction()));
+	m_pMenuUnmount = m_pMenuBox->addAction(CSandMan::GetIcon("LockClosed"), tr("Unmount Box Image"), this, SLOT(OnSandBoxAction()));
+	m_pMenuRecover = m_pMenuBox->addAction(CSandMan::GetIcon("Recover"), tr("Recover Files"), this, SLOT(OnSandBoxAction()));
+	m_pMenuCleanUp = m_pMenuBox->addAction(CSandMan::GetIcon("Erase"), tr("Delete Content"), this, SLOT(OnSandBoxAction()));
 	m_pMenuContent = m_pMenuBox->addMenu(CSandMan::GetIcon("Compatibility"), tr("Box Content"));
 		m_pMenuBrowse = m_pMenuContent->addAction(CSandMan::GetIcon("Folder"), tr("Browse Files"), this, SLOT(OnSandBoxAction()));
 		m_pMenuContent->addSeparator();
@@ -206,10 +211,6 @@ void CSbieView::CreateMenu()
 		m_pMenuExplore = m_pMenuContent->addAction(CSandMan::GetIcon("Explore"), tr("Explore Content"), this, SLOT(OnSandBoxAction()));
 		m_pMenuRegEdit = m_pMenuContent->addAction(CSandMan::GetIcon("RegEdit"), tr("Open Registry"), this, SLOT(OnSandBoxAction()));
 	m_pMenuSnapshots = m_pMenuBox->addAction(CSandMan::GetIcon("Snapshots"), tr("Snapshots Manager"), this, SLOT(OnSandBoxAction()));
-	m_pMenuMount = m_pMenuBox->addAction(CSandMan::GetIcon("LockOpen"), tr("Mount Box Image"), this, SLOT(OnSandBoxAction()));
-	m_pMenuUnmount = m_pMenuBox->addAction(CSandMan::GetIcon("LockClosed"), tr("Unmount Box Image"), this, SLOT(OnSandBoxAction()));
-	m_pMenuRecover = m_pMenuBox->addAction(CSandMan::GetIcon("Recover"), tr("Recover Files"), this, SLOT(OnSandBoxAction()));
-	m_pMenuCleanUp = m_pMenuBox->addAction(CSandMan::GetIcon("Erase"), tr("Delete Content"), this, SLOT(OnSandBoxAction()));
 	m_pMenuBox->addSeparator();
 	m_pMenuOptions = m_pMenuBox->addAction(CSandMan::GetIcon("Options"), tr("Sandbox Options"), this, SLOT(OnSandBoxAction()));
 	QFont f = m_pMenuOptions->font();
@@ -241,6 +242,7 @@ void CSbieView::CreateMenu()
 	
 	m_pMenuTools = m_pMenuBox->addMenu(CSandMan::GetIcon("Maintenance"), tr("Sandbox Tools"));
 		m_pMenuDuplicate = m_pMenuTools->addAction(CSandMan::GetIcon("Duplicate"), tr("Duplicate Box Config"), this, SLOT(OnSandBoxAction()));
+		m_pMenuDuplicateEx = m_pMenuTools->addAction(CSandMan::GetIcon("Duplicate"), tr("Duplicate Box with Content"), this, SLOT(OnSandBoxAction()));
 		m_pMenuExport = m_pMenuTools->addAction(CSandMan::GetIcon("PackBox"), tr("Export Box"), this, SLOT(OnSandBoxAction()));
 		m_pMenuExport->setEnabled(CArchive::IsInit());
 
@@ -342,6 +344,7 @@ void CSbieView::CreateOldMenu()
 
 		m_pMenuTools->addSeparator();
 		m_pMenuDuplicate = m_pMenuTools->addAction(CSandMan::GetIcon("Duplicate"), tr("Duplicate Sandbox Config"), this, SLOT(OnSandBoxAction()));
+		m_pMenuDuplicateEx = m_pMenuTools->addAction(CSandMan::GetIcon("Duplicate"), tr("Duplicate Sandbox with Content"), this, SLOT(OnSandBoxAction()));
 		m_pMenuExport = m_pMenuTools->addAction(CSandMan::GetIcon("PackBox"), tr("Export Sandbox"), this, SLOT(OnSandBoxAction()));
 		m_pMenuExport->setEnabled(CArchive::IsInit());
 
@@ -1037,7 +1040,7 @@ QString CSbieView::AddNewBox(bool bAlowTemp)
 
 QString CSbieView::ImportSandbox()
 {
-	QString Path = QFileDialog::getOpenFileName(this, tr("Select file name"), "", tr("7-zip Archive (*.7z)"));
+	QString Path = QFileDialog::getOpenFileName(this, tr("Select file name"), "", tr("7-Zip Archive (*.7z);;Zip Archive (*.zip)"));
 	if (Path.isEmpty())
 		return "";
 
@@ -1071,24 +1074,27 @@ QString CSbieView::ImportSandbox()
 	StrPair PathName = Split2(Path, "/", true);
 	StrPair NameEx = Split2(PathName.second, ".", true);
 	QString Name = NameEx.first;
+	
+	CExtractDialog optWnd(Name, this);
+	if(!Password.isEmpty())
+		optWnd.ShowNoCrypt();
+	if (!theGUI->SafeExec(&optWnd) == 1)
+		return "";
+	Name = optWnd.GetName();
+	QString BoxRoot = optWnd.GetRoot();
 
 	CSandBoxPtr pBox;
-	for (;;) {
-		pBox = theAPI->GetBoxByName(Name);
-		if (pBox.isNull())
-			break;
-		Name = QInputDialog::getText(this, "Sandboxie-Plus", tr("This name is already in use, please select an alternative box name"), QLineEdit::Normal, Name);
-		if (Name.isEmpty())
-			return "";
-	}
-
 	SB_PROGRESS Status = theAPI->CreateBox(Name);
 	if (!Status.IsError()) {
 		pBox = theAPI->GetBoxByName(Name);
 		if (pBox) {
+
 			auto pBoxEx = pBox.objectCast<CSandBoxPlus>();
 
-			if (!Password.isEmpty()) {
+			if (!BoxRoot.isEmpty())
+				pBox->SetFileRoot(BoxRoot);
+
+			if (!Password.isEmpty() && !optWnd.IsNoCrypt()) {
 				Status = pBoxEx->ImBoxCreate(ImageSize / 1024, Password);
 				if (!Status.IsError())
 					Status = pBoxEx->ImBoxMount(Password, true, true);
@@ -1096,8 +1102,12 @@ QString CSbieView::ImportSandbox()
 
 			if (!Status.IsError())
 				Status = pBoxEx->ImportBox(Path, Password);
+
+			// always overwrite restored FileRootPath
+			pBox->SetText("FileRootPath", BoxRoot);
 		}
 	}
+
 	if (Status.GetStatus() == OP_ASYNC) {
 		Status = theGUI->AddAsyncOp(Status.GetValue(), true, tr("Importing: %1").arg(Path));
 		if (Status.IsError()) {
@@ -1137,9 +1147,9 @@ QString CSbieView::AddNewGroup()
 
 bool CSbieView::TestNameAndWarn(const QString& Name)
 {
-	if (Name.contains(QRegularExpression("[,()]")))
+	if (Name.contains(QRegularExpression("[,()\r\n\t]")))
 	{
-		QMessageBox::critical(this, "Sandboxie-Plus", tr("The Sandbox name and Box Group name cannot use the ',()' symbol."));
+		QMessageBox::critical(this, "Sandboxie-Plus", tr("The Sandbox name and Box Group name cannot use the ',()' symbol or control characters."));
 		return false;
 	}
 
@@ -1168,6 +1178,25 @@ void CSbieView::OnSandBoxAction(QAction* pAction)
 
 void CSbieView::OnSandBoxAction(QAction* Action, const QList<CSandBoxPtr>& SandBoxes)
 {
+	auto RenderSandboxNameList_ = [&,this](const QList<CSandBoxPtr>& SandBoxes, int max_displayed = 10) -> QString
+	{
+		QString name_list = "";
+		for (int i = 0; i < SandBoxes.count() && i < max_displayed; i++)
+		{
+			if (i != 0) name_list.append("<br />");
+			name_list.append(QString::fromWCharArray(L"\u2022 ")); // Unicode bullet
+			name_list.append("<b>" + SandBoxes[i]->GetName().replace("_", " ") + "</b>");
+		}
+		if (SandBoxes.count() > max_displayed) 
+		{
+			name_list.append(tr("<br />"));
+			name_list.append(QString::fromWCharArray(L"\u2022 ")); // Unicode bullet
+			name_list.append(tr("... and %1 more").arg(SandBoxes.count() - max_displayed));
+		}
+			
+		return name_list;
+	};
+
 	QList<SB_STATUS> Results;
 
 	if (SandBoxes.isEmpty())
@@ -1275,7 +1304,7 @@ void CSbieView::OnSandBoxAction(QAction* Action, const QList<CSandBoxPtr>& SandB
 				theConf->SetValue("Options/ExplorerInfo", false);
 		}
 
-		::ShellExecute(NULL, NULL, SandBoxes.first()->GetFileRoot().toStdWString().c_str(), NULL, NULL, SW_SHOWNORMAL);
+		::ShellExecuteW(NULL, NULL, SandBoxes.first()->GetFileRoot().toStdWString().c_str(), NULL, NULL, SW_SHOWNORMAL);
 	}
 	else if (Action == m_pMenuRegEdit)
 	{
@@ -1287,7 +1316,7 @@ void CSbieView::OnSandBoxAction(QAction* Action, const QList<CSandBoxPtr>& SandB
  		if (theConf->GetInt("Options/WarnOpenRegistry", -1) == -1)
 		{
 			bool State = false;
-			if (CCheckableMessageBox::question(this, "Sandboxie-Plus", tr("WARNING: The opened registry editor is not sandboxed, please be careful and only do changes to the pre-selected sandbox locations.")
+			if (CCheckableMessageBox::question(this, "Sandboxie-Plus", tr("WARNING: The opened registry editor is not sandboxed, please be careful and only do changes to the preselected sandbox locations.")
 			  , tr("Don't show this warning in future"), &State, QDialogButtonBox::Ok | QDialogButtonBox::Cancel, QDialogButtonBox::Yes, QMessageBox::Information) != QDialogButtonBox::Ok)
 				return;
 
@@ -1309,9 +1338,9 @@ void CSbieView::OnSandBoxAction(QAction* Action, const QList<CSandBoxPtr>& SandB
 		if (SandBoxes.first()->GetActiveProcessCount() == 0)
 			params += L" \"" + theAPI->GetStartPath().toStdWString() + L" /box:" + SandBoxes.first()->GetName().toStdWString() + L" mount_hive\"";
 
-		SHELLEXECUTEINFO shex;
-		memset(&shex, 0, sizeof(SHELLEXECUTEINFO));
-		shex.cbSize = sizeof(SHELLEXECUTEINFO);
+		SHELLEXECUTEINFOW shex;
+		memset(&shex, 0, sizeof(shex));
+		shex.cbSize = sizeof(shex);
 		shex.fMask = SEE_MASK_FLAG_NO_UI;
 		shex.hwnd = NULL;
 		shex.lpFile = path.c_str();
@@ -1319,7 +1348,7 @@ void CSbieView::OnSandBoxAction(QAction* Action, const QList<CSandBoxPtr>& SandB
 		shex.nShow = SW_SHOWNORMAL;
 		shex.lpVerb = L"runas";
 
-		ShellExecuteEx(&shex);
+		ShellExecuteExW(&shex);
 	}
 	else if (Action == m_pMenuSnapshots)
 	{
@@ -1341,43 +1370,46 @@ void CSbieView::OnSandBoxAction(QAction* Action, const QList<CSandBoxPtr>& SandB
 			SetForegroundWindow((HWND)pSnapshotsWindow->winId());
 		}
 	}
-	else if (Action == m_pMenuDuplicate)
+	else if (Action == m_pMenuDuplicate || Action == m_pMenuDuplicateEx)
 	{
-		QString OldValue = SandBoxes.first()->GetName().replace("_", " ");
+		CSandBoxPtr pSrcBox = theAPI->GetBoxByName(SandBoxes.first()->GetName());
+		if (!pSrcBox) return;
+
+		QString OldValue = pSrcBox->GetName().replace("_", " ");
 		QString Value = QInputDialog::getText(this, "Sandboxie-Plus", tr("Please enter a new name for the duplicated Sandbox."), QLineEdit::Normal, tr("%1 Copy").arg(OldValue));
 		if (Value.isEmpty() || Value == OldValue)
 			return;
 		
 		QString Name = Value.replace(" ", "_");
 		SB_STATUS Status = theAPI->CreateBox(Name, false);
-
+		
 		if (!Status.IsError())
 		{
-			CSandBoxPtr pBox = theAPI->GetBoxByName(Value);
-
-			QList<QPair<QString, QString>> Settings;
-			CSandBoxPtr pSrcBox = theAPI->GetBoxByName(SandBoxes.first()->GetName());
-			qint32 status = 0;
-			if (!pSrcBox.isNull()) Settings = pSrcBox->GetIniSection(&status);
-			if (Settings.isEmpty())
-				Status = SB_ERR(SB_FailedCopyConf, QVariantList() << SandBoxes.first()->GetName() << (quint32)status);
-			else
-			{
-				for (QList<QPair<QString, QString>>::iterator I = Settings.begin(); I != Settings.end(); ++I)
-				{
-					if (I->first == "FileRootPath" && !I->second.toUpper().contains("%SANDBOX%"))
-						continue; // skip the FileRootPath if it does not contain a %SANDBOX% 
-
-					Status = theAPI->SbieIniSet(Name, I->first, I->second, CSbieAPI::eIniAppend, false);
-					if (Status.IsError())
-						break;
-				}
-			}
-
-			theAPI->CommitIniChanges();
+			QString Section; 
+			Section = theAPI->SbieIniGetEx(pSrcBox->GetName(), "");
+			Status = theAPI->SbieIniSet(Name, "", Section);
 			theAPI->ReloadBoxes(true);
 		}
 
+		CSandBoxPtr pDestBox;
+		if (!Status.IsError())
+		{
+			pDestBox = theAPI->GetBoxByName(Name);
+			if(!pDestBox)
+				Status = SB_ERR(SB_FailedCopyConf, QVariantList() << SandBoxes.first()->GetName() << tr("Not Created"));
+		}
+
+		if (Action == m_pMenuDuplicateEx && !Status.IsError())
+		{
+			auto pSrcBoxEx = pSrcBox.objectCast<CSandBoxPlus>();
+			SB_PROGRESS Progress = pSrcBoxEx->CopyBox(pDestBox->GetFileRoot());
+
+			if (Progress.GetStatus() == OP_ASYNC)
+				Status = theGUI->AddAsyncOp(Progress.GetValue(), false, tr("Copying: %1").arg(Value));
+			else
+				Status = Progress;
+		}
+		
 		Results.append(Status);
 	}
 	else if (Action == m_pMenuExport)
@@ -1399,7 +1431,7 @@ void CSbieView::OnSandBoxAction(QAction* Action, const QList<CSandBoxPtr>& SandB
 			Password = pwWnd.GetPassword();
 		}
 
-		QString Path = QFileDialog::getSaveFileName(this, tr("Select file name"), SandBoxes.first()->GetName() + ".7z", tr("7-zip Archive (*.7z)"));	
+		QString Path = QFileDialog::getSaveFileName(this, tr("Select file name"), SandBoxes.first()->GetName() + optWnd.GetFormat(), tr("7-Zip Archive (*.7z);;Zip Archive (*.zip)"));
 		if (Path.isEmpty())
 			return;
 
@@ -1465,7 +1497,9 @@ void CSbieView::OnSandBoxAction(QAction* Action, const QList<CSandBoxPtr>& SandB
 	}
 	else if (Action == m_pMenuRemove)
 	{
-		if (QMessageBox("Sandboxie-Plus", tr("Do you really want to remove the selected sandbox(es)?<br /><br />Warning: The box content will also be deleted!"), QMessageBox::Warning, QMessageBox::Yes, QMessageBox::No | QMessageBox::Default | QMessageBox::Escape, QMessageBox::NoButton, this).exec() != QMessageBox::Yes)
+		QString message = tr("Do you really want to remove the following sandbox(es)?<br /><br />%1<br /><br />Warning: The box content will also be deleted!")
+			.arg(RenderSandboxNameList_(SandBoxes));
+		if (QMessageBox("Sandboxie-Plus", message, QMessageBox::Warning, QMessageBox::Yes, QMessageBox::No | QMessageBox::Default | QMessageBox::Escape, QMessageBox::NoButton, this).exec() != QMessageBox::Yes)
 			return;
 
 		bool bChanged = false;
@@ -1526,24 +1560,32 @@ void CSbieView::OnSandBoxAction(QAction* Action, const QList<CSandBoxPtr>& SandB
 				if(!theGUI->OpenRecovery(SandBoxes.first(), DeleteSnapshots))
 					return;
 			}
-			else {
-				if (SandBoxes.first()->HasSnapshots()) {
-					if(CCheckableMessageBox::question(this, "Sandboxie-Plus", tr("Do you want to delete the content of the selected sandbox?")
+			else
+			{
+				QString message = tr("Do you want to delete the content of the following sandbox?<br /><br />%1")
+					.arg(RenderSandboxNameList_(SandBoxes));
+				
+				if (SandBoxes.first()->HasSnapshots())
+				{
+					if(CCheckableMessageBox::question(this, "Sandboxie-Plus", message
 					, tr("Also delete all Snapshots"), &DeleteSnapshots, QDialogButtonBox::Yes | QDialogButtonBox::No, QDialogButtonBox::Yes) != QDialogButtonBox::Yes)
 						return;
 				}
-				else {
-					if(QMessageBox::question(this, "Sandboxie-Plus", tr("Do you want to delete the content of the selected sandbox?")
-					, QMessageBox::Yes, QMessageBox::No) != QMessageBox::Yes)
+				else
+				{
+					if(QMessageBox::question(this, "Sandboxie-Plus", message , QMessageBox::Yes, QMessageBox::No) != QMessageBox::Yes)
 						return;
 				}
 			}
-
-			
 		}
-		else if(CCheckableMessageBox::question(this, "Sandboxie-Plus", tr("Do you really want to delete the content of all selected sandboxes?")
-			, tr("Also delete all Snapshots"), &DeleteSnapshots, QDialogButtonBox::Yes | QDialogButtonBox::No, QDialogButtonBox::Yes) != QDialogButtonBox::Yes)
+		else
+		{
+			QString message = tr("Do you really want to delete the content of the following sandboxes?<br /><br />%1")
+				.arg(RenderSandboxNameList_(SandBoxes));
+			if(CCheckableMessageBox::question(this, "Sandboxie-Plus", message
+				, tr("Also delete all Snapshots"), &DeleteSnapshots, QDialogButtonBox::Yes | QDialogButtonBox::No, QDialogButtonBox::Yes) != QDialogButtonBox::Yes)
 				return;
+		}
 
 		foreach(const CSandBoxPtr& pBox, SandBoxes)
 		{
@@ -1699,7 +1741,7 @@ void CSbieView::OnProcessAction(QAction* Action, const QList<CBoxedProcessPtr>& 
 				Entry["Name"] = pProcess->GetProcessName();
 				Entry["WorkingDir"] = pProcess->GetWorkingDir();
 				Entry["Command"] = pBoxPlus->MakeBoxCommand(pProcess->GetFileName());
-				pBoxPlus->InsertText("RunCommand", MakeRunEntry(Entry));
+				pBoxPlus->AppendText("RunCommand", MakeRunEntry(Entry));
 			}
 			else if(!m_pMenuPinToRun->data().toString().isEmpty())
 				pBoxPlus->DelValue("RunCommand", m_pMenuPinToRun->data().toString());
@@ -1974,7 +2016,7 @@ void CSbieView::OnMenuContextAction()
 		QString Link = m_pCtxPinToRun->data().toString();
 		if (!Link.isEmpty()) {
 			if (m_pCtxPinToRun->isChecked())
-				pBoxPlus->InsertText("RunCommand", Link);
+				pBoxPlus->AppendText("RunCommand", Link);
 			else
 				pBoxPlus->DelValue("RunCommand", Link);
 		}

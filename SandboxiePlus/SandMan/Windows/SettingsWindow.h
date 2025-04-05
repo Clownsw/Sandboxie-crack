@@ -59,6 +59,8 @@ public:
 	static QColor GetCertColor();
 	static QString GetCertLevel();
 
+	static void StartEval(QWidget* parent, QObject* receiver, const char* member);
+
 signals:
 	void OptionsChanged(bool bRebuildUI = false);
 	void Closed();
@@ -139,6 +141,7 @@ private slots:
 	void OnCertData(const QByteArray& Certificate, const QVariantMap& Params);
 	void ApplyCert();
 	void UpdateUpdater();
+	void OnStartEval();
 
 	void GetUpdates();
 	void OnUpdateData(const QVariantMap& Data, const QVariantMap& Params);
@@ -192,6 +195,8 @@ private:
 	void WriteTextList(const QString& Setting, const QStringList& List);
 
 	Ui::SettingsWindow ui;
+
+	class CCodeEdit* m_pCodeEdit;
 };
 
 QVariantMap GetRunEntry(const QString& sEntry);
@@ -208,3 +213,6 @@ extern QByteArray g_Certificate;
 #include "..\..\Sandboxie\core\drv\verify.h"
 
 extern SCertInfo g_CertInfo;
+
+#define EVAL_MAX 3		// for UI only actual limits enforced on server
+#define EVAL_DAYS 10	

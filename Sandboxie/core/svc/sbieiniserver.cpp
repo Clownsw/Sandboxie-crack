@@ -1,6 +1,6 @@
 /*
  * Copyright 2004-2020 Sandboxie Holdings, LLC 
- * Copyright 2020-2021 David Xanatos, xanasoft.com
+ * Copyright 2020-2025 David Xanatos, xanasoft.com
  *
  * This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@
 #define RC4_HEADER_ONLY
 #include "common/rc4.c"
 #include "core/drv/api_defs.h"
+#include "DriverAssist.h"
 
 #ifdef NEW_INI_MODE
 extern "C" {
@@ -371,7 +372,7 @@ MSG_HEADER *SbieIniServer::GetUser(MSG_HEADER *msg)
     bool ok2 = SetUserSettingsSectionName(hToken);
 
     BOOLEAN admin = FALSE;
-    if (ok2 && TokenIsAdmin(hToken, true))
+    if (ok2 && TokenIsAdmin(hToken))
         admin = TRUE;
 
     CloseHandle(hToken);
@@ -522,14 +523,15 @@ bool SbieIniServer::SetUserSettingsSectionName(HANDLE hToken)
         return false;
 
     ULONG username_len = sizeof(m_username) / sizeof(WCHAR) - 4;
-    WCHAR domain[256];
-    ULONG domain_len = sizeof(domain) / sizeof(WCHAR) - 4;
-    SID_NAME_USE use;
+    //WCHAR domain[256];
+    //ULONG domain_len = sizeof(domain) / sizeof(WCHAR) - 4;
+    //SID_NAME_USE use;
 
     m_username[0] = L'\0';
 
-    ok = LookupAccountSid(NULL, info.user.User.Sid,
-            m_username, &username_len, domain, &domain_len, &use);
+    //ok = LookupAccountSid(NULL, info.user.User.Sid,
+    //        m_username, &username_len, domain, &domain_len, &use);
+    ok = DriverAssist::LookupSidCached(info.user.User.Sid, m_username, &username_len);
     if (! ok || ! m_username[0])
         return false;
 
@@ -1186,10 +1188,10 @@ ULONG SbieIniServer::AddSetting(MSG_HEADER* msg, bool insert)
                 pos = I;
                 if (!insert) pos++;
             }
-            if (_wcsicmp(I->Value.c_str(), req->value) == 0) {
-                // this value is already present, so let's abort right here
-                return STATUS_SUCCESS;
-            }
+            //if (_wcsicmp(I->Value.c_str(), req->value) == 0) {
+            //    // this value is already present, so let's abort right here
+            //    return STATUS_SUCCESS;
+            //}
         }
     }
 
@@ -2275,7 +2277,7 @@ MSG_HEADER *SbieIniServer::RunSbieCtrl(MSG_HEADER *msg, HANDLE idProcess, bool i
     if (ok) {
 
         HANDLE SbieCtrlProcessId;
-        SbieApi_SessionLeader(hToken, &SbieCtrlProcessId);
+        SbieApi_SessionLeader(m_session_id, &SbieCtrlProcessId);
         if (SbieCtrlProcessId) {
             status = STATUS_IMAGE_ALREADY_LOADED;
             ok = FALSE;
