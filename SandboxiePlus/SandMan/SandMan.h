@@ -108,7 +108,8 @@ public:
 	QIcon				MakeIconBusy(const QIcon& Icon, int Index = 0);
 	QIcon				IconAddOverlay(const QIcon& Icon, const QString& Name, int Size = 24);
 	QString				GetBoxDescription(int boxType);
-
+	
+	bool				SetCertificate(const QByteArray& Certificate);
 	bool				CheckCertificate(QWidget* pWidget, int iType = 0);
 
 	bool				IsAlwaysOnTop() const;
@@ -207,7 +208,7 @@ public slots:
 	void				OnFileRecovered(const QString& BoxName, const QString& FilePath, const QString& BoxPath);
 
 	bool				OpenRecovery(const CSandBoxPtr& pBox, bool& DeleteSnapshots, bool bCloseEmpty = false);
-	class CRecoveryWindow*	ShowRecovery(const CSandBoxPtr& pBox, bool bFind = true);
+	class CRecoveryWindow* ShowRecovery(const CSandBoxPtr& pBox);
 
 	void				TryFix(quint32 MsgCode, const QStringList& MsgData, const QString& ProcessName, const QString& BoxName);
 
@@ -235,7 +236,7 @@ public slots:
 
 
 	void				OpenUrl(const QString& url) { OpenUrl(QUrl(url)); }
-	void				OpenUrl(const QUrl& url);
+	void				OpenUrl(QUrl url);
 
 	int					ShowQuestion(const QString& question, const QString& checkBoxText, bool* checkBoxSetting, int buttons, int defaultButton, int type, QWidget* pParent);
 	void				ShowMessage(const QString& message, int type);
@@ -295,6 +296,8 @@ private slots:
 
 	void				SetUITheme();
 	void				SetTitleTheme(const HWND& hwnd);
+
+    void				OnCertData(const QByteArray& Certificate, const QVariantMap& Params);
 
 	void				AddLogMessage(const QString& Message);
 	void				AddFileRecovered(const QString& BoxName, const QString& FilePath);

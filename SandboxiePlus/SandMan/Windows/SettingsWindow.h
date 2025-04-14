@@ -52,8 +52,9 @@ public:
 	static bool AddBrowserIcon();
 
 	static bool ApplyCertificate(const QByteArray &Certificate, QWidget* widget);
-
 	static void LoadCertificate(QString CertPath = QString());
+	static bool	TryRefreshCert(QWidget* parent, QObject* receiver, const char* member);
+	static bool	CertRefreshRequired();
 
 	static QString GetCertType();
 	static QColor GetCertColor();
@@ -69,7 +70,7 @@ public slots:
 	void ok();
 	void apply();
 
-	void showTab(const QString& Name, bool bExclusive = false);
+	void showTab(const QString& Name, bool bExclusive = false, bool bExec = false);
 
 private slots:
 	void OnTab();

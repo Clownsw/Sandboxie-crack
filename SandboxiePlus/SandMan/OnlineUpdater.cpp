@@ -174,29 +174,38 @@ void CGetUpdatesJob::Finish(QNetworkReply* pReply)
 			QByteArray BlockList0 = CertBL["list"].toByteArray();
 			QByteArray BlockListSig0 = QByteArray::fromHex(CertBL["sig"].toByteArray());
 
-			std::string BlockList;
-			BlockList.resize(0x10000, 0); // 64 kb should be enough
-			static quint32 BlockListLen = 0;
-			if (BlockListLen == 0) {
-				SB_STATUS Status = theAPI->GetSecureParam("CertBlockList", (void*)BlockList.c_str(), BlockList.size(), &BlockListLen, true);
-				//BlockList.resize(BlockListLen);
-				if (Status.IsError()) // error
-					BlockListLen = 0;
-			}
-
-			if (BlockListLen < BlockList0.size())
+			if (theAPI->TestSignature(BlockList0, BlockListSig0))
 			{
-				theAPI->SetSecureParam("CertBlockList", BlockList0, BlockList0.size());
-				theAPI->SetSecureParam("CertBlockListSig", BlockListSig0, BlockListSig0.size());
-				BlockListLen = BlockList0.size();
-				//BlockList = BlockList0;
+				std::string BlockList;
+				BlockList.resize(qMax(0x10000, BlockList0.size()), 0); // 64 kb should be enough
+				static quint32 BlockListLen = 0;
+				if (BlockListLen == 0) {
+					SB_STATUS Status = theAPI->GetSecureParam("CertBlockList", (void*)BlockList.c_str(), BlockList.size(), &BlockListLen, true);
+					//BlockList.resize(BlockListLen);
+					if (Status.IsError()) // error
+						BlockListLen = 0;
+				}
 
-				theGUI->ReloadCert();
+				if (BlockListLen < BlockList0.size())
+				{
+					theAPI->SetSecureParam("CertBlockList", BlockList0, BlockList0.size());
+					theAPI->SetSecureParam("CertBlockListSig", BlockListSig0, BlockListSig0.size());
+					BlockListLen = BlockList0.size();
+					//BlockList = BlockList0;
+
+					theGUI->ReloadCert();
+				}
+			}
+			else
+			{
+				Q_ASSERT(0);
 			}
 		}
 
 		time_t CurrentDate = QDateTime::currentDateTimeUtc().toSecsSinceEpoch();
 		theAPI->SetSecureParam("LastUpdate", &CurrentDate, sizeof(CurrentDate));
+
+		theConf->SetValue("Updater/LabelMessage", Data["labelMsg"].toString());
 	}
 
 	m_pProgress->Finish(SB_OK);
@@ -282,13 +291,16 @@ SB_PROGRESS COnlineUpdater::GetSupportCert(const QString& Serial, QObject* recei
 	QString HashKey = QString::number(Hash, 16).rightJustified(8, '0').toUpper() + "-" + QString::number(RandID, 16).rightJustified(16, '0').toUpper();
 	Query.addQueryItem("HashKey", HashKey);
 
-	if (Serial.isEmpty() && Params.contains("eMail")) { // Request eval Key
+	if (Serial.isEmpty() && Params.contains("Name")) { // Request eval Key
+		Query.addQueryItem("Name", Params["Name"].toString()); // for cert
 		Query.addQueryItem("eMail", Params["eMail"].toString());
 		bHwId = true;
 	}
 
-	if (Params.contains("Name"))
-		Query.addQueryItem("Name", Params["Name"].toString());
+	if (IsLockRequired()) {
+		Query.addQueryItem("LR", "1");
+		bHwId = true;
+	}
 
 	if (bHwId) {
 		wchar_t uuid_str[40];
@@ -307,6 +319,26 @@ SB_PROGRESS COnlineUpdater::GetSupportCert(const QString& Serial, QObject* recei
 	StartJob(pJob, Url);
 	QObject::connect(pJob, SIGNAL(Certificate(const QByteArray&, const QVariantMap&)), receiver, member, Qt::QueuedConnection);
 	return SB_PROGRESS(OP_ASYNC, pJob->m_pProgress);
+}
+
+extern "C" NTSTATUS NTAPI NtQueryInstallUILanguage(LANGID* LanguageId);
+
+bool COnlineUpdater::IsLockRequired()
+{
+	if (theConf->GetBool("Debug/LockedRegion", false))
+		return true;
+
+	if (g_CertInfo.lock_req)
+		return true;
+
+	LANGID LangID = 0;
+	if ((NtQueryInstallUILanguage(&LangID) == 0) && (LangID == 0x0804))
+		return true;
+
+	if (theGUI->m_LanguageId == 0x0804)
+		return true;
+
+	return false;
 }
 
 void CGetCertJob::Finish(QNetworkReply* pReply)
@@ -473,7 +505,6 @@ void COnlineUpdater::Process()
 					bCheck = false;
 				if (State)
 					theConf->SetValue("Options/AutoUpdateTemplates", 1);
-					
 			}
 			theConf->SetValue("Options/NextCheckForUpdates", CurretnDate.addSecs(UpdateInterval).toSecsSinceEpoch());
 			if (bCheck)

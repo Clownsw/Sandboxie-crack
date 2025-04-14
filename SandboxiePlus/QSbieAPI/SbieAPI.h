@@ -168,6 +168,11 @@ public:
 	virtual SB_STATUS		SetSecureParam(const QString& Name, const void* data, size_t size);
 	virtual SB_STATUS		GetSecureParam(const QString& Name, void* data, size_t size, quint32* size_out = NULL, bool bVerify = false);
 
+	virtual bool			TestSignature(const QByteArray& Data, const QByteArray& Signature);
+
+	virtual SB_STATUS		SetDatFile(const QString& FileName, const QByteArray& Data);
+	//virtual SB_RESULT(QByteArray) GetDatFile(const QString& FileName);
+
 
 	enum ESbieQueuedRequests
 	{

@@ -20,6 +20,7 @@
 #include "Helpers/TabOrder.h"
 #include "../MiscHelpers/Common/CodeEdit.h"
 #include "Helpers/IniHighlighter.h"
+#include "../MiscHelpers/Common/CheckableMessageBox.h"
 
 
 #include <windows.h>
@@ -209,7 +210,7 @@ CSettingsWindow::CSettingsWindow(QWidget* parent)
 
 	{
 		ui.uiLang->addItem(tr("Auto Detection"), "");
-		ui.uiLang->addItem(tr("No Translation"), "native");
+		ui.uiLang->addItem("No Translation (English)", "native"); // do not translate
 
 		QString langDir;
 		C7zFileEngineHandler LangFS("lang", this);
@@ -524,12 +525,14 @@ CSettingsWindow::CSettingsWindow(QWidget* parent)
 	// Support
 	connect(ui.lblSupport, SIGNAL(linkActivated(const QString&)), theGUI, SLOT(OpenUrl(const QString&)));
 	connect(ui.lblSupportCert, SIGNAL(linkActivated(const QString&)), theGUI, SLOT(OpenUrl(const QString&)));
+	connect(ui.lblCert, SIGNAL(linkActivated(const QString&)), theGUI, SLOT(OpenUrl(const QString&)));
 	connect(ui.lblCertExp, SIGNAL(linkActivated(const QString&)), theGUI, SLOT(OpenUrl(const QString&)));
 	connect(ui.lblCertGuide, SIGNAL(linkActivated(const QString&)), theGUI, SLOT(OpenUrl(const QString&)));
 	connect(ui.lblInsiderInfo, SIGNAL(linkActivated(const QString&)), theGUI, SLOT(OpenUrl(const QString&)));
 
 	m_CertChanged = false;
 	connect(ui.txtCertificate, SIGNAL(textChanged()), this, SLOT(CertChanged()));
+	ui.txtCertificate->installEventFilter(this);
 	connect(ui.txtSerial, SIGNAL(textChanged(const QString&)), this, SLOT(KeyChanged()));
 	ui.btnGetCert->setEnabled(false);
 	connect(theGUI, SIGNAL(CertUpdated()), this, SLOT(UpdateCert()));
@@ -542,34 +545,11 @@ CSettingsWindow::CSettingsWindow(QWidget* parent)
 		"SIGNATURE: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
 	);
 
-	if (g_CertInfo.active) 
-	{
-		QString Text1 = ui.lblCertEntry->text();
-		ui.lblCertEntry->setText(QString("<a href=\"_\">%1</a>").arg(Text1));
-		ui.txtCertificate->setVisible(false);
-		connect(ui.lblCertEntry, &QLabel::linkActivated, this, [=]() {
-			ui.lblCertEntry->setText(Text1);
-			ui.txtCertificate->setVisible(true);
-		});
-
-		QString Text = ui.lblSerial->text();
-		ui.lblSerial->setText(QString("<a href=\"_\">%1</a>").arg(Text));
-		ui.txtSerial->setVisible(false);
-		ui.lblHwId->setVisible(false);
-		ui.btnGetCert->setVisible(false);
-		connect(ui.lblSerial, &QLabel::linkActivated, this, [=]() {
-			ui.lblSerial->setText(Text);
-			ui.txtSerial->setVisible(true);
-			ui.lblHwId->setVisible(true);
-			ui.btnGetCert->setVisible(true);
-		});
-	}
-
 	wchar_t uuid_str[40];
 	if(theAPI->GetDriverInfo(-2, uuid_str, sizeof(uuid_str)))
 		ui.lblHwId->setText(tr("HwId: %1").arg(QString::fromWCharArray(uuid_str)));
 
-	connect(ui.lblCert, SIGNAL(linkActivated(const QString&)), this, SLOT(OnStartEval()));
+	connect(ui.lblEvalCert, SIGNAL(linkActivated(const QString&)), this, SLOT(OnStartEval()));
 
 	connect(ui.btnGetCert, SIGNAL(clicked(bool)), this, SLOT(OnGetCert()));
 
@@ -715,7 +695,7 @@ CSettingsWindow::~CSettingsWindow()
 		theConf->SetBlob("SettingsWindow/" + pTree->objectName() + "_Columns", pTree->header()->saveState());
 }
 
-void CSettingsWindow::showTab(const QString& Name, bool bExclusive)
+void CSettingsWindow::showTab(const QString& Name, bool bExclusive, bool bExec)
 {
 	QWidget* pWidget = this->findChild<QWidget*>("tab" + Name);
 
@@ -754,7 +734,11 @@ void CSettingsWindow::showTab(const QString& Name, bool bExclusive)
 		}
 	}
 
-	CSandMan::SafeShow(this);
+	if (bExec)
+		this->exec();
+		//theGUI->SafeExec(this);
+	else
+		CSandMan::SafeShow(this);
 }
 
 void CSettingsWindow::closeEvent(QCloseEvent *e)
@@ -776,6 +760,14 @@ bool CSettingsWindow::eventFilter(QObject *source, QEvent *event)
 		&& (((QKeyEvent*)event)->modifiers() == Qt::NoModifier || ((QKeyEvent*)event)->modifiers() == Qt::KeypadModifier))
 	{
 		return true; // cancel event
+	}
+
+	if (source == ui.txtCertificate)
+	{
+		if (event->type() == QEvent::FocusIn && ui.txtCertificate->property("hiden").toBool()) {
+			ui.txtCertificate->setProperty("hiden", false);
+			ui.txtCertificate->setPlainText(g_Certificate);
+		}
 	}
 
 	return QDialog::eventFilter(source, event);
@@ -1319,26 +1311,26 @@ void CSettingsWindow::UpdateDrives()
 void CSettingsWindow::UpdateCert()
 {
 	ui.lblCertExp->setVisible(false);
+	ui.lblEvalCert->setVisible(g_Certificate.isEmpty());
 	
-	int EvalCount = theConf->GetInt("User/EvalCount", 0);
-	if(EvalCount >= EVAL_MAX)
-		ui.lblCert->setText(tr("<b>You have used %1/%2 evaluation certificates. No more free certificates can be generated.</b>").arg(EvalCount).arg(EVAL_MAX));
-	else
-		ui.lblCert->setText(tr("<b><a href=\"_\">Get a free evaluation certificate</a> and enjoy all premium features for %1 days.</b>").arg(EVAL_DAYS));
-	ui.lblCert->setToolTip(tr("You can request a free %1-day evaluation certificate up to %2 times per hardware ID.").arg(EVAL_DAYS).arg(EVAL_MAX));
-
 	//ui.lblCertLevel->setVisible(!g_Certificate.isEmpty());
 	if (!g_Certificate.isEmpty()) 
 	{
-		ui.txtCertificate->setPlainText(g_Certificate);
+		ui.txtCertificate->setProperty("hiden", true);
+		int Pos = g_Certificate.indexOf("UPDATEKEY:");
+		ui.txtCertificate->setPlainText(g_Certificate.left(Pos) + "...");
 		//ui.lblSupport->setVisible(false);
+
+		QString ReNewUrl = "https://sandboxie-plus.com/go.php?to=sbie-renew-cert";
+		if (CERT_IS_TYPE(g_CertInfo, eCertPatreon))
+			ReNewUrl = "https://xanasoft.com/get-supporter-certificate/";
 
 		QPalette palette = QApplication::palette();
 		if (theGUI->m_DarkTheme)
 			palette.setColor(QPalette::Text, Qt::black);
 		if (g_CertInfo.expired) {
 			palette.setColor(QPalette::Base, QColor(255, 255, 192));
-			QString infoMsg = tr("This supporter certificate has expired, please <a href=\"https://sandboxie-plus.com/go.php?to=sbie-renew-cert\">get an updated certificate</a>.");
+			QString infoMsg = tr("This supporter certificate has expired, please <a href=\"%1\">get an updated certificate</a>.").arg(ReNewUrl);
 			if (g_CertInfo.active) {
 				if (g_CertInfo.grace_period)
 					infoMsg.append(tr("<br /><font color='red'>Plus features will be disabled in %1 days.</font>").arg((g_CertInfo.expirers_in_sec + 30*60*60*24) / (60*60*24)));
@@ -1351,12 +1343,12 @@ void CSettingsWindow::UpdateCert()
 		}
 		else {
 			if (g_CertInfo.expirers_in_sec > 0 && g_CertInfo.expirers_in_sec < (60 * 60 * 24 * 30)) {
-				ui.lblCertExp->setText(tr("This supporter certificate will <font color='red'>expire in %1 days</font>, please <a href=\"https://sandboxie-plus.com/go.php?to=sbie-renew-cert\">get an updated certificate</a>.").arg(g_CertInfo.expirers_in_sec / (60*60*24)));
+				ui.lblCertExp->setText(tr("This supporter certificate will <font color='red'>expire in %1 days</font>, please <a href=\"%2\">get an updated certificate</a>.").arg(g_CertInfo.expirers_in_sec / (60*60*24)).arg(ReNewUrl));
 				ui.lblCertExp->setVisible(true);
 			}
 /*#ifdef _DEBUG
 			else {
-				ui.lblCertExp->setText(tr("This supporter certificate is valid, <a href=\"https://sandboxie-plus.com/go.php?to=sbie-renew-cert\">check for an updated certificate</a>."));
+				ui.lblCertExp->setText(tr("This supporter certificate is valid, <a href=\"%1\">check for an updated certificate</a>.").arg(ReNewUrl));
 				ui.lblCertExp->setVisible(true);
 			}
 #endif*/
@@ -1384,13 +1376,15 @@ void CSettingsWindow::UpdateCert()
 		//	});
 		//}
 
-		QStringList Info;
-		
+		QString ExpInfo;
 		if(g_CertInfo.expirers_in_sec > 0)
-			Info.append(tr("Expires in: %1 days").arg(g_CertInfo.expirers_in_sec / (60*60*24)));
+			ExpInfo = tr("Expires in: %1 days").arg(g_CertInfo.expirers_in_sec / (60*60*24));
 		else if(g_CertInfo.expirers_in_sec < 0)
-			Info.append(tr("Expired: %1 days ago").arg(-g_CertInfo.expirers_in_sec / (60*60*24)));
-		
+			ExpInfo = tr("Expired: %1 days ago").arg(-g_CertInfo.expirers_in_sec / (60*60*24));
+		if (CERT_IS_TYPE(g_CertInfo, eCertPatreon))
+			ExpInfo += tr("; eligible Patreons can always <a href=\"https://xanasoft.com/get-supporter-certificate/\">obtain an updated certificate</a> from xanasoft.com");
+		ui.lblCert->setText(ExpInfo);
+
 		QStringList Options;
 		if (g_CertInfo.opt_sec) Options.append("SBox");
 		else Options.append(QString("<font color='gray'>SBox</font>"));
@@ -1398,18 +1392,26 @@ void CSettingsWindow::UpdateCert()
 		else Options.append(QString("<font color='gray'>EBox</font>"));
 		if (g_CertInfo.opt_net) Options.append("NetI");
 		else Options.append(QString("<font color='gray'>NetI</font>"));
-		if (g_CertInfo.opt_desk) Options.append("Desk");
-		else Options.append(QString("<font color='gray'>Desk</font>"));
-		Info.append(tr("Options: %1").arg(Options.join(", ")));
-
-		ui.lblCert->setText(Info.join("<br />"));
+		ui.lblCertOpt->setText(tr("Options: %1").arg(Options.join(", ")));
 
 		QStringList OptionsEx;
 		OptionsEx.append(tr("Security/Privacy Enhanced & App Boxes (SBox): %1").arg(g_CertInfo.opt_sec ? tr("Enabled") : tr("Disabled")));
 		OptionsEx.append(tr("Encrypted Sandboxes (EBox): %1").arg(g_CertInfo.opt_enc ? tr("Enabled") : tr("Disabled")));
 		OptionsEx.append(tr("Network Interception (NetI): %1").arg(g_CertInfo.opt_net ? tr("Enabled") : tr("Disabled")));
 		OptionsEx.append(tr("Sandboxie Desktop (Desk): %1").arg(g_CertInfo.opt_desk ? tr("Enabled") : tr("Disabled")));
-		ui.lblCert->setToolTip(OptionsEx.join("\n"));
+		ui.lblCertOpt->setToolTip(OptionsEx.join("\n"));
+	}
+	else
+	{
+		ui.lblCert->clear();
+		ui.lblCertOpt->clear();
+
+		int EvalCount = theConf->GetInt("User/EvalCount", 0);
+		if(EvalCount >= EVAL_MAX)
+			ui.lblEvalCert->setText(tr("<b>You have used %1/%2 evaluation certificates. No more free certificates can be generated.</b>").arg(EvalCount).arg(EVAL_MAX));
+		else
+			ui.lblEvalCert->setText(tr("<b><a href=\"_\">Get a free evaluation certificate</a> and enjoy all premium features for %1 days.</b>").arg(EVAL_DAYS));
+		ui.lblEvalCert->setToolTip(tr("You can request a free %1-day evaluation certificate up to %2 times per hardware ID.").arg(EVAL_DAYS).arg(EVAL_MAX));
 	}
 
 	ui.radInsider->setEnabled(CERT_IS_INSIDER(g_CertInfo));
@@ -1417,7 +1419,11 @@ void CSettingsWindow::UpdateCert()
 
 void CSettingsWindow::OnGetCert()
 {
-	QByteArray Certificate = ui.txtCertificate->toPlainText().toUtf8();	
+	QByteArray Certificate;
+	if (!ui.txtCertificate->property("hiden").toBool())
+		Certificate = ui.txtCertificate->toPlainText().toUtf8();
+	else
+		Certificate = g_Certificate;
 	QString Serial = ui.txtSerial->text();
 
 	QString Message;
@@ -1467,7 +1473,7 @@ void CSettingsWindow::OnStartEval()
 
 void CSettingsWindow::StartEval(QWidget* parent, QObject* receiver, const char* member)
 {
-	QString Name = theConf->GetString("User/Name", qgetenv("USERNAME"));
+	QString Name = theConf->GetString("User/Name", QString::fromLocal8Bit(qgetenv("USERNAME")));
 
 	QString eMail = QInputDialog::getText(parent, tr("Sandboxie-Plus - Get EVALUATION Certificate"), tr("Please enter your email address to receive a free %1-day evaluation certificate, which will be issued to %2 and locked to the current hardware.\n"
 													"You can request up to %3 evaluation certificates for each unique hardware ID.").arg(EVAL_DAYS).arg(Name).arg(EVAL_MAX), QLineEdit::Normal, theConf->GetString("User/eMail"));
@@ -1499,6 +1505,7 @@ void CSettingsWindow::OnCertData(const QByteArray& Certificate, const QVariantMa
 		CSandMan::ShowMessageBox(this, QMessageBox::Critical, Message);
 		return;
 	}
+	ui.txtCertificate->setProperty("hiden", false);
 	ui.txtCertificate->setPlainText(Certificate);
 	ApplyCert();
 }
@@ -1507,7 +1514,10 @@ void CSettingsWindow::ApplyCert()
 {
 	if (!theAPI->IsConnected())
 		return;
-	
+
+	if (ui.txtCertificate->property("hiden").toBool())
+		return;
+
 	QByteArray Certificate = ui.txtCertificate->toPlainText().toUtf8();	
 	if (g_Certificate != Certificate) {
 
@@ -1525,6 +1535,9 @@ void CSettingsWindow::ApplyCert()
 			EvalCount++;
 			theConf->SetValue("User/EvalCount", EvalCount);
 		}
+
+		if (CertRefreshRequired())
+			TryRefreshCert(this, this, SLOT(OnCertData(const QByteArray&, const QVariantMap&)));
 
 		if (Certificate.isEmpty())
 			palette.setColor(QPalette::Base, Qt::white);
@@ -2035,9 +2048,8 @@ void CSettingsWindow::SaveSettings()
 
 bool CSettingsWindow::ApplyCertificate(const QByteArray &Certificate, QWidget* widget)
 {
-	QString CertPath = theAPI->GetSbiePath() + "\\Certificate.dat";
-	if (!Certificate.isEmpty()) {
-
+	if (!Certificate.isEmpty()) 
+	{
 		auto Args = GetArguments(Certificate, L'\n', L':');
 
 		bool bLooksOk = true;
@@ -2048,34 +2060,24 @@ bool CSettingsWindow::ApplyCertificate(const QByteArray &Certificate, QWidget* w
 		if (Args.value("SIGNATURE").isEmpty()) // absolutely mandatory
 			bLooksOk = false;
 
-		if (bLooksOk) {
-			QString TempPath = QDir::tempPath() + "/Sbie+Certificate.dat";
-			QFile CertFile(TempPath);
-			if (CertFile.open(QFile::WriteOnly)) {
-				CertFile.write(Certificate);
-				CertFile.close();
-			}
-
-			WindowsMoveFile(TempPath.replace("/", "\\"), CertPath.replace("/", "\\"));
-		}
+		if (bLooksOk)
+			theGUI->SetCertificate(Certificate);
 		else {
 			QMessageBox::critical(widget, "Sandboxie-Plus", tr("This does not look like a certificate. Please enter the entire certificate, not just a portion of it."));
 			return false;
 		}
+		g_Certificate = Certificate;
 	}
-	else if(!g_Certificate.isEmpty()){
-		g_Certificate.clear();
-		WindowsMoveFile(CertPath.replace("/", "\\"), "");
-	}
+	else
+		theGUI->SetCertificate("");
 
 	if (Certificate.isEmpty())
 		return false;
 
-	if (!theGUI->ReloadCert(widget).IsError())
-	{
-		g_FeatureFlags = theAPI->GetFeatureFlags();
-		g_Certificate = Certificate;
+	SB_STATUS Status = theGUI->ReloadCert(widget);
 
+	if (!Status.IsError())
+	{
 		if (g_CertInfo.expired || g_CertInfo.outdated) {
 			if(g_CertInfo.outdated)
 				QMessageBox::information(widget, "Sandboxie-Plus", tr("This certificate is unfortunately not valid for the current build, you need to get a new certificate or downgrade to an earlier build."));
@@ -2088,7 +2090,13 @@ bool CSettingsWindow::ApplyCertificate(const QByteArray &Certificate, QWidget* w
 			if(CERT_IS_TYPE(g_CertInfo, eCertEvaluation))
 				QMessageBox::information(widget, "Sandboxie-Plus", tr("The evaluation certificate has been successfully applied. Enjoy your free trial!"));
 			else
-				QMessageBox::information(widget, "Sandboxie-Plus", tr("Thank you for supporting the development of Sandboxie-Plus."));
+			{
+				QString Message = tr("Thank you for supporting the development of Sandboxie-Plus.");
+				if (g_CertInfo.type == eCertEntryPatreon)
+					Message += tr("\nThis is a temporary Patreon certificate, valid for 3 months. "
+						"Once it nears expiration, you can obtain a new certificate online that will be valid for the full term.");
+				QMessageBox::information(widget, "Sandboxie-Plus", Message);
+			}
 		}
 
 		return true;
@@ -2096,9 +2104,51 @@ bool CSettingsWindow::ApplyCertificate(const QByteArray &Certificate, QWidget* w
 	else
 	{
 		g_CertInfo.State = 0;
-		g_Certificate.clear();
+		if (Status.GetStatus() != 0xC000006EL /*STATUS_ACCOUNT_RESTRICTION*/)
+			g_Certificate.clear();
 		return false;
 	}
+}
+
+bool CSettingsWindow::CertRefreshRequired()
+{
+	if (g_CertInfo.active) {
+		if (COnlineUpdater::IsLockRequired() && g_CertInfo.type != eCertEternal)
+		{
+			if(!g_CertInfo.locked || g_CertInfo.grace_period)
+				return true;
+		}
+	} else {
+		if (g_CertInfo.lock_req && !(g_CertInfo.expired || g_CertInfo.outdated))
+			return true;
+	}
+
+	return false;
+}
+
+bool CSettingsWindow::TryRefreshCert(QWidget* parent, QObject* receiver, const char* member)
+{
+ 	if (theConf->GetInt("Options/AskCertRefresh", -1) != 1)
+	{
+		bool State = false;
+		if(CCheckableMessageBox::question(parent, "Sandboxie-Plus", tr("A mandatory security update for your Sandboxie-Plus Supporter Certificate is required. Would you like to download the updated certificate now?")
+			, tr("Auto update in future"), &State, QDialogButtonBox::Yes | QDialogButtonBox::No, QDialogButtonBox::Yes, QMessageBox::Information) != QDialogButtonBox::Yes)
+			return false;
+
+		if (State)
+			theConf->SetValue("Options/AskCertRefresh", 1);
+	}
+
+	QVariantMap Params;
+	Params["key"] = GetArguments(g_Certificate, L'\n', L':').value("UPDATEKEY");
+
+	SB_PROGRESS Status = theGUI->m_pUpdater->GetSupportCert("", receiver, member, Params);
+	if (Status.GetStatus() == OP_ASYNC) {
+		theGUI->AddAsyncOp(Status.GetValue());
+		Status.GetValue()->ShowMessage(tr("Retrieving certificate..."));
+	}
+	
+	return true;
 }
 
 void CSettingsWindow::apply()
@@ -2225,6 +2275,9 @@ void CSettingsWindow::OnTab(QWidget* pTab)
 
 	if (pTab == ui.tabSupport)
 	{
+		if (CSettingsWindow::CertRefreshRequired())
+			TryRefreshCert(this, this, SLOT(OnCertData(const QByteArray&, const QVariantMap&)));
+
 		if (ui.lblCurrent->text().isEmpty()) {
 			if (ui.chkAutoUpdate->checkState())
 				GetUpdates();
