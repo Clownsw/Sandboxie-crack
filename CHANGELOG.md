@@ -2,7 +2,51 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.15.10 / 5.70.10] - 2025-04-
+## [1.15.12 / 5.70.12] - 2025-04-??
+
+### Added
+- added Indonesian translation to the Plus UI [4bad4d1](https://github.com/sandboxie-plus/Sandboxie/commit/4bad4d190a90a6329d549e5a31ca8ee13b4eb9a1) (thanks ???)
+- added template for WeType Input Method (IME) [#4715](https://github.com/sandboxie-plus/Sandboxie/pull/4715) (thanks bot-1450)
+- added host name support to proxy configuration (looking up host at WSA_Startup)
+- instead of binding to IP, Sandboxie can now bind to adapter (resolving IPs at WSA_Startup)
+- added support for %ProgramFiles(x86)% variable [#2402](https://github.com/sandboxie-plus/Sandboxie/issues/2402)
+- added TemplateDefaultFolders containing all the default paths to be created in a privacy enhanced box
+
+### Changed
+- weird sort in the Move Sandbox list [#4615](https://github.com/sandboxie-plus/Sandboxie/issues/4615)
+- name and HwID information in the Support tab is now hidden by default but can be toggled as needed [#4714](https://github.com/sandboxie-plus/Sandboxie/pull/4714)
+- added alternative proxy relay implementation (instead of hacking existing sockets it starts relay threads) [EXPERIMENTAL]
+
+### Fixed
+- fixed the 'run in box' selection prompt not show BoxAlias [#4709](https://github.com/sandboxie-plus/Sandboxie/issues/4709)
+- fixed after Ctrl+F, the expansion and closure records of the Box Group were disrupted [#4708](https://github.com/sandboxie-plus/Sandboxie/issues/4708)
+- added additional checks to registry set/get functions [5a6a2f7](https://github.com/sandboxie-plus/Sandboxie/commit/5a6a2f7f8a99eb9d36906b73bc883ebc4c268cc4)
+- fixed issue in Pool_Alloc [5a6a2f7](https://github.com/sandboxie-plus/Sandboxie/commit/5a6a2f7f8a99eb9d36906b73bc883ebc4c268cc4)
+- fixed SbieCtrl.exe and SandMan.exe having a constant 3 MB/s IO rate in the Process Explorer [#4693](https://github.com/sandboxie-plus/Sandboxie/issues/4693)
+- fixed template for Tencent TIM cause drag and drop not available [#4688](https://github.com/sandboxie-plus/Sandboxie/issues/4688)
+- improved when Sandboxie.ini is huge, the response speed gets worse [#4573](https://github.com/sandboxie-plus/Sandboxie/issues/4573)
+- fixed MSI install can`t create AppData\Roaming\Microsoft folder in Data Protection Box [#4711](https://github.com/sandboxie-plus/Sandboxie/issues/4711)
+- fixed two errors in Sandboxie about time speeding and add two time function hook [#4721](https://github.com/sandboxie-plus/Sandboxie/pull/4721) (thanks pwnmelife)
+- fixed an issue where the translation string of the protocol selection was saved in the configuration file
+- fixed box picker icon
+- fixed when the UI language change, toolbar unchanged [#4726](https://github.com/sandboxie-plus/Sandboxie/issues/4726)
+- fixed PingInfoView gives an error when running in Sandboxie [#4718](https://github.com/sandboxie-plus/Sandboxie/issues/4718)
+- fixed CollectProducts() Stuck in Loop When Uninstall Key Not Found [#4753](https://github.com/sandboxie-plus/Sandboxie/issues/4753)
+- fixed crashes with SbieDll.dll [#4754](https://github.com/sandboxie-plus/Sandboxie/issues/4754)
+
+### Removed
+- removed the not-working "delete content" button [#4720](https://github.com/sandboxie-plus/Sandboxie/pull/4720) (thanks habatake)
+
+
+
+## [1.15.11 / 5.70.11] - 2025-04-16
+
+### Fixed
+- fixed issue with SboxHostDll.dll failing to be injected into OfficeClickToRun.exe
+
+
+
+## [1.15.10 / 5.70.10] - 2025-04-15
 
 ### Added
 - added 'BindAdapterIP=192.168.100.123' and/or 'BindAdapterIP=::ffff:c0a8:647b' to force sandboxed programs to use a defined host IP
@@ -1826,6 +1870,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
   - the Security Hardened icons are now repurposed for the new Super Extra Security Hardened Box Mode
   - Note: the new enhanced security features require a supporter certificate
 - added browse option to the "force process" tab
+- added support reminder dialog
 
 ### Changed
 - replaced the "DeviceSecurity" template with a dedicated setting "RestrictDevices=y"

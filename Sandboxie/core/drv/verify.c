@@ -22,7 +22,7 @@
 NTSTATUS NTAPI ZwQueryInstallUILanguage(LANGID* LanguageId);
 
 #include "api_defs.h"
-NTSTATUS Api_GetSecureParam(PROCESS* proc, ULONG64* parms);
+NTSTATUS Api_GetSecureParamImpl(const wchar_t* name, PVOID* data_ptr, ULONG* data_len, BOOLEAN verify);
 
 #include <bcrypt.h>
 
@@ -745,22 +745,24 @@ _FX NTSTATUS KphValidateCertificate()
     status = KphVerifySignature(hash, hashSize, signature, signatureSize);
 
     if (NT_SUCCESS(status) && key) {
+        if (_wcsicmp(key, L"46329469461254954325945934569378") == 0  // Y - CC
+          ||_wcsicmp(key, L"63F49D96BDBA28F8428B4A5008D1A587") == 0) // X - H
+        {
+            //DbgPrint("Found Blocked UpdateKey %S\n", key);
+            status = STATUS_CONTENT_BLOCKED;
+        }
+    }
+
+    if (NT_SUCCESS(status) && key) {
 
         ULONG key_len = wcslen(key);
 
-        ULONG blocklist_len = 0x10000;
-        CHAR* blocklist = Mem_Alloc(Driver_Pool, blocklist_len);
+        CHAR* blocklist = NULL;
         ULONG blocklist_size = 0;
-
-        API_SECURE_PARAM_ARGS args;
-        args.param_name.val = L"CertBlockList";
-        args.param_data.val = blocklist;
-        args.param_size.val = blocklist_len - 1;
-        args.param_size_out.val = &blocklist_size;
-        args.param_verify.val = TRUE;
-
-        if (NT_SUCCESS(Api_GetSecureParam(NULL, (ULONG64*)&args)) && blocklist_size > 0)
+        if (NT_SUCCESS(Api_GetSecureParamImpl(L"CertBlockList", &blocklist, &blocklist_size, TRUE)))
         {
+            //DbgPrint("BAM: found valid blocklist, size: %d", blocklist_size);
+
             blocklist[blocklist_size] = 0;
             CHAR *blocklist_end = blocklist + strlen(blocklist);
             for (CHAR *end, *start = blocklist; start < blocklist_end; start = end + 1)
@@ -776,15 +778,15 @@ _FX NTSTATUS KphValidateCertificate()
                     for (; i < key_len && i < len && start[i] == key[i]; i++); // cmp CHAR vs. WCHAR
                     if (i == key_len) // match found -> Key is on the block list
                     {
-                        //DbgPrint("Found Blocked Key %.*s\n", start, len);
+                        DbgPrint("Found Blocked Key %.*s\n", start, len);
                         status = STATUS_CONTENT_BLOCKED;
                         break;
                     }
                 }
             }
-        }
 
-        Mem_Free(blocklist, blocklist_len);
+            Pool_Free(blocklist, blocklist_size);
+        }
     }
 
     if (!NT_SUCCESS(status))
@@ -1022,23 +1024,18 @@ _FX NTSTATUS KphValidateCertificate()
         }
     }
 
+    // check if lock is required or soon to be renewed
     UCHAR param_data = 0;
-
-    API_SECURE_PARAM_ARGS args;
-    args.param_name.val = L"RequireLock";
-    args.param_data.val = &param_data;
-    args.param_size.val = sizeof(param_data);
-    args.param_size_out.val = NULL;
-    args.param_verify.val = FALSE;
-
-    if (NT_SUCCESS(Api_GetSecureParam(NULL, (ULONG64*)&args)) && param_data != 0)
+    UCHAR* param_ptr = &param_data;
+    ULONG param_len = sizeof(param_data);
+    if (NT_SUCCESS(Api_GetSecureParamImpl(L"RequireLock", &param_ptr, &param_len, FALSE)) && param_data != 0)
         Verify_CertInfo.lock_req = 1;
 
     LANGID LangID = 0;
     if(NT_SUCCESS(ZwQueryInstallUILanguage(&LangID)) && (LangID == 0x0804))
         Verify_CertInfo.lock_req = 1;
 
-    if (Verify_CertInfo.lock_req && Verify_CertInfo.type != eCertEternal) {
+    if (Verify_CertInfo.lock_req && Verify_CertInfo.type != eCertEternal && Verify_CertInfo.type != eCertContributor) {
 
         if (!Verify_CertInfo.locked)
             Verify_CertInfo.active = 0;

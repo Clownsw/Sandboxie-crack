@@ -21,6 +21,7 @@
 #include "../MiscHelpers/Common/CodeEdit.h"
 #include "Helpers/IniHighlighter.h"
 #include "../MiscHelpers/Common/CheckableMessageBox.h"
+#include <QFileIconProvider>
 
 
 #include <windows.h>
@@ -539,15 +540,36 @@ CSettingsWindow::CSettingsWindow(QWidget* parent)
 
 	ui.txtCertificate->setPlaceholderText(
 		"NAME: User Name\n"
-		"TYPE: ULTIMATE\n"
 		"DATE: dd.mm.yyyy\n"
+		"TYPE: ULTIMATE\n"
 		"UPDATEKEY: 00000000000000000000000000000000\n"
 		"SIGNATURE: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
 	);
 
 	wchar_t uuid_str[40];
-	if(theAPI->GetDriverInfo(-2, uuid_str, sizeof(uuid_str)))
-		ui.lblHwId->setText(tr("HwId: %1").arg(QString::fromWCharArray(uuid_str)));
+	if (theAPI->GetDriverInfo(-2, uuid_str, sizeof(uuid_str))) {
+		QString fullHwId = QString::fromWCharArray(uuid_str);
+		QString clickToR = tr("Click to reveal");
+		QString clickToH = tr("Click to hide");
+
+		// Initial state: hidden
+		ui.lblHwId->setText(tr("HwId: <a href=\"%1\">[%2]</a>").arg(fullHwId, clickToR));
+		ui.lblHwId->setToolTip(clickToR);
+
+		// Click handler
+		connect(ui.lblHwId, &QLabel::linkActivated, this, [=]() {
+			if (ui.lblHwId->text().contains(clickToR)) {
+				// Reveal the ID
+				ui.lblHwId->setText(tr("HwId: <a href=\"%1\" style=\"text-decoration:none; color:inherit;\">%1</a>").arg(fullHwId));
+				ui.lblHwId->setToolTip(clickToH);
+			}
+			else {
+				// Hide the ID again
+				ui.lblHwId->setText(tr("HwId: <a href=\"%1\">[%2]</a>").arg(fullHwId, clickToR));
+				ui.lblHwId->setToolTip(clickToR);
+			}
+			});
+	}
 
 	connect(ui.lblEvalCert, SIGNAL(linkActivated(const QString&)), this, SLOT(OnStartEval()));
 
@@ -764,12 +786,36 @@ bool CSettingsWindow::eventFilter(QObject *source, QEvent *event)
 
 	if (source == ui.txtCertificate)
 	{
-		if (event->type() == QEvent::FocusIn && ui.txtCertificate->property("hiden").toBool()) {
-			ui.txtCertificate->setProperty("hiden", false);
+		static bool m_bRightButtonPressed = false;
+
+		if (event->type() == QEvent::FocusIn && ui.txtCertificate->property("hidden").toBool())	{
+			ui.txtCertificate->setProperty("hidden", false);
 			ui.txtCertificate->setPlainText(g_Certificate);
+			ui.txtCertificate->setProperty("modified", false);
+		}
+		else if (event->type() == QEvent::MouseButtonPress && ((QMouseEvent*)event)->button() == Qt::RightButton) {
+			m_bRightButtonPressed = true;
+		}
+		else if (event->type() == QEvent::FocusOut && !ui.txtCertificate->property("hidden").toBool()) {
+			if (!ui.txtCertificate->property("modified").toBool() && !m_bRightButtonPressed) {
+				ui.txtCertificate->setProperty("hidden", true);
+				int Pos = g_Certificate.indexOf("HWID:");
+				if (Pos == -1)
+					Pos = g_Certificate.indexOf("UPDATEKEY:");
+
+				QByteArray truncatedCert = (g_Certificate.left(Pos) + "...");
+				int namePos = truncatedCert.indexOf("NAME:");
+				int datePos = truncatedCert.indexOf("DATE:");
+				if (namePos != -1 && datePos != -1 && datePos > namePos)
+					truncatedCert = truncatedCert.mid(0, namePos + 5) + " ...\n" + truncatedCert.mid(datePos);
+				ui.txtCertificate->setPlainText(truncatedCert);
+			}
+		}
+
+		if (event->type() == QEvent::FocusOut) {
+			m_bRightButtonPressed = false;
 		}
 	}
-
 	return QDialog::eventFilter(source, event);
 }
 
@@ -1048,7 +1094,7 @@ void CSettingsWindow::LoadSettings()
 		
 		ui.cmbDefault->clear();
 		foreach(const CSandBoxPtr & pBox, theAPI->GetAllBoxes())
-			ui.cmbDefault->addItem(pBox->GetName().replace("_", " "), pBox->GetName());
+			ui.cmbDefault->addItem(pBox.objectCast<CSandBoxPlus>()->GetDisplayName(), pBox->GetName());
 		int pos = ui.cmbDefault->findData(theAPI->GetGlobalSettings()->GetText("DefaultBox", "DefaultBox"));
 		if(pos == -1)
 			pos = ui.cmbDefault->findData("DefaultBox");
@@ -1110,9 +1156,29 @@ void CSettingsWindow::LoadSettings()
 		ui.chkSandboxUsb->setChecked(theAPI->GetGlobalSettings()->GetBool("ForceUsbDrives", false));
 
 		ui.cmbUsbSandbox->clear();
-		foreach(const CSandBoxPtr & pBox, theAPI->GetAllBoxes())
-			ui.cmbUsbSandbox->addItem(pBox->GetName().replace("_", " "));
-		ui.cmbUsbSandbox->setCurrentText(theAPI->GetGlobalSettings()->GetText("UsbSandbox", "USB_Box").replace("_", " "));
+
+		QFileIconProvider IconProvider;
+		bool ColorIcons = theConf->GetBool("Options/ColorBoxIcons", false);
+
+		int CurUsbBox = 0;
+		foreach(const CSandBoxPtr& pBox, theAPI->GetAllBoxes()) 
+		{
+			if (theAPI->GetGlobalSettings()->GetText("UsbSandbox", "USB_Box") == pBox->GetName())
+				CurUsbBox = ui.cmbUsbSandbox->count();
+
+			auto pBoxEx = pBox.objectCast<CSandBoxPlus>();
+
+			QIcon Icon;
+			QString Action = pBox->GetText("DblClickAction");
+			if (!Action.isEmpty() && Action.left(1) != "!")
+				Icon = IconProvider.icon(QFileInfo(pBoxEx->GetCommandFile(Action)));
+			else if(ColorIcons)
+				Icon = theGUI->GetColorIcon(pBoxEx->GetColor(), pBox->GetActiveProcessCount());
+			else
+				Icon = theGUI->GetBoxIcon(pBoxEx->GetType(), pBox->GetActiveProcessCount() != 0);
+			ui.cmbUsbSandbox->addItem(Icon, pBoxEx->GetDisplayName(), pBox->GetName());
+		}
+		ui.cmbUsbSandbox->setCurrentIndex(CurUsbBox);
 
 		ui.cmbUsbSandbox->setEnabled(ui.chkSandboxUsb->isChecked() && g_CertInfo.active);
 		ui.treeVolumes->setEnabled(ui.chkSandboxUsb->isChecked() && g_CertInfo.active);
@@ -1314,11 +1380,19 @@ void CSettingsWindow::UpdateCert()
 	ui.lblEvalCert->setVisible(g_Certificate.isEmpty());
 	
 	//ui.lblCertLevel->setVisible(!g_Certificate.isEmpty());
-	if (!g_Certificate.isEmpty()) 
+	if (!g_Certificate.isEmpty())
 	{
-		ui.txtCertificate->setProperty("hiden", true);
-		int Pos = g_Certificate.indexOf("UPDATEKEY:");
-		ui.txtCertificate->setPlainText(g_Certificate.left(Pos) + "...");
+		ui.txtCertificate->setProperty("hidden", true);
+		int Pos = g_Certificate.indexOf("HWID:");
+		if (Pos == -1)
+			Pos = g_Certificate.indexOf("UPDATEKEY:");
+
+		QByteArray truncatedCert = (g_Certificate.left(Pos) + "...");
+		int namePos = truncatedCert.indexOf("NAME:");
+		int datePos = truncatedCert.indexOf("DATE:");
+		if (namePos != -1 && datePos != -1 && datePos > namePos)
+			truncatedCert = truncatedCert.mid(0, namePos + 5) + " ...\n" + truncatedCert.mid(datePos);
+		ui.txtCertificate->setPlainText(truncatedCert);
 		//ui.lblSupport->setVisible(false);
 
 		QString ReNewUrl = "https://sandboxie-plus.com/go.php?to=sbie-renew-cert";
@@ -1420,7 +1494,7 @@ void CSettingsWindow::UpdateCert()
 void CSettingsWindow::OnGetCert()
 {
 	QByteArray Certificate;
-	if (!ui.txtCertificate->property("hiden").toBool())
+	if (!ui.txtCertificate->property("hidden").toBool())
 		Certificate = ui.txtCertificate->toPlainText().toUtf8();
 	else
 		Certificate = g_Certificate;
@@ -1505,7 +1579,7 @@ void CSettingsWindow::OnCertData(const QByteArray& Certificate, const QVariantMa
 		CSandMan::ShowMessageBox(this, QMessageBox::Critical, Message);
 		return;
 	}
-	ui.txtCertificate->setProperty("hiden", false);
+	ui.txtCertificate->setProperty("hidden", false);
 	ui.txtCertificate->setPlainText(Certificate);
 	ApplyCert();
 }
@@ -1515,7 +1589,7 @@ void CSettingsWindow::ApplyCert()
 	if (!theAPI->IsConnected())
 		return;
 
-	if (ui.txtCertificate->property("hiden").toBool())
+	if (ui.txtCertificate->property("hidden").toBool())
 		return;
 
 	QByteArray Certificate = ui.txtCertificate->toPlainText().toUtf8();	
@@ -1555,7 +1629,7 @@ void CSettingsWindow::ApplyCert()
 QString CSettingsWindow::GetCertType()
 {
 	QString CertType;
-	if (CERT_IS_TYPE(g_CertInfo, eCertContributor))
+	if (g_CertInfo.type == eCertContributor)
 		CertType = tr("Contributor");
 	else if (CERT_IS_TYPE(g_CertInfo, eCertEternal))
 		CertType = tr("Eternal");
@@ -1956,7 +2030,7 @@ void CSettingsWindow::SaveSettings()
 
 				WriteAdvancedCheck(ui.chkSandboxUsb, "ForceUsbDrives", "y", "");
 
-				QString UsbSandbox = ui.cmbUsbSandbox->currentText().replace(" ", "_");
+				QString UsbSandbox = ui.cmbUsbSandbox->currentData().toString();
 				SB_STATUS Status = theAPI->ValidateName(UsbSandbox);
 				if (Status.IsError())
 					QMessageBox::warning(this, "Sandboxie-Plus", theGUI->FormatError(Status));
@@ -2113,7 +2187,7 @@ bool CSettingsWindow::ApplyCertificate(const QByteArray &Certificate, QWidget* w
 bool CSettingsWindow::CertRefreshRequired()
 {
 	if (g_CertInfo.active) {
-		if (COnlineUpdater::IsLockRequired() && g_CertInfo.type != eCertEternal)
+		if (COnlineUpdater::IsLockRequired() && g_CertInfo.type != eCertEternal && g_CertInfo.type != eCertContributor)
 		{
 			if(!g_CertInfo.locked || g_CertInfo.grace_period)
 				return true;
@@ -2755,6 +2829,7 @@ void CSettingsWindow::CertChanged()
 	m_CertChanged = true; 
 	QPalette palette = QApplication::palette();
 	ui.txtCertificate->setPalette(palette);
+	ui.txtCertificate->setProperty("modified", true);
 	OnOptChanged();
 }
 

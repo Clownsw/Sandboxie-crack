@@ -148,12 +148,6 @@ void COptionsWindow::CreateGeneral()
 
 	connect(ui.cmbDblClick, SIGNAL(currentIndexChanged(int)), this, SLOT(OnActionChanged()));
 
-	connect(ui.chkBlockNetShare, SIGNAL(clicked(bool)), this, SLOT(OnGeneralChanged()));
-	connect(ui.chkBlockNetParam, SIGNAL(clicked(bool)), this, SLOT(OnGeneralChanged()));
-
-	connect(ui.txtIPv4, SIGNAL(textChanged(const QString&)), this, SLOT(OnGeneralChanged()));
-	connect(ui.txtIPv6, SIGNAL(textChanged(const QString&)), this, SLOT(OnGeneralChanged()));
-
 	connect(ui.chkSecurityMode, SIGNAL(clicked(bool)), this, SLOT(OnSecurityMode()));
 	connect(ui.chkLockDown, SIGNAL(clicked(bool)), this, SLOT(OnSecurityMode()));
 	connect(ui.chkRestrictDevices, SIGNAL(clicked(bool)), this, SLOT(OnSecurityMode()));
@@ -180,7 +174,7 @@ void COptionsWindow::CreateGeneral()
 	ui.cmbVersion->addItem(tr("Version 1"));
 	ui.cmbVersion->addItem(tr("Version 2"));
 
-	CSandBoxPlus* pBoxEx = qobject_cast<CSandBoxPlus*>(m_pBox.data());
+	auto pBoxEx = m_pBox.objectCast<CSandBoxPlus>();
 	bool bEmpty = pBoxEx ? pBoxEx->IsEmpty() : true;
 	ui.lblWhenEmpty->setVisible(!bEmpty);
 	ui.lblScheme->setEnabled(bEmpty);
@@ -271,24 +265,9 @@ void COptionsWindow::LoadGeneral()
 		ui.btnBorderColor->setIcon(QPixmap(m_BoxIcon));
 	else
 		ui.btnBorderColor->setIcon(QIcon());
-	
 
 	ui.chkShowForRun->setChecked(m_pBox->GetBool("ShowForRunIn", true));
 	ui.chkPinToTray->setChecked(m_pBox->GetBool("PinToTray", false));
-
-	ui.chkBlockNetShare->setChecked(m_pBox->GetBool("BlockNetworkFiles", false));
-	ui.chkBlockNetParam->setChecked(m_pBox->GetBool("BlockNetParam", true));
-
-	QStringList BindIPs = m_pBox->GetTextList("BindAdapterIP", false);
-	foreach(const QString& BindIP, BindIPs) {
-		auto ProgIP = Split2(BindIP, ",");
-		if (!ProgIP.second.isEmpty())
-			continue;
-		if (ProgIP.first.contains("."))
-			ui.txtIPv4->setText(ProgIP.first);
-		else if (ProgIP.first.contains(":"))
-			ui.txtIPv6->setText(ProgIP.first);
-	}
 	
 	ui.chkSecurityMode->setChecked(m_pBox->GetBool("UseSecurityMode", false));
 	ui.chkLockDown->setChecked(m_pBox->GetBool("SysCallLockDown", false));
@@ -360,7 +339,7 @@ void COptionsWindow::LoadGeneral()
 		ui.chkEncrypt->setEnabled(!ui.chkRamBox->isChecked());
 	ui.chkForceProtection->setEnabled(ui.chkEncrypt->isEnabled() && ui.chkEncrypt->isChecked());
 
-	CSandBoxPlus* pBoxEx = qobject_cast<CSandBoxPlus*>(m_pBox.data());
+	auto pBoxEx = m_pBox.objectCast<CSandBoxPlus>();
 	if (pBoxEx && QFile::exists(pBoxEx->GetBoxImagePath())) 
 	{
 		if (!ui.btnPassword->menu()) {
@@ -439,24 +418,6 @@ void COptionsWindow::SaveGeneral()
 	if (Action.isEmpty()) Action = ui.cmbDblClick->currentText();
 	if (Action == "!options") m_pBox->DelValue("DblClickAction");
 	else m_pBox->SetText("DblClickAction", Action);
-
-	WriteAdvancedCheck(ui.chkBlockNetShare, "BlockNetworkFiles", "y", "");
-	WriteAdvancedCheck(ui.chkBlockNetParam, "BlockNetParam", "", "n");
-
-	QStringList BindIPs = m_pBox->GetTextList("BindAdapterIP", false);
-	foreach(const QString& BindIP, BindIPs) {
-		auto ProgIP = Split2(BindIP, ",");
-		if (!ProgIP.second.isEmpty())
-			continue;
-		BindIPs.removeAll(BindIP);
-	}
-	QString IPv4 = ui.txtIPv4->text();
-	if (!IPv4.isEmpty())
-		BindIPs.append(IPv4);
-	QString IPv6 = ui.txtIPv6->text();	
-	if (!IPv6.isEmpty())
-		BindIPs.append(IPv6);
-	m_pBox->UpdateTextList("BindAdapterIP", BindIPs, false);
 
 	WriteAdvancedCheck(ui.chkSecurityMode, "UseSecurityMode", "y", "");
 	WriteAdvancedCheck(ui.chkLockDown, "SysCallLockDown", "y", "");
@@ -1003,7 +964,7 @@ QString COptionsWindow::GetActionFile()
 	QString Action = ui.cmbDblClick->currentData().toString();
 	if (Action.isEmpty()) Action = ui.cmbDblClick->currentText();
 	if (!Action.isEmpty() && Action.left(1) != "!") {
-		CSandBoxPlus* pBoxEx = qobject_cast<CSandBoxPlus*>(m_pBox.data());
+		auto pBoxEx = m_pBox.objectCast<CSandBoxPlus>();
 		if (pBoxEx) {
 			QString Path = pBoxEx->GetCommandFile(Action);
 			ui.btnBorderColor->setIcon(LoadWindowsIcon(Path, 0));
@@ -1044,7 +1005,7 @@ void COptionsWindow::OnBrowsePath()
 	if (Name.isEmpty())
 		return;
 
-	CSandBoxPlus* pBoxEx = qobject_cast<CSandBoxPlus*>(m_pBox.data());
+	auto pBoxEx = m_pBox.objectCast<CSandBoxPlus>();
 	
 	QVariantMap Entry;
 	Entry["Name"] = Name;
@@ -1203,7 +1164,7 @@ void COptionsWindow::OnDiskChanged()
 	}
 	else {
 		ui.chkEncrypt->setEnabled(true);
-		CSandBoxPlus* pBoxEx = qobject_cast<CSandBoxPlus*>(m_pBox.data());
+		auto pBoxEx = m_pBox.objectCast<CSandBoxPlus>();
 		ui.btnPassword->setEnabled(ui.chkEncrypt->isChecked() && pBoxEx && pBoxEx->GetMountRoot().isEmpty());
 		ui.chkForceProtection->setEnabled(ui.chkEncrypt->isChecked());
 	}
@@ -1234,7 +1195,7 @@ bool COptionsWindow::RunImBox(const QStringList& Arguments)
 
 void COptionsWindow::OnSetPassword()
 {
-	CSandBoxPlus* pBoxEx = qobject_cast<CSandBoxPlus*>(m_pBox.data());
+	auto pBoxEx = m_pBox.objectCast<CSandBoxPlus>();
 	bool bNew = !QFile::exists(pBoxEx->GetBoxImagePath());
 	CBoxImageWindow window(bNew ? CBoxImageWindow::eNew : CBoxImageWindow::eChange, this);
 	if (bNew) window.SetImageSize(m_ImageSize);
@@ -1260,7 +1221,7 @@ void COptionsWindow::OnSetPassword()
 
 void COptionsWindow::OnBackupHeader()
 {
-	CSandBoxPlus* pBoxEx = qobject_cast<CSandBoxPlus*>(m_pBox.data());
+	auto pBoxEx = m_pBox.objectCast<CSandBoxPlus>();
 
 	QString FileName = QFileDialog::getSaveFileName(theGUI, tr("Backup Image Header for %1").arg(m_pBox->GetName()), "", QString("Image Header File (*.hdr)")).replace("/", "\\");
 
@@ -1275,7 +1236,7 @@ void COptionsWindow::OnBackupHeader()
 
 void COptionsWindow::OnRestoreHeader()
 {
-	CSandBoxPlus* pBoxEx = qobject_cast<CSandBoxPlus*>(m_pBox.data());
+	auto pBoxEx = m_pBox.objectCast<CSandBoxPlus>();
 
 	QString FileName = QFileDialog::getOpenFileName(theGUI, tr("Restore Image Header for %1").arg(m_pBox->GetName()), "", QString("Image Header File (*.hdr)")).replace("/", "\\");
 

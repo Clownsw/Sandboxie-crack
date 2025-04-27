@@ -1426,9 +1426,6 @@ _FX NTSTATUS Conf_Api_Reload(PROCESS *proc, ULONG64 *parms)
     if (proc)
         return STATUS_NOT_IMPLEMENTED;
 
-    if (!MyIsCallerSigned())
-        return STATUS_ACCESS_DENIED;
-
     flags = (ULONG)parms[2];
 
     if (flags & SBIE_CONF_FLAG_RELOAD_CERT) {
@@ -1567,16 +1564,16 @@ _FX NTSTATUS Conf_Api_Query(PROCESS *proc, ULONG64 *parms)
     // parms[1] --> WCHAR [66] SectionName
 
     memzero(boxname, sizeof(boxname));
-    if (proc)
-        wcscpy(boxname, proc->box->name);
-    else {
-        parm = (WCHAR *)parms[1];
-        if (parm) {
-            ProbeForRead(parm, sizeof(WCHAR) * 64, sizeof(WCHAR));
-            if (parm[0])
-                wcsncpy(boxname, parm, 64);
-        }
+    parm = (WCHAR *)parms[1];
+    if (parm) {
+        ProbeForRead(parm, sizeof(WCHAR) * 64, sizeof(WCHAR));
+        if (parm[0])
+            wcsncpy(boxname, parm, 64);
+        else
+            parm = NULL;
     }
+    if (!parm && proc)
+        wcscpy(boxname, proc->box->name);
 
     // parms[2] --> WCHAR [66] SettingName
 

@@ -877,6 +877,7 @@ void COptionsWindow::LoadConfig()
 	LoadNetFwRules();
 	LoadDnsFilter();
 	LoadNetProxy();
+	LoadNetwork();
 
 	LoadAccessList();
 
@@ -1014,6 +1015,8 @@ void COptionsWindow::SaveConfig()
 			SaveDnsFilter();
 		if (m_NetProxyChanged)
 			SaveNetProxy();
+		if (m_NetworkChanged)
+			SaveNetwork();
 
 		if (m_AccessChanged) {
 			SaveAccessList();
@@ -1063,7 +1066,7 @@ bool COptionsWindow::apply()
 	else
 	{
 		if (m_GeneralChanged) {
-			CSandBoxPlus* pBoxEx = qobject_cast<CSandBoxPlus*>(m_pBox.data());
+			auto pBoxEx = m_pBox.objectCast<CSandBoxPlus>();
 			if (ui.chkEncrypt->isChecked() && !QFile::exists(pBoxEx->GetBoxImagePath())) {
 				if (m_Password.isEmpty())
 					OnSetPassword();
