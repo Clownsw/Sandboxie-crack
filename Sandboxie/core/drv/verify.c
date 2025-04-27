@@ -744,51 +744,6 @@ _FX NTSTATUS KphValidateCertificate()
 
     status = KphVerifySignature(hash, hashSize, signature, signatureSize);
 
-    if (NT_SUCCESS(status) && key) {
-        if (_wcsicmp(key, L"46329469461254954325945934569378") == 0  // Y - CC
-          ||_wcsicmp(key, L"63F49D96BDBA28F8428B4A5008D1A587") == 0) // X - H
-        {
-            //DbgPrint("Found Blocked UpdateKey %S\n", key);
-            status = STATUS_CONTENT_BLOCKED;
-        }
-    }
-
-    if (NT_SUCCESS(status) && key) {
-
-        ULONG key_len = wcslen(key);
-
-        CHAR* blocklist = NULL;
-        ULONG blocklist_size = 0;
-        if (NT_SUCCESS(Api_GetSecureParamImpl(L"CertBlockList", &blocklist, &blocklist_size, TRUE)))
-        {
-            //DbgPrint("BAM: found valid blocklist, size: %d", blocklist_size);
-
-            blocklist[blocklist_size] = 0;
-            CHAR *blocklist_end = blocklist + strlen(blocklist);
-            for (CHAR *end, *start = blocklist; start < blocklist_end; start = end + 1)
-            {
-                end = strchr(start, '\n');
-                if (!end) end = blocklist_end;
-
-                SIZE_T len = end - start;
-                if (len > 1 && start[len - 1] == '\r') len--;
-                
-                if (len > 0) {
-                    ULONG i = 0;
-                    for (; i < key_len && i < len && start[i] == key[i]; i++); // cmp CHAR vs. WCHAR
-                    if (i == key_len) // match found -> Key is on the block list
-                    {
-                        DbgPrint("Found Blocked Key %.*s\n", start, len);
-                        status = STATUS_CONTENT_BLOCKED;
-                        break;
-                    }
-                }
-            }
-
-            Pool_Free(blocklist, blocklist_size);
-        }
-    }
-
     if (!NT_SUCCESS(status))
         goto CleanupExit;
 
