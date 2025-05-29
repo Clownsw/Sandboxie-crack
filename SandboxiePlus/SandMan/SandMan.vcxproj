@@ -89,25 +89,29 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>$(SolutionDir)$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Bin\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <LibraryPath>$(SolutionDir)$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LibraryPath>$(SolutionDir)$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Bin\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <LibraryPath>$(SolutionDir)$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>$(SolutionDir)$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <LibraryPath>$(SolutionDir)Bin\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>$(SolutionDir)$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <LibraryPath>$(SolutionDir)Bin\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)Bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
@@ -126,7 +130,7 @@
     <QtModules>core;network;gui;widgets;qml;winextras;concurrent;widgets-private;qml-private</QtModules>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <QtInstall>Qt5.15.14_msvc2019_64</QtInstall>
+    <QtInstall>Qt5.15.15_msvc2019_64</QtInstall>
     <QtModules>core;network;gui;widgets;qml;winextras;concurrent;widgets-private;qml-private</QtModules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="QtSettings">
@@ -296,9 +300,11 @@
     <ClCompile Include="Engine\SysObject.cpp" />
     <ClCompile Include="Helpers\FindTool.cpp" />
     <ClCompile Include="Helpers\FullScreen.cpp" />
+    <ClCompile Include="Helpers\IniHighlighter.cpp" />
     <ClCompile Include="Helpers\ReadDirectoryChanges.cpp" />
     <ClCompile Include="Helpers\ReadDirectoryChangesPrivate.cpp" />
     <ClCompile Include="Helpers\StorageInfo.cpp" />
+    <ClCompile Include="Helpers\TabOrder.cpp" />
     <ClCompile Include="Helpers\WinAdmin.cpp" />
     <ClCompile Include="Helpers\WindowFromPointEx.cpp" />
     <ClCompile Include="Helpers\WinHelper.cpp" />
@@ -348,6 +354,7 @@
     <ClCompile Include="Views\StackView.cpp" />
     <ClCompile Include="Views\TraceView.cpp" />
     <ClCompile Include="Windows\CompressDialog.cpp" />
+    <ClCompile Include="Windows\ExtractDialog.cpp" />
     <ClCompile Include="Windows\OptionsAccess.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -443,6 +450,7 @@
     <ClCompile Include="Windows\TestProxyDialog.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="Windows\ExtractDialog.h" />
     <QtMoc Include="Windows\TestProxyDialog.h" />
     <QtMoc Include="Windows\CompressDialog.h" />
     <QtMoc Include="Wizards\BoxAssistant.h" />
@@ -480,9 +488,11 @@
     <ClInclude Include="Engine\V4ScriptDebuggerApi.h" />
     <ClInclude Include="Helpers\FindTool.h" />
     <ClInclude Include="Helpers\FullScreen.h" />
+    <QtMoc Include="Helpers\IniHighlighter.h" />
     <ClInclude Include="Helpers\ReadDirectoryChanges.h" />
     <ClInclude Include="Helpers\ReadDirectoryChangesPrivate.h" />
     <ClInclude Include="Helpers\StorageInfo.h" />
+    <ClInclude Include="Helpers\TabOrder.h" />
     <ClInclude Include="Helpers\ThreadSafeQueue.h" />
     <ClInclude Include="Helpers\WinAdmin.h" />
     <QtMoc Include="Models\MonitorModel.h" />
@@ -504,6 +514,7 @@
   <ItemGroup>
     <QtUic Include="Forms\BoxImageWindow.ui" />
     <QtUic Include="Forms\CompressDialog.ui" />
+    <QtUic Include="Forms\ExtractDialog.ui" />
     <QtUic Include="Forms\OptionsWindow.ui" />
     <QtUic Include="Forms\PopUpWindow.ui" />
     <QtUic Include="Forms\RecoveryWindow.ui" />
@@ -514,6 +525,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\finder.cur" />
+    <None Include="sandman_ar.ts" />
     <None Include="sandman_cs.ts" />
     <None Include="sandman_de.ts" />
     <None Include="sandman_en.ts" />

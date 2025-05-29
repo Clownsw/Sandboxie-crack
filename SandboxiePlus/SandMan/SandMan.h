@@ -95,6 +95,8 @@ public:
 	SB_RESULT(quint32)	RunStart(const QString& BoxName, const QString& Command, CSbieAPI::EStartFlags Flags = CSbieAPI::eStartDefault, const QString& WorkingDir = QString(), QProcess* pProcess = NULL);
 	SB_STATUS			ImBoxMount(const CSandBoxPtr& pBox, bool bAutoUnmount = false);
 
+	void				OpenSettings(const QString& Tab = QString());
+
 	void				EditIni(const QString& IniPath, bool bPlus = false);
 
 	void				UpdateDrives();
@@ -106,7 +108,8 @@ public:
 	QIcon				MakeIconBusy(const QIcon& Icon, int Index = 0);
 	QIcon				IconAddOverlay(const QIcon& Icon, const QString& Name, int Size = 24);
 	QString				GetBoxDescription(int boxType);
-
+	
+	bool				SetCertificate(const QByteArray& Certificate);
 	bool				CheckCertificate(QWidget* pWidget, int iType = 0);
 
 	bool				IsAlwaysOnTop() const;
@@ -115,7 +118,6 @@ public:
 	void				UpdateTitleTheme(const HWND& hwnd);
 
 	SB_STATUS			ReloadCert(QWidget* pWidget = NULL);
-	void				UpdateCertState();
 
 	void				SaveMessageLog(QIODevice* pFile);
 
@@ -206,7 +208,7 @@ public slots:
 	void				OnFileRecovered(const QString& BoxName, const QString& FilePath, const QString& BoxPath);
 
 	bool				OpenRecovery(const CSandBoxPtr& pBox, bool& DeleteSnapshots, bool bCloseEmpty = false);
-	class CRecoveryWindow*	ShowRecovery(const CSandBoxPtr& pBox, bool bFind = true);
+	class CRecoveryWindow* ShowRecovery(const CSandBoxPtr& pBox);
 
 	void				TryFix(quint32 MsgCode, const QStringList& MsgData, const QString& ProcessName, const QString& BoxName);
 
@@ -226,6 +228,7 @@ public slots:
 	void				OnCancelAsync();
 
 	void				OnBoxAdded(const CSandBoxPtr& pBox);
+	void				OnBoxOpened(const CSandBoxPtr& pBox);
 	void				OnBoxClosed(const CSandBoxPtr& pBox);
 	void				OnBoxCleaned(CSandBoxPlus* pBoxEx);
 
@@ -233,7 +236,7 @@ public slots:
 
 
 	void				OpenUrl(const QString& url) { OpenUrl(QUrl(url)); }
-	void				OpenUrl(const QUrl& url);
+	void				OpenUrl(QUrl url);
 
 	int					ShowQuestion(const QString& question, const QString& checkBoxText, bool* checkBoxSetting, int buttons, int defaultButton, int type, QWidget* pParent);
 	void				ShowMessage(const QString& message, int type);
@@ -294,6 +297,8 @@ private slots:
 	void				SetUITheme();
 	void				SetTitleTheme(const HWND& hwnd);
 
+    void				OnCertData(const QByteArray& Certificate, const QVariantMap& Params);
+
 	void				AddLogMessage(const QString& Message);
 	void				AddFileRecovered(const QString& BoxName, const QString& FilePath);
 
@@ -351,6 +356,7 @@ private:
 	QVBoxLayout*		m_pMainLayout;
 
 	QToolBar*			m_pToolBar;
+	QMenu*				m_pToolBarContextMenu;
 	QSplitter*			m_pPanelSplitter;
 	QSplitter*			m_pLogSplitter;
 

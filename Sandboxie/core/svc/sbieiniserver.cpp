@@ -1,6 +1,6 @@
 /*
  * Copyright 2004-2020 Sandboxie Holdings, LLC 
- * Copyright 2020-2021 David Xanatos, xanasoft.com
+ * Copyright 2020-2025 David Xanatos, xanasoft.com
  *
  * This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@
 #define RC4_HEADER_ONLY
 #include "common/rc4.c"
 #include "core/drv/api_defs.h"
+#include "DriverAssist.h"
 
 #ifdef NEW_INI_MODE
 extern "C" {
@@ -157,6 +158,19 @@ MSG_HEADER *SbieIniServer::Handler2(MSG_HEADER *msg)
 
     if (NT_SUCCESS(status))     // if sandboxed
         return SHORT_REPLY(STATUS_NOT_SUPPORTED);
+
+    //
+    // Get/Set *.dat files in sandboxie's home directory
+    //
+
+    if (msg->msgid == MSGID_SBIE_INI_SET_DAT) {
+
+        return SetDatFile(msg, idProcess);
+    }
+    //if (msg->msgid == MSGID_SBIE_INI_GET_DAT) {
+    //
+    //    return GetDatFile(msg, idProcess);
+    //}
 
     if (PipeServer::ImpersonateCaller(&msg) != 0)
         return msg;
@@ -371,7 +385,7 @@ MSG_HEADER *SbieIniServer::GetUser(MSG_HEADER *msg)
     bool ok2 = SetUserSettingsSectionName(hToken);
 
     BOOLEAN admin = FALSE;
-    if (ok2 && TokenIsAdmin(hToken, true))
+    if (ok2 && TokenIsAdmin(hToken))
         admin = TRUE;
 
     CloseHandle(hToken);
@@ -522,14 +536,15 @@ bool SbieIniServer::SetUserSettingsSectionName(HANDLE hToken)
         return false;
 
     ULONG username_len = sizeof(m_username) / sizeof(WCHAR) - 4;
-    WCHAR domain[256];
-    ULONG domain_len = sizeof(domain) / sizeof(WCHAR) - 4;
-    SID_NAME_USE use;
+    //WCHAR domain[256];
+    //ULONG domain_len = sizeof(domain) / sizeof(WCHAR) - 4;
+    //SID_NAME_USE use;
 
     m_username[0] = L'\0';
 
-    ok = LookupAccountSid(NULL, info.user.User.Sid,
-            m_username, &username_len, domain, &domain_len, &use);
+    //ok = LookupAccountSid(NULL, info.user.User.Sid,
+    //        m_username, &username_len, domain, &domain_len, &use);
+    ok = DriverAssist::LookupSidCached(info.user.User.Sid, m_username, &username_len);
     if (! ok || ! m_username[0])
         return false;
 
@@ -1186,10 +1201,10 @@ ULONG SbieIniServer::AddSetting(MSG_HEADER* msg, bool insert)
                 pos = I;
                 if (!insert) pos++;
             }
-            if (_wcsicmp(I->Value.c_str(), req->value) == 0) {
-                // this value is already present, so let's abort right here
-                return STATUS_SUCCESS;
-            }
+            //if (_wcsicmp(I->Value.c_str(), req->value) == 0) {
+            //    // this value is already present, so let's abort right here
+            //    return STATUS_SUCCESS;
+            //}
         }
     }
 
@@ -2275,7 +2290,7 @@ MSG_HEADER *SbieIniServer::RunSbieCtrl(MSG_HEADER *msg, HANDLE idProcess, bool i
     if (ok) {
 
         HANDLE SbieCtrlProcessId;
-        SbieApi_SessionLeader(hToken, &SbieCtrlProcessId);
+        SbieApi_SessionLeader(m_session_id, &SbieCtrlProcessId);
         if (SbieCtrlProcessId) {
             status = STATUS_IMAGE_ALREADY_LOADED;
             ok = FALSE;
@@ -2403,6 +2418,71 @@ MSG_HEADER *SbieIniServer::RunSbieCtrl(MSG_HEADER *msg, HANDLE idProcess, bool i
 
 
 //---------------------------------------------------------------------------
+// SetDatFile
+//---------------------------------------------------------------------------
+
+
+MSG_HEADER *SbieIniServer::SetDatFile(MSG_HEADER *msg, HANDLE idProcess)
+{
+    HANDLE SessionLeaderPid;
+    SbieApi_SessionLeader(m_session_id, &SessionLeaderPid);
+    if (SessionLeaderPid != idProcess)
+        return SHORT_REPLY(STATUS_ACCESS_DENIED);
+
+    SBIE_INI_SETTING_REQ *req = (SBIE_INI_SETTING_REQ *)msg;
+    if (req->h.length < sizeof(SBIE_INI_SETTING_REQ))
+        return SHORT_REPLY(STATUS_INVALID_PARAMETER);
+
+    wchar_t* ext = wcsrchr(req->setting, L'.');
+    if (!ext || (_wcsicmp(ext, L".dat") != 0) || wcsstr(req->setting, L"..") != NULL)
+        return SHORT_REPLY(STATUS_INVALID_FILE_FOR_SECTION);
+
+    WCHAR path[768];
+    NTSTATUS status = SbieApi_GetHomePath(path, 768, NULL, 0);
+    if (!NT_SUCCESS(status))
+        return SHORT_REPLY(status);
+    wcscat(path, L"\\");
+    wcscat(path, req->setting);
+
+    UNICODE_STRING objname;
+    RtlInitUnicodeString(&objname, path);
+
+    OBJECT_ATTRIBUTES objattrs;
+    InitializeObjectAttributes(&objattrs, &objname, OBJ_CASE_INSENSITIVE, NULL, NULL);
+
+    if (req->value_len == 0) {
+
+        NtDeleteFile(&objattrs);
+
+        return SHORT_REPLY(STATUS_SUCCESS);
+    }
+
+    HANDLE handle = INVALID_HANDLE_VALUE;
+    IO_STATUS_BLOCK IoStatusBlock;
+    status = NtCreateFile(&handle, FILE_GENERIC_WRITE, &objattrs, &IoStatusBlock,NULL, 0, FILE_SHARE_VALID_FLAGS, FILE_OVERWRITE_IF, FILE_SYNCHRONOUS_IO_NONALERT | FILE_NON_DIRECTORY_FILE, NULL, 0);
+    if (NT_SUCCESS(status)) {
+
+        status = NtWriteFile(handle, NULL, NULL, NULL, &IoStatusBlock, req->value, req->value_len, NULL, NULL);
+
+        NtClose(handle);
+    }
+
+    return SHORT_REPLY(status);
+}
+
+
+//---------------------------------------------------------------------------
+// GetDatFile
+//---------------------------------------------------------------------------
+
+//
+//MSG_HEADER *SbieIniServer::GetDatFile(MSG_HEADER *msg, HANDLE idProcess)
+//{
+//    // ToDo
+//}
+
+
+//---------------------------------------------------------------------------
 // RC4Crypt
 //---------------------------------------------------------------------------
 
@@ -2416,7 +2496,7 @@ MSG_HEADER *SbieIniServer::RC4Crypt(MSG_HEADER *msg, HANDLE idProcess, bool isSa
     // as well as the rc4 algorithm for the encryption, applying the same transformation twice 
     // yealds the original plaintext, hence only one function is sufficient.
     // 
-    // Please note that neither the mechanism nor the use of the rc4 algorithm can be consideredÂ 
+    // Please note that neither the mechanism nor the use of the rc4 algorithm can be considered 
     // cryptographically secure by any means.
     // This mechanism is only good for simple obfuscation of non critical data.
     //

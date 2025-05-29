@@ -1037,7 +1037,7 @@ _FX BOOLEAN Gui_IsOpenClass(const WCHAR *ClassName)
 
         if (! Gui_MatchPath_Initialized) {
 
-            mp_flags = SbieDll_MatchPath(L'w', (const WCHAR *)-1);
+            SbieDll_MatchPath(L'w', (const WCHAR *)-1);
 
             Gui_MatchPath_Initialized = TRUE;
         }
@@ -1079,6 +1079,16 @@ _FX BOOLEAN Gui_IsWindowAccessible(HWND hWnd)
 {
     BOOLEAN allow = FALSE;
     ULONG_PTR idProcess;
+
+    //
+    // allow if target special pseudo handle
+    //
+
+    if (hWnd == HWND_MESSAGE || hWnd == HWND_DESKTOP 
+     || hWnd == HWND_BOTTOM || hWnd == HWND_NOTOPMOST || hWnd == HWND_TOPMOST) {
+
+        return TRUE;
+    }
 
     //
     // allow if target window is part of a process in the same sandbox

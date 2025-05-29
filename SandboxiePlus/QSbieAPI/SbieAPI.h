@@ -168,6 +168,11 @@ public:
 	virtual SB_STATUS		SetSecureParam(const QString& Name, const void* data, size_t size);
 	virtual SB_STATUS		GetSecureParam(const QString& Name, void* data, size_t size, quint32* size_out = NULL, bool bVerify = false);
 
+	virtual bool			TestSignature(const QByteArray& Data, const QByteArray& Signature);
+
+	virtual SB_STATUS		SetDatFile(const QString& FileName, const QByteArray& Data);
+	//virtual SB_RESULT(QByteArray) GetDatFile(const QString& FileName);
+
 
 	enum ESbieQueuedRequests
 	{
@@ -182,7 +187,7 @@ public:
 	virtual SB_RESULT(int)	RunUpdateUtility(const QStringList& Params, quint32 Elevate = 0, bool Wait = false);
 
 public slots:
-	virtual void			SendReplyData(quint32 RequestId, const QVariantMap& Result);
+	virtual void			SendQueueRpl(quint32 RequestId, const QVariantMap& Result);
 
 signals:
 	void					StatusChanged();
@@ -220,7 +225,7 @@ protected:
 
 	virtual bool			HasProcesses(const QString& BoxName);
 
-	virtual bool			GetQueue();
+	virtual bool			GetQueueReq();
 	virtual bool			GetLog();
 	virtual bool			GetMonitor();
 
@@ -289,11 +294,14 @@ public:
 	struct SScopedVoid {
 		~SScopedVoid()					{ if (ptr) free(ptr); }
 
-		inline void Assign(void* p)		{Q_ASSERT(!ptr); ptr = p;}
+		inline void Assign(void* p, size_t s) { Q_ASSERT(!ptr); ptr = p; size = s; }
+
+		inline size_t Size()			{return size;}
 
 	protected:
-		SScopedVoid(void* p) : ptr(p)	{}
+		SScopedVoid(void* p) : ptr(p), size(0) {}
 		void* ptr;
+		size_t size;
 	};
 
 	template <typename T>

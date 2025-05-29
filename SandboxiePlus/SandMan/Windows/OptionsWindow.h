@@ -97,6 +97,7 @@ private slots:
 	void OnBreakoutProg();
 	void OnBreakoutBrowse();
 	void OnBreakoutDir();
+	void OnBreakoutDoc();
 	void OnDelBreakout();
 	void OnShowBreakoutTmpl()		{ LoadBreakoutTmpl(true); }
 	void OnBreakoutChanged(QTreeWidgetItem *pItem, int);
@@ -154,6 +155,9 @@ private slots:
 
 	void OnBlockDns();
 	void OnBlockSamba();
+
+	void OnNetworkChanged() { m_NetworkChanged = true; OnOptChanged(); }
+	void OnAdapterChanged();
 	//
 	
 	// access
@@ -455,10 +459,14 @@ protected:
 	void LoadINetAccess();
 	void SaveINetAccess();
 
+	void LoadNetwork();
+	void SaveNetwork();
+
 	void ParseAndAddFwRule(const QString& Value, bool disabled = false, const QString& Template = QString());
 	void CloseNetFwEdit(bool bSave = true);
 	void CloseNetFwEdit(QTreeWidgetItem* pItem, bool bSave = true);
 	ENetWfProt GetFwRuleProt(const QString& Value);
+	QString GetFwRuleProtStr(ENetWfProt Prot);
 	ENetWfAction GetFwRuleAction(const QString& Value);
 	QString GetFwRuleActionStr(ENetWfAction Action);
 	void LoadNetFwRules();
@@ -573,6 +581,7 @@ protected:
 	bool m_NetFwRulesChanged;
 	bool m_DnsFilterChanged;
 	bool m_NetProxyChanged;
+	bool m_NetworkChanged;
 	bool m_AccessChanged;
 	bool m_TemplatesChanged;
 	bool m_FoldersChanged;
@@ -638,5 +647,7 @@ private:
 	QMap<QCheckBox*, SDbgOpt> m_DebugOptions;
 
 	void InitLangID();
+
+	class CCodeEdit* m_pCodeEdit;
 };
 
