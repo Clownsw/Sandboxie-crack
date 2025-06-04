@@ -105,6 +105,13 @@ private slots:
 
 	void OnRamDiskChange();
 
+	void OnImportBox();
+	void OnMakeBox();
+	void OnAddRoot();
+	void OnRemoveBox();
+
+	void OnImportChanged() { m_ImportChanged = true; OnOptChanged(); }
+
 	void OnProtectionChange();
 	void OnSetPassword();
 
@@ -113,6 +120,7 @@ private slots:
 	void OnAddWarnFolder();
 	void OnDelWarnProg();
 
+	void OnMoTWChange();
 	void OnVolumeChanged();
 	void UpdateDrives();
 
@@ -183,6 +191,7 @@ protected:
 	bool	m_CompatChanged;
 	bool	m_RunChanged;
 	bool	m_SkipUACChanged;
+	bool	m_ImportChanged;
 	bool	m_ProtectionChanged;
 	bool	m_GeneralChanged;
 	bool	m_FeaturesChanged;

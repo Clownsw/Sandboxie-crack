@@ -2,6 +2,40 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [1.16.0 / 5.71.0] - 2025-06-03
+
+### Added
+- added option to copy HwID from the support page
+- added 'MarkOfTheWebBox=BoxName' option to force all files with the Mark of The Web set into a preset sandbox
+- added wildcard support with ForceProcess [#2603](https://github.com/sandboxie-plus/Sandboxie/issues/2603)
+- added support for proper text scaling in the 'Type' dropdown on the Trace Log page to prevent truncation when display scaling is applied [#4812](https://github.com/sandboxie-plus/Sandboxie/pull/4812) (thanks wzxjohn)
+- added missing virtualization to EventPair and KeyedEvent objects
+- added filtering and virtualization to Timer objects
+- added option to create virtual sandboxes (not stored in Sandboxie.ini)
+- added option 'UseSandboxieUAC=y' to use Sandboxie's own UAC stand-in prompt instead of the system default one
+  - Note: the new UAC prompt offers also the option to grant only fake admin privileges to the application
+
+### Changed
+- refactored **DNS Filter logic** to enable filtering even when no DNS resolution occurs or when no valid IP address is returned [#4811](https://github.com/sandboxie-plus/Sandboxie/pull/4811) (thanks wzxjohn)
+  - previously, DNS Filter only applied if a DNS request was made and a valid response (e.g. IP address) was received
+  - this caused issues such as failed modifications for unresolved domains and potential information leakage due to DNS requests during filtering
+- enabled /GS for all components
+- enabled /CETCOMPAT for the driver
+- reworked INI handling [#4492](https://github.com/sandboxie-plus/Sandboxie/issues/4492)
+  - added 'ImportBox=C:\path\To\Box.ini'
+  - added mechanism to create virtual config section in the driver without the need for an INI file
+- improved Move Sandbox menu [#4819](https://github.com/sandboxie-plus/Sandboxie/issues/4819)
+
+### Fixed
+- fixed taskbar remains visible at the top when entering full screen in Firefox 138+ [#4761](https://github.com/sandboxie-plus/Sandboxie/issues/4761)
+- fixed redundant options in multiple delete content [#4817](https://github.com/sandboxie-plus/Sandboxie/issues/4817)
+- fixed Sandboxie Plus closes unexpectedly
+- fixed Page display abnormality [#4810](https://github.com/sandboxie-plus/Sandboxie/issues/4810)
+- fixed working directory when running program from context menu on Windows 11 [#4844](https://github.com/sandboxie-plus/Sandboxie/pull/4844) (thanks micbou)
+
+
+
 ## [1.15.12 / 5.70.12] - 2025-05-01
 
 ### Added
@@ -20,20 +54,20 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - fixed the 'run in box' selection prompt not show BoxAlias [#4709](https://github.com/sandboxie-plus/Sandboxie/issues/4709)
 - fixed after Ctrl+F, the expansion and closure records of the Box Group were disrupted [#4708](https://github.com/sandboxie-plus/Sandboxie/issues/4708)
-- added additional checks to registry set/get functions [5a6a2f7](https://github.com/sandboxie-plus/Sandboxie/commit/5a6a2f7f8a99eb9d36906b73bc883ebc4c268cc4)
+- FIXED SECURITY ISSUE ID-26: added security checks to registry set/get functions CVE-2025-46713, CVE-2025-46714, CVE-2025-46716, CVE-2025-46715 [5a6a2f7](https://github.com/sandboxie-plus/Sandboxie/commit/5a6a2f7f8a99eb9d36906b73bc883ebc4c268cc4) (thanks sgayou)
 - fixed issue in Pool_Alloc [5a6a2f7](https://github.com/sandboxie-plus/Sandboxie/commit/5a6a2f7f8a99eb9d36906b73bc883ebc4c268cc4)
 - fixed SbieCtrl.exe and SandMan.exe having a constant 3 MB/s IO rate in the Process Explorer [#4693](https://github.com/sandboxie-plus/Sandboxie/issues/4693)
-- fixed template for Tencent TIM cause drag and drop not available [#4688](https://github.com/sandboxie-plus/Sandboxie/issues/4688)
+- fixed template for Tencent TIM causes drag and drop not available [#4688](https://github.com/sandboxie-plus/Sandboxie/issues/4688)
 - improved when Sandboxie.ini is huge, the response speed gets worse [#4573](https://github.com/sandboxie-plus/Sandboxie/issues/4573)
-- fixed MSI install can`t create AppData\Roaming\Microsoft folder in Data Protection Box [#4711](https://github.com/sandboxie-plus/Sandboxie/issues/4711)
+- fixed MSI install can't create AppData\Roaming\Microsoft folder in Data Protection Box [#4711](https://github.com/sandboxie-plus/Sandboxie/issues/4711)
 - fixed two errors in Sandboxie about time speeding and add two time function hook [#4721](https://github.com/sandboxie-plus/Sandboxie/pull/4721) (thanks pwnmelife)
 - fixed an issue where the translation string of the protocol selection was saved in the configuration file
 - fixed box picker icon
 - fixed when the UI language change, toolbar unchanged [#4726](https://github.com/sandboxie-plus/Sandboxie/issues/4726)
 - fixed PingInfoView gives an error when running in Sandboxie [#4718](https://github.com/sandboxie-plus/Sandboxie/issues/4718)
-- fixed CollectProducts() Stuck in Loop When Uninstall Key Not Found [#4753](https://github.com/sandboxie-plus/Sandboxie/issues/4753)
+- fixed CollectProducts() stuck in loop when Uninstall key not found [#4753](https://github.com/sandboxie-plus/Sandboxie/issues/4753)
 - fixed crashes with SbieDll.dll [#4754](https://github.com/sandboxie-plus/Sandboxie/issues/4754)
-- fixed Automatically download file when creating shortcut [#4663](https://github.com/sandboxie-plus/Sandboxie/issues/4663) [4750](https://github.com/sandboxie-plus/Sandboxie/pull/4750) (thanks WZ-Tong)
+- fixed OneDrive automatically downloads file when creating shortcut [#4663](https://github.com/sandboxie-plus/Sandboxie/issues/4663) [4750](https://github.com/sandboxie-plus/Sandboxie/pull/4750) (thanks WZ-Tong)
 
 ### Removed
 - removed the not-working "delete content" button [#4720](https://github.com/sandboxie-plus/Sandboxie/pull/4720) (thanks habatake)

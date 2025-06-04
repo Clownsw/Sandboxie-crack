@@ -161,7 +161,8 @@ CSettingsWindow::CSettingsWindow(QWidget* parent)
 
 	ui.tabsControl->setCurrentIndex(0);
 	ui.tabsControl->setTabIcon(0, CSandMan::GetIcon("Alarm"));
-	ui.tabsControl->setTabIcon(1, CSandMan::GetIcon("USB"));
+	ui.tabsControl->setTabIcon(1, CSandMan::GetIcon("Force"));
+	ui.tabsControl->setTabIcon(2, CSandMan::GetIcon("USB"));
 
 	ui.tabsTemplates->setCurrentIndex(0);
 	ui.tabsTemplates->setTabIcon(0, CSandMan::GetIcon("Program"));
@@ -188,13 +189,14 @@ CSettingsWindow::CSettingsWindow(QWidget* parent)
 	AddIconToLabel(ui.lblInterface, CSandMan::GetIcon("GUI").pixmap(size,size));
 
 	AddIconToLabel(ui.lblDisplay, CSandMan::GetIcon("Advanced").pixmap(size,size));
-	AddIconToLabel(ui.lblIni, CSandMan::GetIcon("EditIni").pixmap(size,size));
+	AddIconToLabel(ui.lblEditor, CSandMan::GetIcon("EditIni").pixmap(size,size));
 
 	AddIconToLabel(ui.lblDiskImage, CSandMan::GetIcon("Disk").pixmap(size,size));
 
 	AddIconToLabel(ui.lblBoxRoot, CSandMan::GetIcon("Sandbox").pixmap(size,size));
 	AddIconToLabel(ui.lblBoxFeatures, CSandMan::GetIcon("Miscellaneous").pixmap(size,size));
 
+	AddIconToLabel(ui.lblIni, CSandMan::GetIcon("Editor").pixmap(size,size));
 	AddIconToLabel(ui.lblProtection, CSandMan::GetIcon("Lock").pixmap(size,size));
 
 	AddIconToLabel(ui.lblUpdates, CSandMan::GetIcon("Update").pixmap(size,size));
@@ -456,9 +458,16 @@ CSettingsWindow::CSettingsWindow(QWidget* parent)
 	connect(ui.chkWin32k, SIGNAL(stateChanged(int)), this, SLOT(OnGeneralChanged()));
 	connect(ui.chkSbieLogon, SIGNAL(stateChanged(int)), this, SLOT(OnGeneralChanged()));
 	connect(ui.chkSbieAll, SIGNAL(stateChanged(int)), this, SLOT(OnGeneralChanged()));
+	connect(ui.chkSbieUAC, SIGNAL(stateChanged(int)), this, SLOT(OnGeneralChanged()));
 	m_GeneralChanged = false;
 
 	connect(ui.chkWatchConfig, SIGNAL(stateChanged(int)), this, SLOT(OnOptChanged())); // not sbie ini
+
+	connect(ui.btnAddBox, SIGNAL(clicked(bool)), this, SLOT(OnImportBox()));
+	connect(ui.btnMkBox, SIGNAL(clicked(bool)), this, SLOT(OnMakeBox()));
+	connect(ui.btnAddRoot, SIGNAL(clicked(bool)), this, SLOT(OnAddRoot()));
+	connect(ui.btnRemBox, SIGNAL(clicked(bool)), this, SLOT(OnRemoveBox()));
+	m_ImportChanged = false;
 
 	connect(ui.chkSkipUAC, SIGNAL(stateChanged(int)), this, SLOT(OnSkipUAC()));
 	ui.chkSkipUAC->setEnabled(IsElevated());
@@ -486,6 +495,9 @@ CSettingsWindow::CSettingsWindow(QWidget* parent)
 	connect(ui.btnBrowse, SIGNAL(clicked(bool)), this, SLOT(OnBrowse()));
 	m_WarnProgsChanged = false;
 	//
+
+	connect(ui.chkSandboxMoTW, SIGNAL(stateChanged(int)), this, SLOT(OnMoTWChange()));
+	connect(ui.cmbMoTWSandbox, SIGNAL(stateChanged(int)), this, SLOT(OnMoTWChange()));
 
 	// USB
 	connect(ui.chkSandboxUsb, SIGNAL(stateChanged(int)), this, SLOT(OnVolumeChanged()));
@@ -554,24 +566,25 @@ CSettingsWindow::CSettingsWindow(QWidget* parent)
 		QString clickToR = tr("Click to reveal");
 		QString clickToH = tr("Click to hide");
 
-		// Initial state: hidden
-		ui.lblHwId->setText(tr("HwId: <a href=\"%1\">[%2]</a>").arg(fullHwId, clickToR));
+		ui.lblHwId->setText(tr("HwId: <a href=\"show\">[%1]</a>").arg(clickToR));
 		ui.lblHwId->setToolTip(clickToR);
 
-		// Click handler
-		connect(ui.lblHwId, &QLabel::linkActivated, this, [=]() {
-			if (ui.lblHwId->text().contains(clickToR)) {
-				// Reveal the ID
-				ui.lblHwId->setText(tr("HwId: <a href=\"%1\" style=\"text-decoration:none; color:inherit;\">%1</a>").arg(fullHwId));
+		connect(ui.lblHwId, &QLabel::linkActivated, this, [=](const QString& Link) {
+			if (Link == "show") {
+				ui.lblHwId->setText(tr("HwId: <a href=\"hide\" style=\"text-decoration:none; color:inherit;\">%1</a> <a href=\"copy\">(copy)</a>").arg(fullHwId));
 				ui.lblHwId->setToolTip(clickToH);
 			}
-			else {
-				// Hide the ID again
-				ui.lblHwId->setText(tr("HwId: <a href=\"%1\">[%2]</a>").arg(fullHwId, clickToR));
+			else if (Link == "hide") {
+				ui.lblHwId->setText(tr("HwId: <a href=\"show\">[%1]</a>").arg(clickToR));
 				ui.lblHwId->setToolTip(clickToR);
 			}
-			});
+			else if (Link == "copy") {
+				QApplication::clipboard()->setText(fullHwId);
+			}
+		});
 	}
+
+	ui.lblVersion->setText(tr("Sandboxie-Plus Version: %1").arg(theGUI->GetVersion()));
 
 	connect(ui.lblEvalCert, SIGNAL(linkActivated(const QString&)), this, SLOT(OnStartEval()));
 
@@ -1128,6 +1141,12 @@ void CSettingsWindow::LoadSettings()
 		ui.chkWin32k->setChecked(theAPI->GetGlobalSettings()->GetBool("EnableWin32kHooks", true));
 		ui.chkSbieLogon->setChecked(theAPI->GetGlobalSettings()->GetBool("SandboxieLogon", false));
 		ui.chkSbieAll->setChecked(theAPI->GetGlobalSettings()->GetBool("SandboxieAllGroup", false));
+		ui.chkSbieUAC->setChecked(theAPI->GetGlobalSettings()->GetBool("UseSandboxieUAC", true));
+
+		ui.treeImport->clear();
+		foreach(const QString& Value, theAPI->GetGlobalSettings()->GetTextList("ImportBox", false))
+			ui.treeImport->addTopLevelItem(new QTreeWidgetItem(QStringList() << Value));
+		m_ImportChanged = false;
 
 		ui.chkAdminOnly->setChecked(theAPI->GetGlobalSettings()->GetBool("EditAdminOnly", false));
 		ui.chkAdminOnly->setEnabled(IsAdminUser());
@@ -1155,18 +1174,26 @@ void CSettingsWindow::LoadSettings()
 
 		m_WarnProgsChanged = false;
 
+		QString MoTWBox = theAPI->GetGlobalSettings()->GetText("MarkOfTheWebBox", "Web_Box");
+		ui.chkSandboxMoTW->setChecked(theAPI->GetGlobalSettings()->GetBool("ForceMarkOfTheWeb", false));
+		QString USBBox = theAPI->GetGlobalSettings()->GetText("UsbSandbox", "USB_Box");
 		ui.chkSandboxUsb->setChecked(theAPI->GetGlobalSettings()->GetBool("ForceUsbDrives", false));
 
+		ui.cmbMoTWSandbox->clear();
 		ui.cmbUsbSandbox->clear();
 
 		QFileIconProvider IconProvider;
 		bool ColorIcons = theConf->GetBool("Options/ColorBoxIcons", false);
 
 		int CurUsbBox = 0;
+		int CurMoTWBox = 0;
 		foreach(const CSandBoxPtr& pBox, theAPI->GetAllBoxes()) 
 		{
-			if (theAPI->GetGlobalSettings()->GetText("UsbSandbox", "USB_Box") == pBox->GetName())
+			if (USBBox == pBox->GetName())
 				CurUsbBox = ui.cmbUsbSandbox->count();
+
+			if (MoTWBox == pBox->GetName())
+				CurMoTWBox = ui.cmbMoTWSandbox->count();
 
 			auto pBoxEx = pBox.objectCast<CSandBoxPlus>();
 
@@ -1178,10 +1205,13 @@ void CSettingsWindow::LoadSettings()
 				Icon = theGUI->GetColorIcon(pBoxEx->GetColor(), pBox->GetActiveProcessCount());
 			else
 				Icon = theGUI->GetBoxIcon(pBoxEx->GetType(), pBox->GetActiveProcessCount() != 0);
+			ui.cmbMoTWSandbox->addItem(Icon, pBoxEx->GetDisplayName(), pBox->GetName());
 			ui.cmbUsbSandbox->addItem(Icon, pBoxEx->GetDisplayName(), pBox->GetName());
 		}
+		ui.cmbMoTWSandbox->setCurrentIndex(CurMoTWBox);
 		ui.cmbUsbSandbox->setCurrentIndex(CurUsbBox);
-
+		
+		ui.cmbMoTWSandbox->setEnabled(ui.chkSandboxMoTW->isChecked());
 		ui.cmbUsbSandbox->setEnabled(ui.chkSandboxUsb->isChecked() && g_CertInfo.active);
 		ui.treeVolumes->setEnabled(ui.chkSandboxUsb->isChecked() && g_CertInfo.active);
 
@@ -1202,11 +1232,17 @@ void CSettingsWindow::LoadSettings()
 		ui.chkWin32k->setEnabled(false);
 		ui.chkSbieLogon->setEnabled(false);
 		ui.chkSbieAll->setEnabled(false);
+		ui.chkSbieUAC->setEnabled(false);
 		ui.regRoot->setEnabled(false);
 		ui.ipcRoot->setEnabled(false);
 		ui.chkRamDisk->setEnabled(false);
 		ui.txtRamLimit->setEnabled(false);
 		ui.lblRamLimit->setEnabled(false);
+		ui.treeImport->setEnabled(false);
+		ui.btnAddBox->setEnabled(false);
+		ui.btnMkBox->setEnabled(false);
+		ui.btnAddRoot->setEnabled(false);
+		ui.btnRemBox->setEnabled(false);
 		ui.chkAdminOnly->setEnabled(false);
 		ui.chkPassRequired->setEnabled(false);
 		ui.chkAdminOnlyFP->setEnabled(false);
@@ -1215,6 +1251,8 @@ void CSettingsWindow::LoadSettings()
 		ui.treeWarnProgs->setEnabled(false);
 		ui.btnAddWarnProg->setEnabled(false);
 		ui.btnDelWarnProg->setEnabled(false);
+		ui.chkSandboxMoTW->setEnabled(false);
+		ui.cmbMoTWSandbox->setEnabled(false);
 		ui.chkSandboxUsb->setEnabled(false);
 		ui.cmbUsbSandbox->setEnabled(false);
 		ui.treeVolumes->setEnabled(false);
@@ -1294,6 +1332,12 @@ void CSettingsWindow::OnRamDiskChange()
 	ui.lblRamLetter->setEnabled(bEnabled && ui.chkRamLetter->isChecked());
 
 	OnGeneralChanged();
+}
+
+void CSettingsWindow::OnMoTWChange()
+{
+	ui.cmbMoTWSandbox->setEnabled(ui.chkSandboxMoTW->isChecked());
+	OnOptChanged();
 }
 
 void CSettingsWindow::OnVolumeChanged() 
@@ -1970,11 +2014,23 @@ void CSettingsWindow::SaveSettings()
 				WriteAdvancedCheck(ui.chkWin32k, "EnableWin32kHooks", "", "n");
 				WriteAdvancedCheck(ui.chkSbieLogon, "SandboxieLogon", "y", "");
 				WriteAdvancedCheck(ui.chkSbieAll, "SandboxieAllGroup", "y", "");
+				WriteAdvancedCheck(ui.chkSbieUAC, "UseSandboxieUAC", "", "n");
 
 				if (m_FeaturesChanged) {
 					m_FeaturesChanged = false;
 					theAPI->ReloadConfig(true);
 				}
+			}
+
+			if (m_ImportChanged)
+			{
+				m_ImportChanged = false;
+
+				QStringList Imports;
+				for (int i = 0; i < ui.treeImport->topLevelItemCount(); i++)
+					Imports.append(ui.treeImport->topLevelItem(i)->text(0));
+
+				WriteTextList("ImportBox", Imports);
 			}
 
 			if (m_ProtectionChanged)
@@ -2025,6 +2081,15 @@ void CSettingsWindow::SaveSettings()
 				WriteTextList("AlertProcess", AlertProcess);
 				WriteTextList("AlertFolder", AlertFolder);
 			}
+
+			WriteAdvancedCheck(ui.chkSandboxMoTW, "ForceMarkOfTheWeb", "y", "");
+
+			QString MoTWSandbox = ui.cmbMoTWSandbox->currentData().toString();
+			SB_STATUS Status = theAPI->ValidateName(MoTWSandbox);
+			if (Status.IsError())
+				QMessageBox::warning(this, "Sandboxie-Plus", theGUI->FormatError(Status));
+			else
+				WriteText("MarkOfTheWebBox", MoTWSandbox);
 
 			if (m_VolumeChanged)
 			{
@@ -2423,6 +2488,68 @@ void CSettingsWindow::OnCompat()
 		OnCompatChanged();
 
 	LoadTemplates();
+}
+
+void CSettingsWindow::OnImportBox()
+{
+	QString Value = QFileDialog::getOpenFileName(this, tr("Select Portable Box ini"), "", tr("Ini Files (*.ini)")).replace("/", "\\");
+	if (Value.isEmpty())
+		return;
+
+	ui.treeImport->addTopLevelItem(new QTreeWidgetItem(QStringList() << Value));
+	OnImportChanged();
+}
+
+void CSettingsWindow::OnMakeBox()
+{
+	QString Value = QFileDialog::getSaveFileName(this, tr("Save new Portable Box ini"), "", tr("Ini Files (*.ini)")).replace("/", "\\");
+	if (Value.isEmpty())
+		return;
+
+	if (QFile::exists(Value)) {
+		QMessageBox::critical(this, "Sandboxie-Plus", tr("File already exists, please select a different file name."));
+		return;
+	}
+
+	QString Name = Split2(Split2(Value, "\\", true).second, ".").first.replace(" ", "_");
+	if (theAPI->ValidateName(Name).IsError()) {
+		QMessageBox::critical(this, "Sandboxie-Plus", tr("Invalid box name"));
+		return;
+	}
+
+	QFile File(Value);
+	if (File.open(QFile::WriteOnly)) {
+		File.write("#\n");
+		File.write("# Portable sandbox configuration file\n");
+		File.write("#\n");
+		File.write("\n");
+		File.write("[" +  Name.toLatin1() + "]\n");
+		File.write("Enabled=y\n");
+		File.close();
+	}
+
+	ui.treeImport->addTopLevelItem(new QTreeWidgetItem(QStringList() << Value));
+	OnImportChanged();
+}
+
+void CSettingsWindow::OnAddRoot()
+{
+	QString Value = QFileDialog::getExistingDirectory(this, tr("Select Root Folder")).replace("/", "\\");
+	if (Value.isEmpty())
+		return;
+
+	ui.treeImport->addTopLevelItem(new QTreeWidgetItem(QStringList() << Value + "\\*"));
+	OnImportChanged();
+}
+
+void CSettingsWindow::OnRemoveBox()
+{
+	QTreeWidgetItem* pItem = ui.treeImport->currentItem();
+	if (!pItem)
+		return;
+
+	delete pItem;
+	OnImportChanged();
 }
 
 void CSettingsWindow::OnProtectionChange()
