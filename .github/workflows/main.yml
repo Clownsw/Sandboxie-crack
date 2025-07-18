@@ -84,7 +84,7 @@ env:
 
 jobs:
   Build_x64:
-    runs-on: windows-2019
+    runs-on: windows-2022
     timeout-minutes: 45
 
     steps:
@@ -191,7 +191,7 @@ jobs:
           retention-days: 60
 
   Build_ARM64:
-    runs-on: windows-2019
+    runs-on: windows-2022
     timeout-minutes: 45
 
     steps:
@@ -296,7 +296,7 @@ jobs:
           retention-days: 60
 
   Build_x86:
-    runs-on: windows-2019
+    runs-on: windows-2022
     timeout-minutes: 45
 
     steps:
@@ -364,7 +364,7 @@ jobs:
           retention-days: 60
 
   Build_x64_Qt6:
-    runs-on: windows-2019
+    runs-on: windows-2022
     timeout-minutes: 45
 
     steps:
