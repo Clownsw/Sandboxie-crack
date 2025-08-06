@@ -35,6 +35,8 @@ VersionInfoCopyright=Copyright (C) 2020-{#CurrentYear} by David Xanatos (xanasof
 VersionInfoVersion={#MyAppVersion}
 SetupIconFile=SandManInstall.ico
 SignTool=sha256
+; Require windows 10 or later
+MinVersion=10.0
 
 ; Handled in code section as always want DirPage for portable mode.
 DisableDirPage=no
@@ -504,7 +506,7 @@ begin
 
         if ExecRet = IDYES then
         begin
-          Exec('cmd.exe', '/c ' + UninstallString, '', SW_HIDE, ewWaitUntilTerminated, ExecRet);
+          Exec(ExpandConstant('{sys}\cmd.exe'), '/c ' + UninstallString, '', SW_HIDE, ewWaitUntilTerminated, ExecRet);
           ExecRet := IDYES;
         end;
 

@@ -369,6 +369,40 @@ _FX WCHAR *Get_Default_Browser(void)
 
 
 //---------------------------------------------------------------------------
+// InitDpiAwareness
+//---------------------------------------------------------------------------
+
+typedef DPI_AWARENESS_CONTEXT (WINAPI *PFN_SetThreadDpiAwarenessContext)(DPI_AWARENESS_CONTEXT);
+
+static BOOL InitDpiAwareness()
+{
+    HMODULE hUser32 = GetModuleHandleW(L"user32.dll");
+    if (!hUser32) {
+        // Should never happen
+        return FALSE;
+    }
+
+    PFN_SetThreadDpiAwarenessContext pSetThreadDpiAwarenessContext =
+        (PFN_SetThreadDpiAwarenessContext)GetProcAddress(hUser32,
+            "SetThreadDpiAwarenessContext");
+    if (!pSetThreadDpiAwarenessContext) {
+        // Function not available (pre-Win10)—cannot change thread DPI context
+        return FALSE;
+    }
+
+    // Switch this thread to UNaware
+    DPI_AWARENESS_CONTEXT prev = pSetThreadDpiAwarenessContext(
+        DPI_AWARENESS_CONTEXT_UNAWARE);
+    if (prev == NULL) {
+        // failed
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+
+//---------------------------------------------------------------------------
 // Eat_String
 //---------------------------------------------------------------------------
 
@@ -1012,6 +1046,8 @@ BOOL Parse_Command_Line(void)
             Sleep(500);
         __debugbreak();*/
 
+        InitDpiAwareness();
+
         //
         // Open Sandboxie's own UAC Dialog
         // Note: When User Account Control (UAC) is configured to not use the secure desktop, sandboxie does the same.
@@ -1381,25 +1417,31 @@ LRESULT UacPromptWndProc(
 
         pParams->ButtonY = 300;
 
-        WCHAR bufYes[32], bufNo[32], bufCancel[32];
-        LoadStringW(GetModuleHandleW(L"user32.dll"), IDS_YES,    bufYes,    32);
-        LoadStringW(GetModuleHandleW(L"user32.dll"), IDS_NO,     bufNo,     32);
-        LoadStringW(GetModuleHandleW(L"user32.dll"), IDS_CANCEL, bufCancel, 32);
+        //WCHAR bufYes[32], bufNo[32], bufCancel[32];
+        //LoadStringW(GetModuleHandleW(L"user32.dll"), IDS_YES,    bufYes,    32);
+        //LoadStringW(GetModuleHandleW(L"user32.dll"), IDS_NO,     bufNo,     32);
+        //LoadStringW(GetModuleHandleW(L"user32.dll"), IDS_CANCEL, bufCancel, 32);
 
-        pParams->hYes = CreateWindowW(L"BUTTON", bufYes,
+        WCHAR* pMsg = SbieDll_FormatMessage0(MSG_3115);
+        pParams->hYes = CreateWindowW(L"BUTTON", pMsg,
             WS_VISIBLE | WS_CHILD | WS_TABSTOP | BS_PUSHBUTTON,
             140, pParams->ButtonY, 100, 30, hwnd, (HMENU)IDYES,
             GetModuleHandle(NULL), NULL);
+        LocalFree(pMsg);
 
-        pParams->hNo = CreateWindowW(L"BUTTON", bufNo,
+        pMsg = SbieDll_FormatMessage0(MSG_3116);
+        pParams->hNo = CreateWindowW(L"BUTTON", pMsg,
             WS_VISIBLE | WS_CHILD | WS_TABSTOP | BS_DEFPUSHBUTTON,
             250, pParams->ButtonY, 100, 30, hwnd, (HMENU)IDNO,
             GetModuleHandle(NULL), NULL);
+        LocalFree(pMsg);
 
-        pParams->hCancel = CreateWindowW(L"BUTTON", bufCancel,
+        pMsg = SbieDll_FormatMessage0(MSG_3117);
+        pParams->hCancel = CreateWindowW(L"BUTTON", pMsg,
             WS_VISIBLE | WS_CHILD | WS_TABSTOP | BS_PUSHBUTTON,
             360, pParams->ButtonY, 100, 30, hwnd, (HMENU)IDCANCEL,
             GetModuleHandle(NULL), NULL);
+        LocalFree(pMsg);
 
         SetFocus(pParams->hNo);
 

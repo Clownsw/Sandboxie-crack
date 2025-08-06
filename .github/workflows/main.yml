@@ -1,4 +1,3 @@
-
 name: CI
 
 on:
@@ -100,6 +99,7 @@ jobs:
           call "${{ github.workspace }}\Installer\buildVariables.cmd" build_qt6
           echo qt6_version=%qt6_version% >> %GITHUB_ENV%
           echo qt_version=%qt6_version% >> %GITHUB_ENV%
+
       - name: Setup msbuild
         uses: microsoft/setup-msbuild@v2
 
@@ -213,6 +213,7 @@ jobs:
           @echo on
           call "${{ github.workspace }}\Installer\buildVariables.cmd" build_qt6
           echo qt6_version=%qt6_version% >> %GITHUB_ENV%
+
       - name: Setup msbuild
         uses: microsoft/setup-msbuild@v2
 
