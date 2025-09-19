@@ -2635,6 +2635,7 @@ SB_STATUS CSbieAPI::ImBoxMount(CSandBox* pBox, const QString& Password, bool bPr
 	req->h.msgid = MSGID_IMBOX_MOUNT;
 	wcscpy(req->password, password.c_str());
 	req->protect_root = bProtect;
+	req->admin_only = pBox->GetBool("ProtectAdminOnly", true, true, true);
 	req->auto_unmount = bAutoUnmount;
 	wcscpy(req->reg_root, root.c_str());
 	wcscpy(req->file_root, file_root.c_str());
@@ -2819,14 +2820,14 @@ SB_STATUS CSbieAPI::ExecImDisk(const QString& ImageFile, const QString& Password
 #endif
 
 	WCHAR sName[32];
-	wsprintf(sName, L"_%08X_%08X%08X", GetCurrentProcessId(), (ULONG)(ctr >> 32), (ULONG)ctr);
+	wsprintfW(sName, L"_%08X_%08X%08X", GetCurrentProcessId(), (ULONG)(ctr >> 32), (ULONG)ctr);
 
 	cmd += L" mem=0x0000000000000000";
 
 	VOID* pMem = NULL;
 
 	std::wstring app = m_SbiePath.toStdWString() + L"\\ImBox.exe";
-	STARTUPINFO si = { sizeof(STARTUPINFO) };
+	STARTUPINFOW si = { sizeof(STARTUPINFOW) };
 	PROCESS_INFORMATION pi = { 0 };
     if (CreateProcessW(app.c_str(), (WCHAR*)cmd.c_str(), NULL, NULL, FALSE, CREATE_SUSPENDED, NULL, NULL, &si, &pi))
 	{

@@ -24,7 +24,6 @@
 #include "Wizards/SetupWizard.h"
 #include "Helpers/WinAdmin.h"
 #include "../MiscHelpers/Common/OtherFunctions.h"
-#include "../MiscHelpers/Common/Common.h"
 #include "Windows/SupportDialog.h"
 #include "../MiscHelpers/Archive/Archive.h"
 #include "../MiscHelpers/Archive/ArchiveFS.h"
@@ -150,7 +149,7 @@ CSandMan::CSandMan(QWidget *parent)
 	m_DarkPalett.setColor(QPalette::WindowText, Qt::white);
 	m_DarkPalett.setColor(QPalette::Base, QColor(25, 25, 25));
 	m_DarkPalett.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
-	m_DarkPalett.setColor(QPalette::ToolTipBase, Qt::lightGray);
+	m_DarkPalett.setColor(QPalette::ToolTipBase, QColor(53, 53, 53));
 	m_DarkPalett.setColor(QPalette::ToolTipText, Qt::white);
 	m_DarkPalett.setColor(QPalette::Text, Qt::white);
 	m_DarkPalett.setColor(QPalette::Button, QColor(53, 53, 53));
@@ -544,6 +543,7 @@ void CSandMan::CreateMenus(bool bAdvanced)
 
 		m_pMenuFile->addSeparator();
 		m_pRestart = m_pMenuFile->addAction(CSandMan::GetIcon("Shield9"), tr("Restart As Admin"), this, SLOT(OnRestartAsAdmin()));
+		m_pRestart->setEnabled(!IsElevated());
 		m_pExit = m_pMenuFile->addAction(CSandMan::GetIcon("Exit"), tr("Exit"), this, SLOT(OnExit()));
 
 
@@ -1315,7 +1315,7 @@ void CSandMan::OnRestartAsAdmin()
 	se.cbSize = sizeof(se);
 	se.lpVerb = L"runas";
 	se.lpFile = buf;
-	se.nShow = SW_HIDE;
+	se.nShow = SW_SHOWNORMAL;
 	se.fMask = 0;
 	ShellExecuteExW(&se);
 	m_bExit = true;

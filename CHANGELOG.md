@@ -5,12 +5,39 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 
-## [1.16.3 / 5.71.3] - 2025-08-xx
+## [1.16.4 / 5.71.4] - 2025-09-xx
+
+### Added
+- added option to block non administrative session leader (sandman.exe or sbiectrl.exe) from accessing encrypted box data
+  - Note: this is now enabled by default to disable it use 'ProtectAdminOnly=n'
+
+### Fixed
+- Sandboxie-Plus 1.16.3 Fails to Connect to Driver on Windows Preview Build 27943 [#5003](https://github.com/sandboxie-plus/Sandboxie/issues/5003)
+
+### Changed
+- improved checks in Thread_CheckObject_CommonEx for encrypted boxes
+
+
+
+## [1.16.3 / 5.71.3] - 2025-09-08
+
+### Changed
+- reworked driver imports to despite of being build with VS2022 allow it to load on windows 7 [#4942](https://github.com/sandboxie-plus/Sandboxie/issues/4942)
+- improved dark mode color pattern
+- switched to Qt 6.8.3 with [windows 7 compatibility patches](https://github.com/crystalidea/qt6windows7)
+- validated compatibility with Windows build 27934 and updated DynData
 
 ### Fixed
 - fixed 1.16.2 = Tray Menu Missing in Action [#4940](https://github.com/sandboxie-plus/Sandboxie/issues/4940)
+- fixed UAC prompt layout at higher DPI in secure desktop [#4953](https://github.com/sandboxie-plus/Sandboxie/issues/4953) (thanks gexgd0419)
+- fixed RTL layout for Arabic in UAC prompt dialog [#4957](https://github.com/sandboxie-plus/Sandboxie/pull/4957) (thanks gexgd0419)
+- fixed 1.16.1 Dark mode help popup window with light color background [#4903](https://github.com/sandboxie-plus/Sandboxie/issues/4903)
+- fixed Network options cannot be persisted during editing [#4899](https://github.com/sandboxie-plus/Sandboxie/issues/4899)
+- fixed Cleanup on Aisle Qt5 - Installer should remove obsolete files after Sandboxie 1.16.x [#4934](https://github.com/sandboxie-plus/Sandboxie/issues/4934)
+- fixed on restart as admin windows was not shown
 
-
+### Removed
+- remove obsolete code which was long superseded by new implementations
 
 
 
@@ -37,6 +64,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [1.16.1 / 5.71.1] - 2025-07-06
+
+### Added
+- added UI Font in settings windows [#4894](https://github.com/sandboxie-plus/Sandboxie/pull/4894) (thanks srdr0p)
 
 ### Changed
 - updated toolset to MSVC_2022 as the GitHub CI runner 2019 is being discontinued
