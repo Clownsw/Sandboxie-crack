@@ -4,7 +4,6 @@ Patch used: https://www.52pojie.cn/thread-1793118-1-1.html
 
 A valid license:
 
-
 ```
 NAME: 52pojie  //任意
 DATE: 01.04.2099  //非必需
