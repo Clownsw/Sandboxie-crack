@@ -532,6 +532,8 @@ _FX NTSTATUS KphValidateCertificate()
     LARGE_INTEGER cert_date = { 0 };
     LARGE_INTEGER check_date = { 0 };
     LONG days = 0;
+    BOOLEAN node_lock = FALSE;
+    BOOLEAN node_pass = FALSE;
 
     Verify_CertInfo.State = 0; // clear
 
@@ -721,13 +723,11 @@ _FX NTSTATUS KphValidateCertificate()
                 goto CleanupExit;
             }
         }
-        else if (_wcsicmp(L"HWID", name) == 0) { // if HwId is specified it must be the right one
+        else if (_wcsicmp(L"HWID", name) == 0) { // if HwId is specified it must be the right one, new format allows for multiple hwids in one cert, only one entry must match
+            node_lock = TRUE;
             extern wchar_t g_uuid_str[40];
-            if (_wcsicmp(value, g_uuid_str) != 0) {
-                status = STATUS_FIRMWARE_IMAGE_INVALID;
-                goto CleanupExit;
-            }
-            Verify_CertInfo.locked = 1;
+            if (_wcsicmp(value, g_uuid_str) == 0)
+                node_pass = TRUE;
         }
             
     next:
@@ -746,6 +746,16 @@ _FX NTSTATUS KphValidateCertificate()
 
     if (!NT_SUCCESS(status))
         goto CleanupExit;
+
+    // signature OK
+    if (node_lock) {
+        Verify_CertInfo.locked = 1;
+        if (!node_pass) {
+            status = STATUS_FIRMWARE_IMAGE_INVALID;
+            goto CleanupExit;
+        }
+    }
+    
 
     Verify_CertInfo.active = 1;
 
@@ -798,6 +808,7 @@ _FX NTSTATUS KphValidateCertificate()
 
 
     LARGE_INTEGER expiration_date = { 0 };
+    BOOLEAN bNoCR = FALSE;
 
     if (!type) // type is mandatory 
         ;
@@ -844,6 +855,7 @@ _FX NTSTATUS KphValidateCertificate()
         if(days) expiration_date.QuadPart = cert_date.QuadPart + KphGetDateInterval((CSHORT)(days), 0, 0);
         else expiration_date.QuadPart = cert_date.QuadPart + KphGetDateInterval((CSHORT)(level ? _wtoi(level) : 7), 0, 0); // x days, default 7
         Verify_CertInfo.level = eCertMaxLevel;
+		bNoCR = TRUE;
     }
     else if (!level || _wcsicmp(level, L"STANDARD") == 0) // not used, default does not have explicit level
         Verify_CertInfo.level = eCertStandard;
@@ -891,7 +903,6 @@ _FX NTSTATUS KphValidateCertificate()
         
     if(CertDbg)     DbgPrint("Sbie Cert level: %X\n", Verify_CertInfo.level);
 
-    BOOLEAN bNoCR = FALSE;
     if (options) {
 
             if(CertDbg)     DbgPrint("Sbie Cert options: %S\n", options);
@@ -983,24 +994,21 @@ _FX NTSTATUS KphValidateCertificate()
     UCHAR param_data = 0;
     UCHAR* param_ptr = &param_data;
     ULONG param_len = sizeof(param_data);
-    if (NT_SUCCESS(Api_GetSecureParamImpl(L"RequireLock", &param_ptr, &param_len, FALSE)) && param_data != 0)
+    if (NT_SUCCESS(Api_GetSecureParamImpl(L"RequireLock", &param_ptr, &param_len, FALSE)) && param_data != 0) // uses allocated param_ptr
         Verify_CertInfo.lock_req = 1;
 
     LANGID LangID = 0;
     if(NT_SUCCESS(ZwQueryInstallUILanguage(&LangID)) && (LangID == 0x0804))
         Verify_CertInfo.lock_req = 1;
 
-    if (Verify_CertInfo.lock_req && Verify_CertInfo.type != eCertEternal && Verify_CertInfo.type != eCertContributor) {
-
-        if (!Verify_CertInfo.locked)
+    if (Verify_CertInfo.lock_req && !bNoCR && Verify_CertInfo.type != eCertEternal && Verify_CertInfo.type != eCertContributor) {
+        // Check if a refresh of the cert is required
+        if (check_date.QuadPart + KphGetDateInterval(0, 4, 0) < LocalTime.QuadPart || !Verify_CertInfo.locked)
             Verify_CertInfo.active = 0;
-        if (!bNoCR) { // Check if a refresh of the cert is required
-            if (check_date.QuadPart + KphGetDateInterval(0, 4, 0) < LocalTime.QuadPart)
-                Verify_CertInfo.active = 0;
-            else if (check_date.QuadPart + KphGetDateInterval(0, 3, 0) < LocalTime.QuadPart)
-                Verify_CertInfo.grace_period = 1;
-        }
+        else if (check_date.QuadPart + KphGetDateInterval(0, 3, 0) < LocalTime.QuadPart)
+            Verify_CertInfo.grace_period = 1;
     }
+
 
 CleanupExit:
     if(CertDbg)     DbgPrint("Sbie Cert status: %08x; active: %d\n", status, Verify_CertInfo.active);

@@ -497,6 +497,17 @@ begin
     exit;
   end;
 
+  // Restrict Windows 10 versions between 1507 (build 10240) and 1607 (build 14393).
+  if (Version.Major = 10) and (Version.Minor = 0) and
+     (Version.Build >= 10240) and (Version.Build <= 14393) then
+  begin
+    if MsgBox(CustomMessage('Qt6Win10Unsupported'), mbInformation, MB_YESNO) = IDNO then
+    begin
+    Result := False;
+    exit;
+    end;
+  end;
+
   // Ask to uninstall Sandboxie Classic if found.
   ExecRet := IDYES;
 

@@ -160,6 +160,11 @@ P_NtCreateTokenEx               ZwCreateTokenEx             = NULL;
 #endif
 
 
+P_MmCopyMemory MyMmCopyMemory = NULL;
+
+P_PsIsWin32KFilterEnabledForProcess IsWin32KFilterEnabledForProcess = NULL;
+
+
 //---------------------------------------------------------------------------
 // DriverEntry
 //---------------------------------------------------------------------------
@@ -725,6 +730,8 @@ void* Driver_FindMissingService(const char* ProcName, int prmcnt)
 
 _FX BOOLEAN Driver_FindMissingServices(void)
 {
+    UNICODE_STRING uni;
+
     //
     // Retrieve some unexported kernel functions which may be useful
     //
@@ -752,7 +759,6 @@ _FX BOOLEAN Driver_FindMissingServices(void)
     
     /*DbgPrint("Test 1\n");
 
-    UNICODE_STRING uni;
     OBJECT_ATTRIBUTES objattrs;
     RtlInitUnicodeString(&uni, L"\\??\\C:\\Temp\\test.txt");
     InitializeObjectAttributes(&objattrs,
@@ -783,7 +789,7 @@ _FX BOOLEAN Driver_FindMissingServices(void)
 #endif
 
 #ifdef OLD_DDK
-    UNICODE_STRING uni;
+
 	RtlInitUnicodeString(&uni, L"ZwSetInformationToken");
 
     //
@@ -806,6 +812,12 @@ _FX BOOLEAN Driver_FindMissingServices(void)
 		return FALSE;
 	}
 #endif
+
+    RtlInitUnicodeString(&uni, L"MmCopyMemory"); // not present in windows 7
+    MyMmCopyMemory = (P_MmCopyMemory) MmGetSystemRoutineAddress(&uni);
+
+    RtlInitUnicodeString(&uni, L"PsIsWin32KFilterEnabledForProcess");
+    IsWin32KFilterEnabledForProcess = (P_PsIsWin32KFilterEnabledForProcess) MmGetSystemRoutineAddress(&uni);
 
     return TRUE;
 }

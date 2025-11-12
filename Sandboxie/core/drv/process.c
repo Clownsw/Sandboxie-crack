@@ -41,6 +41,7 @@
 #define KERNEL_MODE
 #include "verify.h"
 #include "dyn_data.h"
+#include <fltKernel.h>
 
 
 //---------------------------------------------------------------------------
@@ -662,6 +663,24 @@ _FX PROCESS *Process_Create(
 
     proc->create_time = PsGetProcessCreateTimeQuadPart(ProcessObject);
 
+    if(IsWin32KFilterEnabledForProcess && IsWin32KFilterEnabledForProcess(ProcessObject)) {
+
+        DbgPrint("Sandboxie: Process %u has Win32KFilterEnabled\n", (DWORD)ProcessId);
+
+        //
+        // Windows Internals 7th Edition:
+        // This is set through an internal process creation attribute flag, which can 
+        // define one out of three possible sets  of Win32k filters that are enabled. 
+        // However, because the filter sets are  hard-coded, this mitigation is re
+        // served for Microsoft internal usage.
+        //
+        // Hence it is of little use to enable it by default, it might be only of use for msedge
+        //
+
+        if(Conf_Get_Boolean(proc->box->name, L"UseWin32kFilterTable", 0, FALSE))
+            proc->filter_win32k_syscalls = TRUE;
+	}
+
     ObDereferenceObject(ProcessObject);
 
     proc->integrity_level = tzuk;   // default to no integrity level
@@ -974,7 +993,7 @@ _FX void Process_NotifyProcess(
 
             //DbgPrint("Process_NotifyProcess_Create pid=%d parent=%d current=%d\n", ProcessId, ParentId, PsGetCurrentProcessId());
             
-            if (!Process_NotifyProcess_Create(ProcessId, ParentId, PsGetCurrentProcessId(), NULL)) {
+            if (!Process_NotifyProcess_Create(ProcessId, ParentId, PsGetCurrentProcessId(), NULL, 0, NULL)) {
 
                 //
                 // Note: the process is already marked for termination so we don't need to do anything
@@ -1036,6 +1055,9 @@ _FX void Process_NotifyProcess(
 _FX void Process_NotifyProcessEx(
     PEPROCESS Process, HANDLE ProcessId, PPS_CREATE_NOTIFY_INFO CreateInfo)
 {
+    UNICODE_STRING *Name = NULL;
+    ULONG NameLength = 0;
+
     //
     // don't do anything before the main driver init says it's ok
     //
@@ -1059,9 +1081,31 @@ _FX void Process_NotifyProcessEx(
             // hence we take for our purposes the ID of the process calling RtlCreateUserProcess instead
             //
 
+            if (CreateInfo != NULL && CreateInfo->FileObject != NULL)
+            {
+                PFLT_FILE_NAME_INFORMATION nameInfo = NULL;
+                if (NT_SUCCESS(FltGetFileNameInformationUnsafe(CreateInfo->FileObject, NULL, FLT_FILE_NAME_NORMALIZED | FLT_FILE_NAME_QUERY_DEFAULT, &nameInfo)))
+                {
+                    //DbgPrint("Long name: %wZ\n", &nameInfo->Name);
+
+					NameLength = sizeof(UNICODE_STRING) +  nameInfo->Name.Length + sizeof(WCHAR);
+                    Name = Mem_Alloc(Driver_Pool, NameLength);
+                    if (Name)
+                    {
+                        Name->Length = nameInfo->Name.Length;
+                        Name->MaximumLength = nameInfo->Name.Length + sizeof(WCHAR);
+                        Name->Buffer = (WCHAR *)((UCHAR *)Name + sizeof(UNICODE_STRING));
+                        RtlCopyMemory(Name->Buffer, nameInfo->Name.Buffer, nameInfo->Name.Length);
+						Name->Buffer[nameInfo->Name.Length / sizeof(WCHAR)] = L'\0';
+                    }
+
+                    FltReleaseFileNameInformation(nameInfo);
+                }
+            }
+
             //DbgPrint("Process_NotifyProcess_Create pid=%d parent=%d current=%d\n", ProcessId, CreateInfo->ParentProcessId, PsGetCurrentProcessId());
             
-            if (!Process_NotifyProcess_Create(ProcessId, CreateInfo->ParentProcessId, PsGetCurrentProcessId(), NULL)) {
+            if (!Process_NotifyProcess_Create(ProcessId, CreateInfo->ParentProcessId, PsGetCurrentProcessId(), Name, NameLength, NULL)) {
 
                 CreateInfo->CreationStatus = STATUS_ACCESS_DENIED;
             }
@@ -1080,7 +1124,7 @@ _FX void Process_NotifyProcessEx(
 
 
 _FX BOOLEAN Process_NotifyProcess_Create(
-    HANDLE ProcessId, HANDLE ParentId, HANDLE CallerId, BOX *box)
+    HANDLE ProcessId, HANDLE ParentId, HANDLE CallerId, UNICODE_STRING* Name, ULONG NameLength, BOX *box)
 {
     void *nbuf1, *nbuf2;
     ULONG nlen1, nlen2;
@@ -1099,7 +1143,19 @@ _FX BOOLEAN Process_NotifyProcess_Create(
     // get image name for new process
     //
 
-    Process_GetProcessName(
+    if (Name) {
+
+        nbuf1 = Name;
+		nlen1 = NameLength;
+
+        nptr1 = wcsrchr(Name->Buffer, L'\\');
+        if (nptr1)
+            nptr1++;
+        if (!nptr1 || !*nptr1)
+            nptr1 = Name->Buffer;
+
+    } else
+        Process_GetProcessName(
                 Driver_Pool, (ULONG_PTR)ProcessId, &nbuf1, &nlen1, &nptr1);
     if (! nbuf1) {
 
@@ -1108,6 +1164,8 @@ _FX BOOLEAN Process_NotifyProcess_Create(
     }
 
     ImagePath = ((UNICODE_STRING *)nbuf1)->Buffer;
+
+    //DbgPrint("Process_NotifyProcess_Create: %S (%S)\n", ImagePath, nptr1);
 
     //
     // determine if new process should be sandboxed:
