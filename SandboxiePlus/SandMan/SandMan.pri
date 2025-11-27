@@ -12,6 +12,8 @@ HEADERS += ./stdafx.h \
     ./Models/SbieModel.h \
     ./Models/TraceModel.h \
     ./Models/MonitorModel.h \
+    ./Models/NtObjectModel.h \
+    ./Views/NtObjectView.h \
     ./Views/SbieView.h \
     ./Views/FileView.h \
     ./Views/TraceView.h \
@@ -30,6 +32,7 @@ HEADERS += ./stdafx.h \
     ./Windows/SnapshotsWindow.h \
     ./Windows/SettingsWindow.h \
     ./Windows/OptionsWindow.h \
+    ./Windows/EditorSettingsWindow.h \
     ./Windows/SelectBoxWindow.h \
     ./Windows/SupportDialog.h \
     ./Windows/TestProxyDialog.h \
@@ -64,6 +67,8 @@ SOURCES += ./main.cpp \
     ./Models/TraceModel.cpp \
     ./Models/MonitorModel.cpp \
     ./Models/SbieModel.cpp \
+    ./Models/NtObjectModel.cpp \
+    ./Views/NtObjectView.cpp \
     ./Views/SbieView.cpp \
     ./Views/FileView.cpp \
     ./Views/TraceView.cpp \
@@ -79,6 +84,7 @@ SOURCES += ./main.cpp \
     ./Helpers/WindowFromPointEx.cpp \
     ./Helpers/TabOrder.cpp \
     ./Windows/OptionsWindow.cpp \
+    ./Windows/EditorSettingsWindow.cpp \
     ./Windows/PopUpWindow.cpp \
     ./Windows/RecoveryWindow.cpp \
     ./Windows/SettingsWindow.cpp \
@@ -103,7 +109,8 @@ SOURCES += ./main.cpp \
     ./Engine/SysObject.cpp \
     ./AddonManager.cpp
 
-FORMS += ./Forms/SelectBoxWindow.ui \
+FORMS += ./Forms/EditorSettingsWindow.ui \
+    ./Forms/SelectBoxWindow.ui \
     ./Forms/OptionsWindow.ui \
     ./Forms/PopUpWindow.ui \
     ./Forms/RecoveryWindow.ui \

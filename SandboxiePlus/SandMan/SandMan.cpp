@@ -15,7 +15,6 @@
 #include <QtConcurrent>
 #include "../MiscHelpers/Common/SettingsWidgets.h"
 #include "Windows/OptionsWindow.h"
-#include <QProxyStyle>
 #include "../MiscHelpers/Common/TreeItemModel.h"
 #include "../MiscHelpers/Common/ListItemModel.h"
 #include "Views/TraceView.h"
@@ -24,7 +23,6 @@
 #include "Wizards/SetupWizard.h"
 #include "Helpers/WinAdmin.h"
 #include "../MiscHelpers/Common/OtherFunctions.h"
-#include "../MiscHelpers/Common/Common.h"
 #include "Windows/SupportDialog.h"
 #include "../MiscHelpers/Archive/Archive.h"
 #include "../MiscHelpers/Archive/ArchiveFS.h"
@@ -150,7 +148,7 @@ CSandMan::CSandMan(QWidget *parent)
 	m_DarkPalett.setColor(QPalette::WindowText, Qt::white);
 	m_DarkPalett.setColor(QPalette::Base, QColor(25, 25, 25));
 	m_DarkPalett.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
-	m_DarkPalett.setColor(QPalette::ToolTipBase, Qt::lightGray);
+	m_DarkPalett.setColor(QPalette::ToolTipBase, QColor(53, 53, 53));
 	m_DarkPalett.setColor(QPalette::ToolTipText, Qt::white);
 	m_DarkPalett.setColor(QPalette::Text, Qt::white);
 	m_DarkPalett.setColor(QPalette::Button, QColor(53, 53, 53));
@@ -414,6 +412,7 @@ void CSandMan::CreateUI()
 	statusBar()->setVisible(iViewMode == 1);
 
 	if(m_pKeepTerminated) m_pKeepTerminated->setChecked(theConf->GetBool("Options/KeepTerminated"));
+	if(m_pAutoExpand) m_pAutoExpand->setChecked(theConf->GetBool("Options/AutoExpandTree", true));
 	if(m_pShowAllSessions) m_pShowAllSessions->setChecked(theConf->GetBool("Options/ShowAllSessions"));
 
 	m_pWndTopMost->setChecked(theConf->GetBool("Options/AlwaysOnTop", false));
@@ -544,6 +543,7 @@ void CSandMan::CreateMenus(bool bAdvanced)
 
 		m_pMenuFile->addSeparator();
 		m_pRestart = m_pMenuFile->addAction(CSandMan::GetIcon("Shield9"), tr("Restart As Admin"), this, SLOT(OnRestartAsAdmin()));
+		m_pRestart->setEnabled(!IsElevated());
 		m_pExit = m_pMenuFile->addAction(CSandMan::GetIcon("Exit"), tr("Exit"), this, SLOT(OnExit()));
 
 
@@ -588,6 +588,9 @@ void CSandMan::CreateMenus(bool bAdvanced)
 
 		m_pKeepTerminated = m_pMenuView->addAction(CSandMan::GetIcon("Keep"), tr("Keep terminated"), this, SLOT(OnProcView()));
 		m_pKeepTerminated->setCheckable(true);
+
+		m_pAutoExpand = m_pMenuView->addAction(CSandMan::GetIcon("Expand"), tr("Auto Expand Tree"), this, SLOT(OnAutoExpand()));
+		m_pAutoExpand->setCheckable(true);
 	}
 	else {
 		m_pCleanUpMenu = NULL;
@@ -597,6 +600,8 @@ void CSandMan::CreateMenus(bool bAdvanced)
 			m_pCleanUpRecovery = NULL;
 
 		m_pKeepTerminated = NULL;
+
+		m_pAutoExpand = NULL;
 	}
 		m_pMenuView->addSeparator();
 		m_pEnableMonitoring = m_pMenuView->addAction(CSandMan::GetIcon("SetLogging"), tr("Trace Logging"), this, SLOT(OnMonitoring()));
@@ -700,6 +705,7 @@ void CSandMan::CreateOldMenus()
 				//m_pUpdateCore = NULL;
 		}
 		m_pRestart = m_pMenuFile->addAction(CSandMan::GetIcon("Shield9"), tr("Restart As Admin"), this, SLOT(OnRestartAsAdmin()));
+		m_pRestart->setEnabled(!IsElevated());
 		m_pExit = m_pMenuFile->addAction(CSandMan::GetIcon("Exit"), tr("Exit"), this, SLOT(OnExit()));
 
 	m_pMenuView = m_pMenuBar->addMenu(tr("&View"));
@@ -729,6 +735,7 @@ void CSandMan::CreateOldMenus()
 			m_pCleanUpTrace = NULL;
 			m_pCleanUpRecovery = NULL;
 		m_pKeepTerminated = NULL;
+		m_pAutoExpand = NULL;
 
 	m_pSandbox = m_pMenuBar->addMenu(tr("&Sandbox"));
 
@@ -843,6 +850,7 @@ QList<ToolBarAction> CSandMan::GetAvailableToolBarActions()
 			ToolBarAction{ "", nullptr },        // separator
 			ToolBarAction{ "CleanUpMenu", nullptr, tr("Cleanup") }, //tr: Name of button in toolbar for cleanup-all action
 			ToolBarAction{ "KeepTerminated", m_pKeepTerminated },
+			ToolBarAction{ "AutoExpand", m_pAutoExpand },
 			ToolBarAction{ "Refresh", m_pRefreshAll },
 			ToolBarAction{ "", nullptr },        // separator
 			ToolBarAction{ "BrowseFiles", m_pMenuBrowse },
@@ -1315,7 +1323,7 @@ void CSandMan::OnRestartAsAdmin()
 	se.cbSize = sizeof(se);
 	se.lpVerb = L"runas";
 	se.lpFile = buf;
-	se.nShow = SW_HIDE;
+	se.nShow = SW_SHOWNORMAL;
 	se.fMask = 0;
 	ShellExecuteExW(&se);
 	m_bExit = true;
@@ -1939,9 +1947,15 @@ void CSandMan::timerEvent(QTimerEvent* pEvent)
 				}
 			}
 
+			QString AllTemplatesStr;
+			foreach(auto& Templates, AllTemplates) {
+				AllTemplatesStr.append(QString::fromWCharArray(L"\u2022 ")); // Unicode bullet
+				AllTemplatesStr.append("<b>" + Templates  + "</b><br />");
+			}
+
 			bool State = false;
-			CleanupTemplates = CCheckableMessageBox::question(this, "Sandboxie-Plus", tr("Some compatibility templates (%1) are missing, probably deleted, do you want to remove them from all boxes?")
-				.arg(AllTemplates.join(", "))
+			CleanupTemplates = CCheckableMessageBox::question(this, "Sandboxie-Plus", tr("Some compatibility templates are missing:<br /><br />%1<br />Probably deleted, do you want to remove them from all boxes?")
+				.arg(AllTemplatesStr)
 				, tr("Don't show this message again."), &State, QDialogButtonBox::Yes | QDialogButtonBox::No, QDialogButtonBox::Yes, QMessageBox::Information) == QDialogButtonBox::Yes ? 1 : 0;
 
 			if (State)
@@ -1963,6 +1977,9 @@ void CSandMan::timerEvent(QTimerEvent* pEvent)
 				foreach(const QString & Template, I.value())
 					Section->DelValue("Template", Template);
 				Section->SetRefreshOnChange(true);
+				auto pBoxEx = Section.objectCast<CSandBoxPlus>();
+				if (pBoxEx && pBoxEx->IsPortable())
+					pBoxEx->CommitIniChanges();
 			}
 
 			theAPI->CommitIniChanges();
@@ -2385,7 +2402,7 @@ void CSandMan::OnBoxClosed(const CSandBoxPtr& pBox)
 	if (!to_delete.isEmpty()) {
 		foreach(const QString& Value, to_delete) {
 			if (tempValLocalPrefix.compare(Value.left(11)) == 0)
-				theAPI->SbieIniSet("Template_" + tempValLocalPrefix, "*", "", CSbieAPI::eIniUpdate);
+				theAPI->SbieIniSet("Template_" + tempValLocalPrefix, "*", "", CSbieIni::eIniUpdate);
 			list.removeAt(list.indexOf(Value));
 		}
 		pBox->UpdateTextList("Template", list, FALSE);
@@ -2455,19 +2472,23 @@ void CSandMan::OnStatusChanged()
 			if (PortableRootDir == 2)
 			{
 				QString NtBoxRoot = theAPI->GetGlobalSettings()->GetText("FileRootPath", "\\??\\%SystemDrive%\\Sandbox\\%USER%\\%SANDBOX%", false, false).replace("GlobalSettings", "[BoxName]");
+				QString DosBoxPath = theAPI->Nt2DosPath(NtBoxRoot);
 
-				bool State = false;
-				PortableRootDir = CCheckableMessageBox::question(this, "Sandboxie-Plus",
-					tr("Sandboxie-Plus was started in portable mode, do you want to put the Sandbox folder into its parent directory?\nYes will choose: %1\nNo will choose: %2")
-					.arg(BoxPath + "\\[BoxName]")
-					.arg(theAPI->Nt2DosPath(NtBoxRoot))
-					, tr("Don't show this message again."), &State, QDialogButtonBox::Yes | QDialogButtonBox::No, QDialogButtonBox::Yes, QMessageBox::Information) == QDialogButtonBox::Yes ? 1 : 0;
+				if (DosBoxPath != BoxPath + "\\%SANDBOX%")
+				{
+					bool State = false;
+					PortableRootDir = CCheckableMessageBox::question(this, "Sandboxie-Plus",
+						tr("Sandboxie-Plus was started in portable mode, do you want to put the Sandbox folder into its parent directory?\nYes will choose: %1\nNo will choose: %2")
+						.arg(BoxPath + "\\[BoxName]")
+						.arg(DosBoxPath)
+						, tr("Don't show this message again."), &State, QDialogButtonBox::Yes | QDialogButtonBox::No, QDialogButtonBox::Yes, QMessageBox::Information) == QDialogButtonBox::Yes ? 1 : 0;
 
-				if (State)
-					theConf->SetValue("Options/PortableRootDir", PortableRootDir);
+					if (State)
+						theConf->SetValue("Options/PortableRootDir", PortableRootDir);
+				}
 			}
 
-			if (PortableRootDir)
+			if (PortableRootDir == 1)
 				theAPI->GetGlobalSettings()->SetText("FileRootPath", BoxPath + "\\%SANDBOX%");
 		}
 
@@ -3673,6 +3694,16 @@ void CSandMan::OnProcView()
 			});
 		}
 	}
+}
+
+void CSandMan::OnAutoExpand()
+{
+	theConf->SetValue("Options/AutoExpandTree", m_pAutoExpand->isChecked());
+
+	if (m_pAutoExpand->isChecked())
+		m_pBoxView->GetTree()->expandAll();
+	else
+		m_pBoxView->GetTree()->collapseAll();
 }
 
 void CSandMan::OnSettings()

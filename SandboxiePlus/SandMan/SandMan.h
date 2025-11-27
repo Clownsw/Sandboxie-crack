@@ -78,6 +78,7 @@ public:
 
 	bool				IsShowHidden() { return m_pShowHidden && m_pShowHidden->isChecked(); }
 	bool				KeepTerminated();
+	bool				IsAutoExpand() { return m_pAutoExpand && m_pAutoExpand->isChecked(); }
 	bool				ShowAllSessions() { return m_pShowAllSessions && m_pShowAllSessions->isChecked(); }
 	bool				IsSilentMode();
 	bool				IsDisableRecovery() {return IsSilentMode() || m_pDisableRecovery && m_pDisableRecovery->isChecked();}
@@ -164,19 +165,6 @@ protected:
 	QMap<CSbieProgress*, QPair<CSbieProgressPtr, QPointer<QWidget>>> m_pAsyncProgress;
 
 	QMap<QString, QSet<QString>> m_MissingTemplates;
-
-	enum EBoxColors
-	{
-		eYellow = 0,
-		eRed,
-		eGreen,
-		eBlue,
-		eCyan,
-		eMagenta,
-		eOrang,
-		eWhite,
-		eMaxColor
-	};
 
 	QMap<int, QRgb> m_BoxColors;
 
@@ -272,6 +260,7 @@ private slots:
 	void				OnRefresh();
 	void				OnCleanUp();
 	void				OnProcView();
+	void				OnAutoExpand();
 	void				OnRecoveryLog();
 
 	void				OnSettings();
@@ -349,7 +338,7 @@ private:
 
 	// per 1.9.3 menu. no whitespace!
 	const QStringList	DefaultToolBarItems = QString(
-						  "Settings,KeepTerminated,CleanUpMenu,BrowseFiles,EditIni,EnableMonitor"
+						  "ReloadIni,EditIniMenu,Settings,RunBoxed,NewBoxMenu,EnableMonitor,TerminateAll,CleanUpMenu,BrowseFiles,KeepTerminated"
 						).split(',');
 
 	QWidget*			m_pMainWidget;
@@ -425,6 +414,7 @@ private:
 	QToolButton*		m_pEditIniButton;
 	//QToolButton*		m_pEditButton;
 	QAction*			m_pKeepTerminated;
+	QAction*			m_pAutoExpand;
 	QAction*			m_pShowAllSessions;
 	QAction*			m_pArrangeGroups;
 
@@ -484,6 +474,7 @@ private:
 	CPopUpWindow*		m_pPopUpWindow;
 
 	bool				m_StartMenuUpdatePending;
+public:
 
 	bool				m_ThemeUpdatePending;
 	QString				m_DefaultStyle;
@@ -495,7 +486,6 @@ private:
 	void				LoadLanguage(const QString& Lang, const QString& Module, int Index);
 	QTranslator			m_Translator[2];
 
-public:
 	class COnlineUpdater*m_pUpdater;
 
 	QString				m_Language;
@@ -544,6 +534,22 @@ class CTreeItemDelegate2 : public CTreeItemDelegate
 		size.setHeight(32);
 		return size;
 	}
+};
+
+class CTrayBoxesItemDelegate : public QStyledItemDelegate
+{
+	void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+	{
+		QStyleOptionViewItem opt(option);
+		if ((opt.state & QStyle::State_MouseOver) != 0)
+			opt.state |= QStyle::State_Selected;
+		else if ((opt.state & QStyle::State_HasFocus) != 0 && m_Hold)
+			opt.state |= QStyle::State_Selected;
+		opt.state &= ~QStyle::State_HasFocus;
+		QStyledItemDelegate::paint(painter, opt, index);
+	}
+public:
+	static bool m_Hold;
 };
 
 extern CSandMan* theGUI;

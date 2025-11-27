@@ -175,8 +175,14 @@ _FX NTSTATUS Process_Api_Start(PROCESS *proc, ULONG64 *parms)
 
         } else {
 
+            //
+            // third parameter specifies if to grant fake admin rights
+            //
+
+            box->fake_admin = (BOOLEAN)parms[3];
+
             if (!Process_NotifyProcess_Create(
-                                user_pid_parm, Api_ServiceProcessId, Api_ServiceProcessId, box)) {
+                                user_pid_parm, Api_ServiceProcessId, Api_ServiceProcessId, NULL, 0, box)) {
 
                 status = STATUS_INTERNAL_ERROR;
             }
@@ -375,6 +381,8 @@ _FX NTSTATUS Process_Api_QueryInfo(PROCESS *proc, ULONG64 *parms)
                     flags |= SBIE_FLAG_DROP_RIGHTS;
                 if (proc->rights_dropped)
                     flags |= SBIE_FLAG_RIGHTS_DROPPED;
+                if (proc->box->fake_admin)
+                    flags |= SBIE_FLAG_FAKE_ADMIN;
                 if (proc->untouchable)
                     flags |= SBIE_FLAG_PROTECTED_PROCESS;
                 if (proc->image_sbie)
@@ -1000,8 +1008,6 @@ _FX NTSTATUS Process_Enumerate(
 
         num = 0;
 
-#ifdef USE_PROCESS_MAP
-
         //
         // quick shortcut for global count retrieval
         //
@@ -1015,10 +1021,7 @@ _FX NTSTATUS Process_Enumerate(
 	    map_iter_t iter = map_iter();
 	    while (map_next(&Process_Map, &iter)) {
             proc1 = iter.value;
-#else
-        proc1 = List_Head(&Process_List);
-        while (proc1) {
-#endif
+
             BOX *box1 = proc1->box;
             if (box1 && !proc1->bHostInject) {
                 BOOLEAN same_box =
@@ -1034,15 +1037,9 @@ _FX NTSTATUS Process_Enumerate(
                     ++num;
                 }
             }
-
-#ifndef USE_PROCESS_MAP
-            proc1 = (PROCESS *)List_Next(proc1);
-#endif
         }
 
-#ifdef USE_PROCESS_MAP
-        done:
-#endif
+    done:
         *count = num;
 
         status = STATUS_SUCCESS;

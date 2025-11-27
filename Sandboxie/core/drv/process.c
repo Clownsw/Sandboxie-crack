@@ -41,6 +41,7 @@
 #define KERNEL_MODE
 #include "verify.h"
 #include "dyn_data.h"
+#include <fltKernel.h>
 
 
 //---------------------------------------------------------------------------
@@ -98,15 +99,9 @@ static NTSTATUS Process_CreateUserProcess(
 //---------------------------------------------------------------------------
 
 
-#ifdef USE_PROCESS_MAP
 HASH_MAP Process_Map;
 HASH_MAP Process_MapDfp;
 HASH_MAP Process_MapFcp;
-#else
-LIST Process_List;
-LIST Process_ListDfp;
-LIST Process_ListFcp;
-#endif
 PERESOURCE Process_ListLock = NULL;
 
 static BOOLEAN Process_NotifyImageInstalled = FALSE;
@@ -132,7 +127,6 @@ _FX BOOLEAN Process_Init(void)
 {
     NTSTATUS status = STATUS_UNSUCCESSFUL;
 
-#ifdef USE_PROCESS_MAP
     map_init(&Process_Map, Driver_Pool);
 	map_resize(&Process_Map, 128); // prepare some buckets for better performance
 
@@ -141,11 +135,6 @@ _FX BOOLEAN Process_Init(void)
 
     map_init(&Process_MapFcp, Driver_Pool);
 	map_resize(&Process_MapFcp, 128); // prepare some buckets for better performance
-#else
-    List_Init(&Process_List);
-    List_Init(&Process_ListDfp);
-    List_Init(&Process_ListFcp);
-#endif
 
     if (! Mem_GetLockResource(&Process_ListLock, TRUE))
         return FALSE;
@@ -485,41 +474,28 @@ _FX PROCESS *Process_Find(HANDLE ProcessId, KIRQL *out_irql)
     KeRaiseIrql(APC_LEVEL, &irql);
     ExAcquireResourceSharedLite(Process_ListLock, TRUE);
 
-#ifdef USE_PROCESS_MAP
     proc = map_get(&Process_Map, ProcessId);
     if (proc) {
-#else
-    proc = List_Head(&Process_List);
-    while (proc) {
-        if (proc->pid == ProcessId) {
-#endif
 
-            if (check_terminated && proc->terminated) {
-                //
-                // ntdll is going to call NtRaiseHardError before
-                // aborting, so disable hard errors to avoid the
-                // pop up box from csrss
-                //
+        if (check_terminated && proc->terminated) {
+            //
+            // ntdll is going to call NtRaiseHardError before
+            // aborting, so disable hard errors to avoid the
+            // pop up box from csrss
+            //
 
-                if (proc->terminated != 9) {
-                    proc->terminated = 9;
-                    PsSetThreadHardErrorsAreDisabled(
-                        (PETHREAD)KeGetCurrentThread(), TRUE);
-                }
-                //
-                // signal that the caller should return status
-                //     STATUS_PROCESS_IS_TERMINATING
-                // (see Api_FastIo_DEVICE_CONTROL for example)
-                //
-                proc = PROCESS_TERMINATED;
+            if (proc->terminated != 9) {
+                proc->terminated = 9;
+                PsSetThreadHardErrorsAreDisabled(
+                    (PETHREAD)KeGetCurrentThread(), TRUE);
             }
-
-#ifndef USE_PROCESS_MAP
-            break;
+            //
+            // signal that the caller should return status
+            //     STATUS_PROCESS_IS_TERMINATING
+            // (see Api_FastIo_DEVICE_CONTROL for example)
+            //
+            proc = PROCESS_TERMINATED;
         }
-
-        proc = List_Next(proc);
-#endif
     }
 
     if (out_irql) {
@@ -615,11 +591,7 @@ _FX void Process_CreateTerminated(HANDLE ProcessId, ULONG SessionId)
         KeRaiseIrql(APC_LEVEL, &irql);
         ExAcquireResourceExclusiveLite(Process_ListLock, TRUE);
 
-#ifdef USE_PROCESS_MAP
         map_insert(&Process_Map, ProcessId, proc, 0);
-#else
-        List_Insert_After(&Process_List, NULL, proc);
-#endif
 
         ExReleaseResourceLite(Process_ListLock);
         KeLowerIrql(irql);
@@ -690,6 +662,24 @@ _FX PROCESS *Process_Create(
     }
 
     proc->create_time = PsGetProcessCreateTimeQuadPart(ProcessObject);
+
+    if(IsWin32KFilterEnabledForProcess && IsWin32KFilterEnabledForProcess(ProcessObject)) {
+
+        DbgPrint("Sandboxie: Process %u has Win32KFilterEnabled\n", (DWORD)ProcessId);
+
+        //
+        // Windows Internals 7th Edition:
+        // This is set through an internal process creation attribute flag, which can 
+        // define one out of three possible sets  of Win32k filters that are enabled. 
+        // However, because the filter sets are  hard-coded, this mitigation is re
+        // served for Microsoft internal usage.
+        //
+        // Hence it is of little use to enable it by default, it might be only of use for msedge
+        //
+
+        if(Conf_Get_Boolean(proc->box->name, L"UseWin32kFilterTable", 0, FALSE))
+            proc->filter_win32k_syscalls = TRUE;
+	}
 
     ObDereferenceObject(ProcessObject);
 
@@ -921,11 +911,7 @@ _FX PROCESS *Process_Create(
     KeRaiseIrql(APC_LEVEL, &irql);
     ExAcquireResourceExclusiveLite(Process_ListLock, TRUE);
 
-#ifdef USE_PROCESS_MAP
     map_insert(&Process_Map, ProcessId, proc, 0);
-#else
-    List_Insert_After(&Process_List, NULL, proc);
-#endif
 
     *out_irql = irql;
 
@@ -1007,7 +993,7 @@ _FX void Process_NotifyProcess(
 
             //DbgPrint("Process_NotifyProcess_Create pid=%d parent=%d current=%d\n", ProcessId, ParentId, PsGetCurrentProcessId());
             
-            if (!Process_NotifyProcess_Create(ProcessId, ParentId, PsGetCurrentProcessId(), NULL)) {
+            if (!Process_NotifyProcess_Create(ProcessId, ParentId, PsGetCurrentProcessId(), NULL, 0, NULL)) {
 
                 //
                 // Note: the process is already marked for termination so we don't need to do anything
@@ -1069,6 +1055,9 @@ _FX void Process_NotifyProcess(
 _FX void Process_NotifyProcessEx(
     PEPROCESS Process, HANDLE ProcessId, PPS_CREATE_NOTIFY_INFO CreateInfo)
 {
+    UNICODE_STRING *Name = NULL;
+    ULONG NameLength = 0;
+
     //
     // don't do anything before the main driver init says it's ok
     //
@@ -1092,9 +1081,31 @@ _FX void Process_NotifyProcessEx(
             // hence we take for our purposes the ID of the process calling RtlCreateUserProcess instead
             //
 
+            if (CreateInfo != NULL && CreateInfo->FileObject != NULL)
+            {
+                PFLT_FILE_NAME_INFORMATION nameInfo = NULL;
+                if (NT_SUCCESS(FltGetFileNameInformationUnsafe(CreateInfo->FileObject, NULL, FLT_FILE_NAME_NORMALIZED | FLT_FILE_NAME_QUERY_DEFAULT, &nameInfo)))
+                {
+                    //DbgPrint("Long name: %wZ\n", &nameInfo->Name);
+
+					NameLength = sizeof(UNICODE_STRING) +  nameInfo->Name.Length + sizeof(WCHAR);
+                    Name = Mem_Alloc(Driver_Pool, NameLength);
+                    if (Name)
+                    {
+                        Name->Length = nameInfo->Name.Length;
+                        Name->MaximumLength = nameInfo->Name.Length + sizeof(WCHAR);
+                        Name->Buffer = (WCHAR *)((UCHAR *)Name + sizeof(UNICODE_STRING));
+                        RtlCopyMemory(Name->Buffer, nameInfo->Name.Buffer, nameInfo->Name.Length);
+						Name->Buffer[nameInfo->Name.Length / sizeof(WCHAR)] = L'\0';
+                    }
+
+                    FltReleaseFileNameInformation(nameInfo);
+                }
+            }
+
             //DbgPrint("Process_NotifyProcess_Create pid=%d parent=%d current=%d\n", ProcessId, CreateInfo->ParentProcessId, PsGetCurrentProcessId());
             
-            if (!Process_NotifyProcess_Create(ProcessId, CreateInfo->ParentProcessId, PsGetCurrentProcessId(), NULL)) {
+            if (!Process_NotifyProcess_Create(ProcessId, CreateInfo->ParentProcessId, PsGetCurrentProcessId(), Name, NameLength, NULL)) {
 
                 CreateInfo->CreationStatus = STATUS_ACCESS_DENIED;
             }
@@ -1113,7 +1124,7 @@ _FX void Process_NotifyProcessEx(
 
 
 _FX BOOLEAN Process_NotifyProcess_Create(
-    HANDLE ProcessId, HANDLE ParentId, HANDLE CallerId, BOX *box)
+    HANDLE ProcessId, HANDLE ParentId, HANDLE CallerId, UNICODE_STRING* Name, ULONG NameLength, BOX *box)
 {
     void *nbuf1, *nbuf2;
     ULONG nlen1, nlen2;
@@ -1132,7 +1143,19 @@ _FX BOOLEAN Process_NotifyProcess_Create(
     // get image name for new process
     //
 
-    Process_GetProcessName(
+    if (Name) {
+
+        nbuf1 = Name;
+		nlen1 = NameLength;
+
+        nptr1 = wcsrchr(Name->Buffer, L'\\');
+        if (nptr1)
+            nptr1++;
+        if (!nptr1 || !*nptr1)
+            nptr1 = Name->Buffer;
+
+    } else
+        Process_GetProcessName(
                 Driver_Pool, (ULONG_PTR)ProcessId, &nbuf1, &nlen1, &nptr1);
     if (! nbuf1) {
 
@@ -1141,6 +1164,8 @@ _FX BOOLEAN Process_NotifyProcess_Create(
     }
 
     ImagePath = ((UNICODE_STRING *)nbuf1)->Buffer;
+
+    //DbgPrint("Process_NotifyProcess_Create: %S (%S)\n", ImagePath, nptr1);
 
     //
     // determine if new process should be sandboxed:
@@ -1553,18 +1578,7 @@ _FX void Process_Delete(HANDLE ProcessId)
     KeRaiseIrql(APC_LEVEL, &irql);
     ExAcquireResourceExclusiveLite(Process_ListLock, TRUE);
 
-#ifdef USE_PROCESS_MAP
     map_take(&Process_Map, ProcessId, &proc, 0);
-#else
-    proc = List_Head(&Process_List);
-    while (proc) {
-        if (proc->pid == ProcessId) {
-            List_Remove(&Process_List, proc);
-            break;
-        }
-        proc = (PROCESS *)List_Next(proc);
-    }
-#endif
 
     Process_DfpDelete(ProcessId);
 

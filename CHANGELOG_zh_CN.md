@@ -3,10 +3,160 @@
 本项目遵循 [语义化版本控制](http://semver.org/)。
 
 
-## [1.15.12 / 5.70.12] - 2025-04-??
+
+## [1.16.5 / 5.71.5] - 2025-11-04
+
+### 新增
+- 增强 INI 编辑器：对“编辑 INI 部分”对话框进行了重大改进
+  - 专用编辑器设置：新增“编辑器设置”窗口，可配置所有 INI 编辑器行为
+  - 设置验证：INI 键值现可根据 `SbieSettings.ini` 进行可视化验证，以便发现配置错误（1.16.2）
+  - 上下文提示：为 INI 键值提供来自 `SbieSettings.ini` 的元数据提示，并可配置提示详细程度（1.16.2，1.16.4）
+  - 自动补全：基于 `SbieSettings.ini` 进行 INI 键值自动补全，并采用用户手动授权的机制（1.16.3）
+  - 新增配置选项：[`Sandboxie-Plus.ini`]
+    - `Options/ValidateIniKeys` bool — 启用/禁用 INI 键值验证（默认：true）（1.16.2）
+    - `Options/EnableIniTooltips` int — 控制 INI 提示详细程度：0=无提示，1=基本信息，2=完整详情（1.16.2）
+    - `Options/EnablePopupTooltips` int — 控制弹窗提示详细程度：0=无提示，1=基本信息，2=完整详情（1.16.4）
+    - `Options/AutoCompletionConsent` bool — 用户同意启用自动补全功能（1.16.3）
+    - `Options/EnableAutoCompletion` int — 自动补全模式：0=禁用，1=手动/区分大小写，2=自动/区分大小写（1.16.3）
+    - `Options/EnableFuzzyMatching` bool — 启用自动补全的模糊匹配（1.16.3）
+  - 通过 `SbieSettings.user.ini` 自定义：
+    - 用户现在可以使用 `SbieSettings.user.ini` 文件进一步微调配置（1.16.3）
+    - 有关这些选项的详细配置指南，请参阅 `SbieSettings.ini` 文件中的注释，其中包含所有新旧设置的说明，为高级配置提供参考
+- 保留自定义沙盒颜色：为沙盒设置的自定义颜色在更改 `Box Type Preset` 后仍将保留 [#5025](https://github.com/sandboxie-plus/Sandboxie/pull/5025)（感谢 Pinefone）
+- 为沙盒边框设置新增 Alpha 透明度 [#5037](https://github.com/sandboxie-plus/Sandboxie/pull/5037)
+- 用户界面：启动时默认折叠所有分组 [#5052](https://github.com/sandboxie-plus/Sandboxie/issues/5052)
+- 用户界面：新增菜单选项，可折叠/展开分组 [#5053](https://github.com/sandboxie-plus/Sandboxie/issues/5053)
+
+### 变更
+- 支持证书可包含多个 HwID，以简化处理
+- 右键菜单图标升级 [#5038](https://github.com/sandboxie-plus/Sandboxie/issues/5038)
+- 改进 Win32 系统调用处理（实验性），当设置 `UseWin32kFilterTable=y` 时，将在适用情况下使用 `KeServiceDescriptorTableFilter` 代替 `KeServiceDescriptorTableShadow`
+- 改进默认工具栏布局
+
+### 修复
+- 修复当 VPN/绑定适配器断开连接时 BindAdapter 的可靠性问题 [#5055](https://github.com/sandboxie-plus/Sandboxie/pull/5055) [#4896](https://github.com/sandboxie-plus/Sandboxie/issues/4896)
+- 修复 WOW6432Node 错误，在必要创建第二个不存在的子键时变为 `HKLM\SOFTWARE\WOW6432Node\WOW6432Node` [#5057](https://github.com/sandboxie-plus/Sandboxie/issues/5057)
+- 修复 PowerShell 能够在添加到程序控制的文件夹中启动可执行文件的问题 [#5027](https://github.com/sandboxie-plus/Sandboxie/issues/5027)
+
+
+## [1.16.4 / 5.71.4] - 2025-10-02
+
+### 新增
+- 新增选项，可阻止非管理员会话主进程（`sandman.exe` 或 `sbiectrl.exe`）访问加密沙盒数据
+  **注意**：该功能现已默认启用，如需禁用，请使用 `ProtectAdminOnly=n`
+
+### 修复
+- 修复 **Sandboxie-Plus 1.16.3** 在 Windows 预览版 Build 27943 无法连接驱动的问题 (#5003)
+- 修复最新版本 Signal 崩溃的问题
+
+### 变更
+- 改进了 `Thread_CheckObject_CommonEx` 对加密沙盒的检查
+
+
+## [1.16.3 / 5.71.3] - 2025-09-08
+### 变更
+- 重构驱动导入机制，尽管使用 VS2022 构建，仍可在 Windows 7 上加载 (#4942)
+- 改进深色模式配色方案
+- 切换到 Qt 6.8.3，并加入 Windows 7 兼容补丁
+- 验证了与 Windows Build 27934 的兼容性，并更新了 DynData
+
+### 修复
+- 修复 1.16.2 版本托盘菜单缺失的问题 (#4940)
+- 修复高 DPI 安全桌面下的 UAC 提示布局问题 (#4953，感谢 gexgd0419)
+- 修复 UAC 提示框中阿拉伯语的 RTL（从右到左）布局问题 (#4957，感谢 gexgd0419)
+- 修复 1.16.1 深色模式下帮助弹窗背景颜色错误的问题 (#4903)
+- 修复网络选项在编辑时无法保存的问题 (#4899)
+- 修复安装程序未清理旧版 Sandboxie 1.16.x 遗留文件的问题 (#4934)
+- 修复以管理员身份重启时未显示窗口的问题
+
+### 移除
+- 移除早已被新实现替代的过时代码
+
+
+## [1.16.2 / 5.71.2] - 2025-07-28
+### 新增
+- 在“编辑 ini 配置节”中新增可切换的 INI 键验证功能 (#4915，感谢 offhub)
+- 新增可切换的逐键工具提示支持 (#4928，感谢 offhub)
+- 新增在 SandMan 中使用全新 Qt Windows 11 风格 的选项 (#4927，感谢 LumitoLuma)
+
+### 变更
+- ImBox 在访问加密沙盒卷时，不再更新容器文件的时间戳
+
+### 修复
+- 修复 Windows 11 24H2 Build 26100.4770 导致 Firefox Portable 140.0.4 / 141.0 在沙盒中启动时无响应的问题 (#4920)
+- 修复安全问题 ID-27：密码更改时加密沙盒密钥泄漏（回移植了 MajorPrivacy 的强化版 ImBox）CVE-2025-54422（感谢 love-code-yeyixiao）
+- 修复 Firefox Nightly 沙盒挂钩错误
+
+### 移除
+- 移除已废弃的 Bullguard Internet Security 模板
+- 移除已废弃的 Bsecure CloudCare 模板
+- 移除已废弃的 CyberPatrol 模板
+
+
+## [1.16.1 / 5.71.1] - 2025-07-06
+### 新增
+- 新增“设置窗口中的 UI 字体”选项 (#4894，感谢 srdr0p)
+
+### 变更
+- 更新工具链至 MSVC 2022，因 GitHub CI runner 2019 已停止支持
+  **注意**：此变更导致不再支持 Windows 7 和 32 位操作系统，因为 2022 工具链不再支持这些目标驱动构建
+- 切换到 Qt6，同时也不再支持 Windows 7
+
+### 修复
+- 修复创建快捷方式时链接目录不完整的问题 (#4882)
+- 修复 `BindAdapter` 无效的问题（即使绑定的适配器/VPN 被禁用，仍可访问互联网）(#4896)
+- 修复 `GetFullPathName()` 使用以反斜杠开头的字符串时出现的异常问题 (#4867)
+- 修复部分 UI 绑定安装语言 ID 的问题 (#4859)
+- 修复 UAC 提示框布局异常的问题 (#4863)
+- 修复启用 “Mark of The Web 强制” 时忽略“非沙盒运行”选项的问题 (#4856)
+
+
+## [1.16.0 / 5.71.0] - 2025-06-03
+
+### 新增
+- 在捐赠支持页面新增了复制硬件 ID 的选项
+- 新增 `MarkOfTheWebBox=BoxName` 选项，可将所有带有“网络标记”的文件强制放入指定的预设沙盒中
+- 为强制进程新增了通配符支持 [#2603](https://github.com/sandboxie-plus/Sandboxie/issues/2603)
+- 在跟踪日志页面的 “类型” 下拉菜单中，新增了文本缩放的正确支持，防止在应用显示缩放时文本被截断 [#4812](https://github.com/sandboxie-plus/Sandboxie/pull/4812)（感谢 wzxjohn）
+- 新增了对 EventPair 和 KeyedEvent 对象的虚拟化处理
+- 为 Timer 对象新增了筛选和虚拟化功能
+- 新增了创建虚拟沙盘（不会存储在 sandboxie ini 文件中）的选项
+- 新增了 `UseSandboxieUAC=y` 选项，可以使用沙盘内置的 UAC 替代系统默认的 UAC 提示
+  - 注意：新的 UAC 提示还提供仅授予应用程序“伪管理员权限”的选项
+
+### 更改
+- 重构了 **DNS 过滤器逻辑**，即便未发生 DNS 解析，或者未返回有效 IP 地址时也能进行过滤 [#4811](https://github.com/sandboxie-plus/Sandboxie/pull/4811)（感谢 wzxjohn）
+  - 之前只有在发起了 DNS 请求并收到有效响应（如 IP 地址）时，DNS 过滤才会生效
+  - 这会导致诸如未解析域名无法被修改和在过滤期间潜在的信息泄露等问题
+- 所有组件均启用了 `/GS`
+- 驱动程序启用了 `/CETCOMPAT`
+- 重构了 ini 配置文件的处理逻辑 [#4492](https://github.com/sandboxie-plus/Sandboxie/issues/4492)
+  - 新增 `ImportBox=C:\path\To\Box.ini`
+  - 新增了无需 ini 文件即可在驱动层创建虚拟配置区段的机制
+- 改进了移动沙箱右键菜单 [#4819](https://github.com/sandboxie-plus/Sandboxie/issues/4819)
+
+### 修复
+- 在 Firefox 138 及以上版本全屏时，任务栏依然显示在顶部的问题 [#4761](https://github.com/sandboxie-plus/Sandboxie/issues/4761)
+- 修复了删除多项内容时的多余选项 [#4817](https://github.com/sandboxie-plus/Sandboxie/issues/4817)
+- 修复了 Sandboxie Plus 意外关闭的问题
+- 修复了页面显示异常 [#4810](https://github.com/sandboxie-plus/Sandboxie/issues/4810)
+- 修复了在 Windows 11 上通过右键菜单运行程序时的工作目录问题 [#4844](https://github.com/sandboxie-plus/Sandboxie/pull/4844)（感谢 micbou）
+
+
+## [1.15.12 / 5.70.12] - 2025-05-01
+
+### 新增
+- 为 Plus 界面新增印度尼西亚语翻译 [4bad4d1](https://github.com/sandboxie-plus/Sandboxie/commit/4bad4d190a90a6329d549e5a31ca8ee13b4eb9a1)（感谢 ？？？）
+- 新增 WeType 输入法（IME）模板 [#4715](https://github.com/sandboxie-plus/Sandboxie/pull/4715)（感谢 bot-1450）
+- 在代理配置中新增主机名支持（在 WSA_Startup 时查找主机）
+- Sandboxie 现在支持绑定到适配器，而非仅绑定 IP（在 WSA_Startup 时解析 IP）
+- 新增对 %ProgramFiles(x86)% 变量的支持 [#2402](https://github.com/sandboxie-plus/Sandboxie/issues/2402)
+- 新增 TemplateDefaultFolders，包含所有需在增强隐私盒中创建的默认路径
 
 ### 更改
 - 修正了沙盒列表中的异常排序问题 [#4615](https://github.com/sandboxie-plus/Sandboxie/issues/4615)
+- 支持标签页中的名称与 HwID 信息默认隐藏，可按需切换显示 [#4714](https://github.com/sandboxie-plus/Sandboxie/pull/4714)
+- 新增可选的代理中继实现（不再篡改现有套接字，而是启动中继线程）[实验性]
 
 ### 修复
 - 修复了“在沙盒中运行”选择提示未显示沙盒别名的问题 [#4709](https://github.com/sandboxie-plus/Sandboxie/issues/4709)
@@ -17,6 +167,17 @@
 - 修复了腾讯 TIM 模板导致无法使用拖放功能的问题 [#4688](https://github.com/sandboxie-plus/Sandboxie/issues/4688)
 - 改进了 Sandboxie.ini 文件很大时响应速度变慢的问题 [#4573](https://github.com/sandboxie-plus/Sandboxie/issues/4573)
 - 修复了 Msi 安装过程中无法在数据保护沙盒中创建 AppData\Romaing\Microsoft 文件夹的问题 [#4711](https://github.com/sandboxie-plus/Sandboxie/issues/4711)
+- 修复了 Sandboxie 在时间加速相关的两个错误，并新增了两个时间函数的钩子 [#4721](https://github.com/sandboxie-plus/Sandboxie/pull/4721)（感谢 pwnmelife）
+- 修复了协议选择的翻译字符串被保存到配置文件中的问题
+- 修复了沙盒选择器图标
+- 修复了切换 UI 语言时工具栏未更新的问题 [#4726](https://github.com/sandboxie-plus/Sandboxie/issues/4726)
+- 修复了 PingInfoView 在 Sandboxie 中运行时报错的问题 [#4718](https://github.com/sandboxie-plus/Sandboxie/issues/4718)
+- 修复了卸载注册表项未找到时，CollectProducts() 卡在循环中的问题 [#4753](https://github.com/sandboxie-plus/Sandboxie/issues/4753)
+- 修复了与 SbieDll.dll 相关的崩溃问题 [#4754](https://github.com/sandboxie-plus/Sandboxie/issues/4754)
+- 修复了在创建快捷方式时自动下载文件的问题 [#4663](https://github.com/sandboxie-plus/Sandboxie/issues/4663) [4750](https://github.com/sandboxie-plus/Sandboxie/pull/4750)（感谢 WZ-Tong）
+
+### 移除
+- 移除了无效的“删除内容”按钮 [#4720](https://github.com/sandboxie-plus/Sandboxie/pull/4720)（感谢 habatake）
 
 
 ## [1.15.11 / 5.70.11] - 2025-04-16

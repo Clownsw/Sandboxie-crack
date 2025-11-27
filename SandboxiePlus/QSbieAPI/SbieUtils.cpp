@@ -212,8 +212,8 @@ SB_RESULT(void*) CSbieUtils::ElevateOps(const QStringList& Ops)
 	std::wstring params = L"-assist \"" + Ops.join("\" \"").toStdWString() + L"\"";
 
 	SHELLEXECUTEINFOW shex;
-	memset(&shex, 0, sizeof(SHELLEXECUTEINFO));
-	shex.cbSize = sizeof(SHELLEXECUTEINFO);
+	memset(&shex, 0, sizeof(shex));
+	shex.cbSize = sizeof(shex);
 	shex.fMask = SEE_MASK_FLAG_NO_UI | SEE_MASK_NOCLOSEPROCESS;
 	shex.hwnd = NULL;
 	shex.lpFile = path.c_str();
@@ -644,14 +644,14 @@ bool CSbieUtils::GetStartMenuShortcut(CSbieAPI* pApi, QString &BoxName, QString 
 	
 
 	struct SLnk {
-		WCHAR box_name[BOXNAME_COUNT];	//0
-		WCHAR reserved[30];				//34
-		WCHAR link_path[956];			//64
-		ULONG IconIndex;				//1020
-		WCHAR unused[2];				//1022
-		WCHAR icon_path[1024];			//1024
-		WCHAR work_dir[1024];			//2048
-										//3072
+		WCHAR box_name[BOXNAME_COUNT];		//0
+		WCHAR reserved[64 - BOXNAME_COUNT];	//40
+		WCHAR link_path[956];				//64
+		ULONG IconIndex;					//1020
+		WCHAR unused[2];					//1022
+		WCHAR icon_path[1024];				//1024
+		WCHAR work_dir[1024];				//2048
+											//3072
 	} *lnk = (SLnk*)buf;
 
 	BoxName = QString::fromWCharArray(lnk->box_name, wcsnlen_s(lnk->box_name, sizeof(lnk->box_name)));

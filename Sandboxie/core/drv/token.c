@@ -164,8 +164,16 @@ UCHAR SandboxieAllSid[16] = { // S-1-5-100-0
     1,                                      // Revision
     2,                                      // SubAuthorityCount
     0,0,0,0,0,5, // SECURITY_NT_AUTHORITY   // IdentifierAuthority
-    100,0,0,0,                              // SubAuthority[0] = SBIE_RID
+    SBIE_RID,0,0,0,                         // SubAuthority[0] = SBIE_RID
     0,0,0,0                                 // SubAuthority[1] = 0
+};
+
+UCHAR SandboxieAdminSid[16] = { // S-1-5-100-544
+    1,                                      // Revision
+    2,                                      // SubAuthorityCount
+    0,0,0,0,0,5, // SECURITY_NT_AUTHORITY   // IdentifierAuthority
+    SBIE_RID,0,0,0,                         // SubAuthority[0]
+    0x20, 0x02, 0x00, 0x00                  // SubAuthority[1] = 544 (0x220 in little endian = 0x20 0x02 0x00 0x00)
 };
 
 static UCHAR SystemLogonSid[12] = {
@@ -245,8 +253,7 @@ _FX BOOLEAN Token_Init(void)
     // find SepFilterToken for Token_RestrictHelper1
     //
 
-    if (!Token_Init_SepFilterToken())
-        return FALSE;
+    Token_Init_SepFilterToken();
 
     //
     // finish
@@ -343,9 +350,10 @@ _FX BOOLEAN Token_Init_SepFilterToken(void)
             //
             // 64-bit: look for "and dword ptr [rsp+48h],0"
             // later followed by "call nt!SepFilterToken"
+            // starting with 27943 we look for "mov dword ptr [rsp+0x48],0"
             //
 
-            if (*(ULONG *)ptr == 0x48246483 && ptr[4] == 0) {
+            if ((*(ULONG *)ptr == 0x48246483 && ptr[4] == 0) || (*(ULONG *)ptr == 0x482444c7 && *(ULONG*)&ptr[4] == 0)) {
 
                 for (; i < 256; ++i) {
 
@@ -387,9 +395,11 @@ _FX BOOLEAN Token_Init_SepFilterToken(void)
     }
 
     if (!Token_SepFilterToken) {
+        DbgPrintEx(DPFLTR_DEFAULT_ID, 0xFFFFFFFF, "Sbie Token_Init_SepFilterToken failed\n");
         Log_Msg1(MSG_1108, uni.Buffer);
         return FALSE;
     }
+    DbgPrintEx(DPFLTR_DEFAULT_ID, 0xFFFFFFFF, "Sbie Token_Init_SepFilterToken found %p\n", Token_SepFilterToken);
     return TRUE;
 }
 
@@ -895,7 +905,8 @@ _FX void *Token_Restrict(
     // Create a heavily restricted primary token
     //
 
-	if (Conf_Get_Boolean(proc->box->name, L"UseCreateToken", 0, FALSE) || 
+	if (!Token_SepFilterToken || // if we couldn't find SepFilterToken, then we have always to create a new token instead of modifying the existing one
+        Conf_Get_Boolean(proc->box->name, L"UseCreateToken", 0, FALSE) || 
         Conf_Get_Boolean(proc->box->name, L"SandboxieAllGroup", 0, FALSE)) {
 
         //

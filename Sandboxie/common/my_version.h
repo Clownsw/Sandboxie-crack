@@ -25,8 +25,8 @@
 #define STR(X) STR2(X)
 
 #define VERSION_MJR		5
-#define VERSION_MIN 	70
-#define VERSION_REV 	12
+#define VERSION_MIN 	71
+#define VERSION_REV 	8
 #define VERSION_UPD 	0
 
 #if VERSION_UPD > 0
@@ -36,7 +36,7 @@
   #define MY_VERSION_BINARY VERSION_MJR,VERSION_MIN,VERSION_REV
   #define MY_VERSION_STRING STR(VERSION_MJR.VERSION_MIN.VERSION_REV)
 #endif
-#define MY_ABI_VERSION  0x57010
+#define MY_ABI_VERSION  0x57170
 
 // These #defines are used by either Resource Compiler or NSIS installer
 #define SBIE_INSTALLER_PATH		"..\\Bin\\"
@@ -50,6 +50,8 @@
 
 #define SANDBOXIE               L"Sandboxie"
 #define SBIE                    L"SBIE"
+
+#define SBIE_RID                100 // must be between 80 and 111 inclusive
 
 #define SANDBOXIE_USER			L"Sandboxie"
 

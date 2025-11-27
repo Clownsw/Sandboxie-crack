@@ -35,6 +35,8 @@ VersionInfoCopyright=Copyright (C) 2020-{#CurrentYear} by David Xanatos (xanasof
 VersionInfoVersion={#MyAppVersion}
 SetupIconFile=SandManInstall.ico
 SignTool=sha256
+; Require windows 10 or later
+;MinVersion=10.0
 
 ; Handled in code section as always want DirPage for portable mode.
 DisableDirPage=no
@@ -115,6 +117,14 @@ Type: files; Name: "{app}\libssl-1_1-x64.dll"
 Type: dirifempty; Name: "{localappdata}\{#MyAppName}"
 ; Delete existing .pdb files before installing new ones.
 Type: files; Name: "{app}\*.pdb"
+; No longer used since 1.16.1
+Type: files; Name: "{app}\styles\qwindowsvistastyle.dll"
+Type: files; Name: "{app}\Qt5Core.dll"
+Type: files; Name: "{app}\Qt5Gui.dll"
+Type: files; Name: "{app}\Qt5Network.dll"
+Type: files; Name: "{app}\Qt5Qml.dll"
+Type: files; Name: "{app}\Qt5Widgets.dll"
+Type: files; Name: "{app}\Qt5WinExtras.dll"
 
 
 [Registry]
@@ -487,6 +497,17 @@ begin
     exit;
   end;
 
+  // Restrict Windows 10 versions between 1507 (build 10240) and 1607 (build 14393).
+  if (Version.Major = 10) and (Version.Minor = 0) and
+     (Version.Build >= 10240) and (Version.Build <= 14393) then
+  begin
+    if MsgBox(CustomMessage('Qt6Win10Unsupported'), mbInformation, MB_YESNO) = IDNO then
+    begin
+    Result := False;
+    exit;
+    end;
+  end;
+
   // Ask to uninstall Sandboxie Classic if found.
   ExecRet := IDYES;
 
@@ -504,7 +525,7 @@ begin
 
         if ExecRet = IDYES then
         begin
-          Exec('cmd.exe', '/c ' + UninstallString, '', SW_HIDE, ewWaitUntilTerminated, ExecRet);
+          Exec(ExpandConstant('{sys}\cmd.exe'), '/c ' + UninstallString, '', SW_HIDE, ewWaitUntilTerminated, ExecRet);
           ExecRet := IDYES;
         end;
 

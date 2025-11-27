@@ -40,6 +40,7 @@ void COptionsWindow::CreateAdvanced()
 	connect(ui.chkComTimeout, SIGNAL(clicked(bool)), this, SLOT(OnAdvancedChanged()));
 
 	connect(ui.chkForceRestart, SIGNAL(clicked(bool)), this, SLOT(OnAdvancedChanged()));
+	connect(ui.chkRestartOnPCA, SIGNAL(clicked(bool)), this, SLOT(OnAdvancedChanged()));
 
 	connect(ui.chkNoSecurityIsolation, SIGNAL(clicked(bool)), this, SLOT(OnIsolationChanged()));
 	connect(ui.chkNoSecurityFiltering, SIGNAL(clicked(bool)), this, SLOT(OnAdvancedChanged()));
@@ -134,6 +135,7 @@ void COptionsWindow::CreateAdvanced()
 	connect(ui.btnDelHostProcess, SIGNAL(clicked(bool)), this, SLOT(OnDelHostProcess()));
 	connect(ui.chkShowHostProcTmpl, SIGNAL(clicked(bool)), this, SLOT(OnShowHostProcTmpl()));
 	connect(ui.chkConfidential, SIGNAL(clicked(bool)), this, SLOT(OnConfidentialChanged()));
+	connect(ui.chkProtectAdminOnly, SIGNAL(clicked(bool)), this, SLOT(OnAdvancedChanged()));
 	connect(ui.chkLessConfidential, SIGNAL(clicked(bool)), this, SLOT(OnLessConfidentialChanged()));
 	connect(ui.chkProtectWindow, SIGNAL(clicked(bool)), this, SLOT(OnAdvancedChanged()));
 	connect(ui.chkAdminOnly, SIGNAL(clicked(bool)), this, SLOT(OnAdvancedChanged()));
@@ -149,6 +151,22 @@ void COptionsWindow::CreateAdvanced()
 	connect(ui.btnAddUser, SIGNAL(clicked(bool)), this, SLOT(OnAddUser()));
 	connect(ui.btnDelUser, SIGNAL(clicked(bool)), this, SLOT(OnDelUser()));
 	connect(ui.chkMonitorAdminOnly, SIGNAL(clicked(bool)), this, SLOT(OnAdvancedChanged()));
+
+
+	connect(ui.btnCfgUpdate, SIGNAL(clicked(bool)), this, SLOT(OnDumpConfig()));
+	connect(ui.chkCfgNoGlobal, SIGNAL(clicked(bool)), this, SLOT(OnDumpConfig()));
+	connect(ui.chkCfgNoTemplates, SIGNAL(clicked(bool)), this, SLOT(OnDumpConfig()));
+	connect(ui.chkCfgNoExpand, SIGNAL(clicked(bool)), this, SLOT(OnDumpConfig()));
+
+
+	CPanelWidgetEx* pCfgDump = new CPanelWidgetEx(ui.tabAdvanced);
+	pCfgDump->GetTree()->setHeaderLabels(tr("Name|Type|Value").split("|"));
+	ui.treeCfgDump->parentWidget()->layout()->replaceWidget(ui.treeCfgDump, pCfgDump);
+	ui.treeCfgDump->deleteLater();
+	ui.treeCfgDump = pCfgDump->GetTree();
+
+	ui.tabsDebug->setCurrentIndex(0);
+	connect(ui.tabsDebug, &QTabWidget::currentChanged, this, [&](int tab) { if(tab == 1) OnDumpConfig(); });
 }
 
 
@@ -188,6 +206,7 @@ void COptionsWindow::LoadAdvanced()
 	//ui.chkNotUntrusted->setChecked(m_pBox->GetBool("NoUntrustedToken", false));
 
 	ui.chkForceRestart->setChecked(m_pBox->GetBool("ForceRestartAll", false));
+	ui.chkRestartOnPCA->setChecked(!m_pBox->GetBool("NoRestartOnPCA", false));
 
 	CheckOpenCOM();
 	ui.chkComTimeout->setChecked(!m_pBox->GetBool("RpcMgmtSetComTimeout", true));
@@ -338,6 +357,7 @@ void COptionsWindow::LoadAdvanced()
 	ShowHostProcTmpl();
 
 	ui.chkConfidential->setChecked(m_pBox->GetBool("ConfidentialBox", false));
+	ui.chkProtectAdminOnly->setChecked(m_pBox->GetBool("ProtectAdminOnly", true));
 	ui.chkLessConfidential->setEnabled(ui.chkConfidential->isChecked());
 	ui.chkLessConfidential->setChecked(m_BoxTemplates.contains("LessConfidentialBox"));
 	ui.chkNotifyProtect->setChecked(m_pBox->GetBool("NotifyBoxProtected", false));
@@ -452,6 +472,7 @@ void COptionsWindow::SaveAdvanced()
 	WriteAdvancedCheck(ui.chkComTimeout, "RpcMgmtSetComTimeout", "n", "");
 
 	WriteAdvancedCheck(ui.chkForceRestart, "ForceRestartAll", "y", "");
+	WriteAdvancedCheck(ui.chkRestartOnPCA, "NoRestartOnPCA", "", "y");
 
 	WriteAdvancedCheck(ui.chkNoSecurityIsolation, "NoSecurityIsolation", "y", "");
 	WriteAdvancedCheck(ui.chkNoSecurityFiltering, "NoSecurityFiltering", "y", "");
@@ -638,6 +659,7 @@ void COptionsWindow::SaveAdvanced()
 	WriteTextList("DenyHostAccess", DenyHostProcesses);
 
 	WriteAdvancedCheck(ui.chkConfidential, "ConfidentialBox", "y", "");
+	WriteAdvancedCheck(ui.chkProtectAdminOnly, "ProtectAdminOnly", "", "n");
 	WriteAdvancedCheck(ui.chkNotifyProtect, "NotifyBoxProtected", "y", "");
 
 	WriteAdvancedCheck(ui.chkProtectWindow, "CoverBoxedWindows", "y", "");
@@ -784,6 +806,9 @@ void COptionsWindow::UpdateJobOptions()
 		ui.lblTotalNumber->setText("");
 	}
 	ui.txtTotalNumber->setEnabled(bUseJobObject);
+
+
+	ui.chkRestartOnPCA->setEnabled(!ui.chkForceRestart->isChecked());
 }
 
 void COptionsWindow::CheckOpenCOM()
@@ -805,9 +830,9 @@ void COptionsWindow::OnOpenCOM()
 void COptionsWindow::OnNoWindowRename()
 {
 	if (ui.chkNoWindowRename->isChecked())
-		SetAccessEntry(eWnd, "", eOpen, "#");
+		SetAccessEntry(eWnd, "", eNoRename, "*");
 	else
-		DelAccessEntry(eWnd, "", eOpen, "#");
+		DelAccessEntry(eWnd, "", eNoRename, "*");
 }
 
 void COptionsWindow::OnToggleInjectDll(QTreeWidgetItem* pItem, int Column)
@@ -1452,6 +1477,24 @@ void COptionsWindow::SaveDebug()
 			continue;
 		WriteAdvancedCheck(pCheck, DbgOption.Name, DbgOption.Value);
 		DbgOption.Changed = false;
+	}
+}
+
+void COptionsWindow::OnDumpConfig()
+{
+	ui.treeCfgDump->clear();
+
+	QList<CSbieIni::SbieIniValue> AllValues = m_pBox->GetIniSection(NULL, !ui.chkCfgNoTemplates->isChecked(), !ui.chkCfgNoGlobal->isChecked(), ui.chkCfgNoExpand->isChecked());
+	for (QList<CSbieIni::SbieIniValue>::const_iterator I = AllValues.begin(); I != AllValues.end(); ++I)
+	{
+		QTreeWidgetItem* pItem = new QTreeWidgetItem();
+		pItem->setText(0, I->Name);
+		QStringList Type;
+		if (I->Type & 0x40000000L) Type << tr("Global"); // CONF_GET_NO_GLOBAL
+		if (I->Type & 0x10000000L) Type << tr("Template"); // CONF_GET_NO_TEMPLS
+		pItem->setText(1, Type.join(", "));
+		pItem->setText(2, I->Value);
+		ui.treeCfgDump->addTopLevelItem(pItem);
 	}
 }
 

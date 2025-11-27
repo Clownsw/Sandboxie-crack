@@ -51,10 +51,6 @@ struct _PROCESS {
     // changes to the linked list of PROCESS blocks are synchronized by
     // an exclusive lock on Process_ListLock
 
-#ifndef USE_PROCESS_MAP
-    LIST_ELEM list_elem;
-#endif
-
     // process id
 
     HANDLE pid;
@@ -100,11 +96,7 @@ struct _PROCESS {
 
     PERESOURCE threads_lock;
 
-#ifdef USE_PROCESS_MAP
     HASH_MAP thread_map;
-#else
-    LIST threads;
-#endif
 
     // flags
 
@@ -216,6 +208,8 @@ struct _PROCESS {
     LIST open_win_classes;
     ULONG gui_trace;
 
+    BOOLEAN filter_win32k_syscalls;
+
     BOOLEAN bHostInject;
 
 };
@@ -247,7 +241,7 @@ PROCESS *Process_FindSandboxed(HANDLE ProcessId, KIRQL *out_irql);
 // Start supervising a new process
 
 BOOLEAN Process_NotifyProcess_Create(
-    HANDLE ProcessId, HANDLE ParentId, HANDLE CallerId, BOX *box);
+    HANDLE ProcessId, HANDLE ParentId, HANDLE CallerId, UNICODE_STRING* Name, ULONG NameLength, BOX *box);
 
 
 // Process_IsSameBox returns TRUE if the other process identified by
@@ -539,15 +533,9 @@ NTSTATUS Process_Api_Kill(PROCESS *proc, ULONG64 *parms);
 //---------------------------------------------------------------------------
 
 
-#ifdef USE_PROCESS_MAP
 extern HASH_MAP Process_Map;
 extern HASH_MAP Process_MapDfp;
 extern HASH_MAP Process_MapFcp;
-#else
-extern LIST Process_List;
-extern LIST Process_ListDfp;
-extern LIST Process_ListFcp;
-#endif
 extern PERESOURCE Process_ListLock;
 
 extern volatile BOOLEAN Process_ReadyToSandbox;

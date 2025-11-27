@@ -904,7 +904,7 @@ _FX LONG SbieApi_EnumProcessEx(
     parms[5] = (ULONG64)(LONG_PTR)boxed_count;
     status = SbieApi_Ioctl(parms);
 
-    if (! NT_SUCCESS(status))
+    if (!NT_SUCCESS(status) && boxed_pids)
         boxed_pids[0] = 0;
 
     return status;
@@ -1383,6 +1383,46 @@ _FX LONG SbieApi_ReloadConf(ULONG session_id, ULONG flags)
     parms[0] = API_RELOAD_CONF;
     parms[1] = session_id;
     parms[2] = flags;
+    status = SbieApi_Ioctl(parms);
+
+    return status;
+}
+
+
+//---------------------------------------------------------------------------
+// SbieApi_UpdateConf
+//---------------------------------------------------------------------------
+
+
+_FX ULONG SbieApi_UpdateConf(
+    ULONG op, 
+    const WCHAR *section_name,
+    const WCHAR *setting_name, 
+    const WCHAR *value_ptr)
+{
+    NTSTATUS status;
+    __declspec(align(8)) UNICODE_STRING64 Input;
+    __declspec(align(8)) ULONG64 parms[API_NUM_ARGS];
+    WCHAR x_section[66];
+    WCHAR x_setting[66];
+
+    memzero(x_section, sizeof(x_section));
+    memzero(x_setting, sizeof(x_setting));
+    if (section_name)
+        wcsncpy(x_section, section_name, 64);
+    if (setting_name)
+        wcsncpy(x_setting, setting_name, 64);
+
+    Input.Length        = wcslen(value_ptr) * sizeof(WCHAR);
+    Input.MaximumLength = Input.Length + sizeof(WCHAR);
+    Input.Buffer        = (ULONG64)(ULONG_PTR)value_ptr;
+
+    memset(parms, 0, sizeof(parms));
+    parms[0] = API_UPDATE_CONF;
+    parms[1] = (ULONG64)(ULONG_PTR)op;
+    parms[2] = (ULONG64)(ULONG_PTR)x_section;
+    parms[3] = (ULONG64)(ULONG_PTR)x_setting;
+    parms[4] = (ULONG64)(ULONG_PTR)(value_ptr ? &Input : NULL);
     status = SbieApi_Ioctl(parms);
 
     return status;
