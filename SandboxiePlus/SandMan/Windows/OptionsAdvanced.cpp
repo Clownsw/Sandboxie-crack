@@ -40,6 +40,7 @@ void COptionsWindow::CreateAdvanced()
 	connect(ui.chkComTimeout, SIGNAL(clicked(bool)), this, SLOT(OnAdvancedChanged()));
 
 	connect(ui.chkForceRestart, SIGNAL(clicked(bool)), this, SLOT(OnAdvancedChanged()));
+	connect(ui.chkRestartOnPCA, SIGNAL(clicked(bool)), this, SLOT(OnAdvancedChanged()));
 
 	connect(ui.chkNoSecurityIsolation, SIGNAL(clicked(bool)), this, SLOT(OnIsolationChanged()));
 	connect(ui.chkNoSecurityFiltering, SIGNAL(clicked(bool)), this, SLOT(OnAdvancedChanged()));
@@ -134,6 +135,7 @@ void COptionsWindow::CreateAdvanced()
 	connect(ui.btnDelHostProcess, SIGNAL(clicked(bool)), this, SLOT(OnDelHostProcess()));
 	connect(ui.chkShowHostProcTmpl, SIGNAL(clicked(bool)), this, SLOT(OnShowHostProcTmpl()));
 	connect(ui.chkConfidential, SIGNAL(clicked(bool)), this, SLOT(OnConfidentialChanged()));
+	connect(ui.chkProtectAdminOnly, SIGNAL(clicked(bool)), this, SLOT(OnAdvancedChanged()));
 	connect(ui.chkLessConfidential, SIGNAL(clicked(bool)), this, SLOT(OnLessConfidentialChanged()));
 	connect(ui.chkProtectWindow, SIGNAL(clicked(bool)), this, SLOT(OnAdvancedChanged()));
 	connect(ui.chkAdminOnly, SIGNAL(clicked(bool)), this, SLOT(OnAdvancedChanged()));
@@ -204,6 +206,7 @@ void COptionsWindow::LoadAdvanced()
 	//ui.chkNotUntrusted->setChecked(m_pBox->GetBool("NoUntrustedToken", false));
 
 	ui.chkForceRestart->setChecked(m_pBox->GetBool("ForceRestartAll", false));
+	ui.chkRestartOnPCA->setChecked(!m_pBox->GetBool("NoRestartOnPCA", false));
 
 	CheckOpenCOM();
 	ui.chkComTimeout->setChecked(!m_pBox->GetBool("RpcMgmtSetComTimeout", true));
@@ -354,6 +357,7 @@ void COptionsWindow::LoadAdvanced()
 	ShowHostProcTmpl();
 
 	ui.chkConfidential->setChecked(m_pBox->GetBool("ConfidentialBox", false));
+	ui.chkProtectAdminOnly->setChecked(m_pBox->GetBool("ProtectAdminOnly", true));
 	ui.chkLessConfidential->setEnabled(ui.chkConfidential->isChecked());
 	ui.chkLessConfidential->setChecked(m_BoxTemplates.contains("LessConfidentialBox"));
 	ui.chkNotifyProtect->setChecked(m_pBox->GetBool("NotifyBoxProtected", false));
@@ -468,6 +472,7 @@ void COptionsWindow::SaveAdvanced()
 	WriteAdvancedCheck(ui.chkComTimeout, "RpcMgmtSetComTimeout", "n", "");
 
 	WriteAdvancedCheck(ui.chkForceRestart, "ForceRestartAll", "y", "");
+	WriteAdvancedCheck(ui.chkRestartOnPCA, "NoRestartOnPCA", "", "y");
 
 	WriteAdvancedCheck(ui.chkNoSecurityIsolation, "NoSecurityIsolation", "y", "");
 	WriteAdvancedCheck(ui.chkNoSecurityFiltering, "NoSecurityFiltering", "y", "");
@@ -654,6 +659,7 @@ void COptionsWindow::SaveAdvanced()
 	WriteTextList("DenyHostAccess", DenyHostProcesses);
 
 	WriteAdvancedCheck(ui.chkConfidential, "ConfidentialBox", "y", "");
+	WriteAdvancedCheck(ui.chkProtectAdminOnly, "ProtectAdminOnly", "", "n");
 	WriteAdvancedCheck(ui.chkNotifyProtect, "NotifyBoxProtected", "y", "");
 
 	WriteAdvancedCheck(ui.chkProtectWindow, "CoverBoxedWindows", "y", "");
@@ -800,6 +806,9 @@ void COptionsWindow::UpdateJobOptions()
 		ui.lblTotalNumber->setText("");
 	}
 	ui.txtTotalNumber->setEnabled(bUseJobObject);
+
+
+	ui.chkRestartOnPCA->setEnabled(!ui.chkForceRestart->isChecked());
 }
 
 void COptionsWindow::CheckOpenCOM()
