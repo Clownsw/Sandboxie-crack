@@ -544,7 +544,7 @@ void CSandMan::CreateMenus(bool bAdvanced)
 		m_pMenuFile->addSeparator();
 		m_pRestart = m_pMenuFile->addAction(CSandMan::GetIcon("Shield9"), tr("Restart As Admin"), this, SLOT(OnRestartAsAdmin()));
 		m_pRestart->setEnabled(!IsElevated());
-		m_pExit = m_pMenuFile->addAction(CSandMan::GetIcon("Exit"), tr("Exit"), this, SLOT(OnExit()));
+		m_pExit = m_pMenuFile->addAction(CSandMan::GetIcon("Quit"), tr("Exit"), this, SLOT(OnExit()));
 
 
 	m_pMenuView = m_pMenuBar->addMenu(tr("&View"));
@@ -706,7 +706,7 @@ void CSandMan::CreateOldMenus()
 		}
 		m_pRestart = m_pMenuFile->addAction(CSandMan::GetIcon("Shield9"), tr("Restart As Admin"), this, SLOT(OnRestartAsAdmin()));
 		m_pRestart->setEnabled(!IsElevated());
-		m_pExit = m_pMenuFile->addAction(CSandMan::GetIcon("Exit"), tr("Exit"), this, SLOT(OnExit()));
+		m_pExit = m_pMenuFile->addAction(CSandMan::GetIcon("Quit"), tr("Exit"), this, SLOT(OnExit()));
 
 	m_pMenuView = m_pMenuBar->addMenu(tr("&View"));
 
@@ -1768,8 +1768,11 @@ void CSandMan::dragEnterEvent(QDragEnterEvent* e)
 
 bool CSandMan::RunSandboxed(const QStringList& Commands, QString BoxName, const QString& WrkDir, bool bShowFCP)
 {
-	if (BoxName.isEmpty())
+	if (BoxName.isEmpty()) {
 		BoxName = theAPI->GetGlobalSettings()->GetText("DefaultBox", "DefaultBox");
+		if(theConf->GetBool("Options/RememberLastBox", false))
+			BoxName = theConf->GetString("Options/LastUsedBox", BoxName);
+	}
 	CSelectBoxWindow* pSelectBoxWindow = new CSelectBoxWindow(Commands, BoxName, WrkDir, g_GUIParent);
 	if (bShowFCP) pSelectBoxWindow->ShowFCP();
 	connect(this, SIGNAL(Closed()), pSelectBoxWindow, SLOT(close()));
@@ -1779,6 +1782,9 @@ bool CSandMan::RunSandboxed(const QStringList& Commands, QString BoxName, const 
 
 SB_RESULT(quint32) CSandMan::RunStart(const QString& BoxName, const QString& Command, CSbieAPI::EStartFlags Flags, const QString& WorkingDir, QProcess* pProcess)
 {
+	if(theConf->GetBool("Options/RememberLastBox", false))
+		theConf->SetValue("Options/LastUsedBox", BoxName);
+
 	auto pBoxEx = theAPI->GetBoxByName(BoxName).objectCast<CSandBoxPlus>();
 	if (pBoxEx && pBoxEx->UseImageFile() && pBoxEx->GetMountRoot().isEmpty()) 
 	{
