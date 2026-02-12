@@ -1376,7 +1376,7 @@ You can click Finish to close this wizard.</source>
     <message>
         <location filename="Windows/ExtractDialog.cpp" line="23"/>
         <source>Sandboxie-Plus - Sandbox Import</source>
-        <translation></translation>
+        <translation>Sandboxie-Plus - Sandbox 가져오기</translation>
     </message>
     <message>
         <location filename="Windows/ExtractDialog.cpp" line="39"/>
@@ -1402,7 +1402,7 @@ You can click Finish to close this wizard.</source>
     <message>
         <location filename="Views/FileView.cpp" line="513"/>
         <source>Create Shortcut</source>
-        <translation>바로가기 만들기</translation>
+        <translation>바로 가기 만들기</translation>
     </message>
     <message>
         <location filename="Views/FileView.cpp" line="536"/>
@@ -1432,7 +1432,7 @@ You can click Finish to close this wizard.</source>
     <message>
         <location filename="Views/FileView.cpp" line="702"/>
         <source>Create Shortcut to sandbox %1</source>
-        <translation>sandbox %1로 바로가기 만들기</translation>
+        <translation>sandbox %1 바로 가기 만들기</translation>
     </message>
 </context>
 <context>
@@ -2098,7 +2098,7 @@ You can use %USER% to save each users sandbox to an own fodler.</oldsource>
         <source>Your Sandboxie-Plus supporter certificate is expired, however for the current build you are using it remains active, when you update to a newer build exclusive supporter features will be disabled.
 
 Do you still want to update?</source>
-        <translation>Sandboxie-Plus 후원자 인증서가 만료되었지만, 현재 사용 중인 빌드의 경우 최신 빌드 전용 지원자 기능으로 업데이트하면 활성 상태로 유지됩니다.
+        <translation>Sandboxie-Plus 후원자 인증서가 만료되었지만, 현재 사용 중인 빌드의 경우 최신 빌드 전용 후원자 기능으로 업데이트하면 활성 상태로 유지됩니다.
 
 그래도 업데이트를 하시겠습니까?</translation>
     </message>
@@ -5105,7 +5105,7 @@ No will choose: %2</source>
     <message>
         <location filename="SandMan.cpp" line="1968"/>
         <source>Some compatibility templates are missing:&lt;br /&gt;&lt;br /&gt;%1&lt;br /&gt;Probably deleted, do you want to remove them from all boxes?</source>
-        <translation>일부 호환성 템플릿이 누락되었습니다:&lt;br /&gt;&lt;br /&gt;%1&lt;br /&gt;삭제되었을 가능성이 있습니다. 모든 상자에서 템플릿을 제거하시겠습니까?</translation>
+        <translation>일부 호환성 템플릿이 누락되었습니다:&lt;br /&gt;&lt;br /&gt;%1&lt;br /&gt;삭제되었을 가능성이 있습니다. 모든 박스에서 템플릿을 제거하시겠습니까?</translation>
     </message>
     <message>
         <location filename="SandMan.cpp" line="2055"/>
@@ -6906,7 +6906,7 @@ Do you wish to enable autocomplete?</source>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="2923"/>
         <source>This supporter certificate has expired, please &lt;a href=&quot;%1&quot;&gt;get an updated certificate&lt;/a&gt;.</source>
-        <translation>이 지원자 인증서가 만료되었습니다. &lt;href=&quot;%1&quot;&gt;업데이트된 인증서를 받아주세요&lt;/a&gt;.</translation>
+        <translation>이 후원자 인증서가 만료되었습니다. &lt;href=&quot;%1&quot;&gt;업데이트된 인증서를 받아주세요&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="2928"/>
@@ -6943,7 +6943,7 @@ This is a temporary Patreon certificate, valid for 3 months. Once it nears expir
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="3300"/>
         <source>A mandatory security update for your Sandboxie-Plus Supporter Certificate is required. Would you like to download the updated certificate now?</source>
-        <translation></translation>
+        <translation>Sandboxie-Plus 후원자 인증서에 대한 필수 보안 업데이트가 필요합니다. 지금 업데이트된 인증서를 다운로드하시겠습니까?</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="3301"/>
@@ -6958,7 +6958,7 @@ This is a temporary Patreon certificate, valid for 3 months. Once it nears expir
         <location filename="Windows/SettingsWindow.cpp" line="2936"/>
         <source>This supporter certificate will &lt;font color=&apos;red&apos;&gt;expire in %1 days&lt;/font&gt;, please &lt;a href=&quot;%2&quot;&gt;get an updated certificate&lt;/a&gt;.</source>
         <oldsource>This supporter certificate has expired, please &lt;a href=&quot;https://sandboxie-plus.com/go.php?to=sbie-renew-cert&quot;&gt;get an updated certificate&lt;/a&gt;.</oldsource>
-        <translation>이 지원자 인증서는 %1일 후에 &lt;font color=&apos;red&apos;&gt;만료되며, &lt;a href=&quot;%2&quot;&gt;업데이트된 인증서를 받아주세요&lt;/a&gt;.</translation>
+        <translation>이 후원자 인증서는 %1일 후에 &lt;font color=&apos;red&apos;&gt;만료되며, &lt;a href=&quot;%2&quot;&gt;업데이트된 인증서를 받아주세요&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>&lt;br /&gt;&lt;font color=&apos;red&apos;&gt;For the current build Plus features remain enabled&lt;/font&gt;, but you no longer have access to Sandboxie-Live services, including compatibility updates and the troubleshooting database.</source>
@@ -6981,7 +6981,7 @@ This is a temporary Patreon certificate, valid for 3 months. Once it nears expir
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="2973"/>
         <source>Expired: %1 days ago</source>
-        <translation></translation>
+        <translation>만료일: %1일 전</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="2987"/>
@@ -7589,7 +7589,7 @@ Right-click to copy</oldsource>
         <location filename="Windows/SnapshotsWindow.cpp" line="258"/>
         <source>Performing Snapshot operation...</source>
         <translatorcomment>스냅샷 작업을 수행하는 중...</translatorcomment>
-        <translation></translation>
+        <translation>스냅샷 작업 수행 중...</translation>
     </message>
 </context>
 <context>
@@ -10300,7 +10300,7 @@ To specify a process use &apos;$:program.exe&apos; as path.</source>
         <location filename="Forms/OptionsWindow.ui" line="6174"/>
         <source>Complete</source>
         <translatorcomment>완성</translatorcomment>
-        <translation></translation>
+        <translation>완성</translation>
     </message>
     <message>
         <source>Show detailed information tooltips when hovering over configuration settings.
