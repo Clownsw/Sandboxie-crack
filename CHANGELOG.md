@@ -15,6 +15,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - added name of sandbox in the border [#3746](https://github.com/sandboxie-plus/Sandboxie/issues/3746)
 - added global option 'ForceBoxDocs=y', allows to force all programs opening a file from a boxed path to the appropriate sandbox
 - added new box border mode 'all', when active the border is shown for all windows of sandboxed processes, not only for the one in focus
+- added missing serial number support to SbieCtrl
 - added mechanism to export/import multiple boxes at once
 - added UseAlternateIpcNaming=y instead of using a separated NT Object namespace in this mode sandboxed objects get a name suffix
   - Note: this mode can only be used with App Compartment boxes, as else the sbiedrv would block the accesses.
@@ -25,14 +26,16 @@ This project adheres to [Semantic Versioning](http://semver.org/).
   - to force 'UseCreateToken=y', 'SandboxieAllGroup=y' is the new default
 - 'NoUntrustedToken=y' can now be set in box options
 - reworked LPC server implementation in SbieSvc, to-do: switch to ALPC
+- improved App Compartment IPC handling
+- improved RenameSection handling to preserve comments and original section order [#5220](https://github.com/sandboxie-plus/Sandboxie/pull/5220)
 
 ### Fixed
 - fixed failure to mount registry when starting a UWP application sandboxed
 - fixed API CryptUnprotectData always returns a wrong ppszDataDescr [#5191](https://github.com/sandboxie-plus/Sandboxie/issues/5191)
-- added missing serial support to SbieCtrl
 - fixed handle leak in SbieDll.dll
-- fixed MSEdge 144 crashes in Applicaiton Compartment [#5188](https://github.com/sandboxie-plus/Sandboxie/issues/5188)
-- improved App Compartment ipc handling
+- fixed the issue with switching sandbox sorting in the view [#5201](https://github.com/sandboxie-plus/Sandboxie/pull/5201) (thanks Catreap)
+- fixed Microsoft Edge 144 crashes in Application Compartment boxes [#5188](https://github.com/sandboxie-plus/Sandboxie/issues/5188)
+- fixed File Searching bar crash when performing multiple searches within a sandbox [#5166](https://github.com/sandboxie-plus/Sandboxie/issues/5166) [#5221](https://github.com/sandboxie-plus/Sandboxie/pull/5221)
 
 
 
