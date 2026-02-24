@@ -8,7 +8,41 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 
-## [1.17.0 / 5.72.0] - 2026-02-??
+## [1.17.3 / 5.72.3] - 2026-02-??
+
+### Added
+- added MIDI workaround template for Windows 11 [#5183](https://github.com/sandboxie-plus/Sandboxie/issues/5183) [#5203](https://github.com/sandboxie-plus/Sandboxie/issues/5203#issuecomment-3938495163) (thanks xsmolasses)
+
+
+
+## [1.17.2 / 5.72.2] - 2026-02-18
+
+### Added
+- added border label alias support
+
+### Changed
+- improved border mode UI labels and exposed `all` mode in the selector
+- reworked `Rename Sandbox` dialog in SandMan: added dedicated alias controls, persisted `Hide alias` preference, improved stable/dynamic dialog resizing, and disabled alias is now saved as `BoxAliasDisabled` [#4657](https://github.com/sandboxie-plus/Sandboxie/pull/4657) [#5231](https://github.com/sandboxie-plus/Sandboxie/pull/5231)
+
+### Fixed
+- fixed border overlay getting stuck when border label text is disabled (`no` mode) [#5230](https://github.com/sandboxie-plus/Sandboxie/pull/5230)
+- fixed stale focused-window border visibility when foreground window becomes invalid/invisible
+- fixed `all` border mode opacity updates to consistently apply configured alpha
+- fixed duplicate Name column appearing in the Config Dump tab under Template Settings [#4900](https://github.com/sandboxie-plus/Sandboxie/issues/4900)  [#5232](https://github.com/sandboxie-plus/Sandboxie/pull/5232)
+
+
+
+## [1.17.1 / 5.72.1] - 2026-02-16
+
+### Fixed
+- fixed regression SbieSvc IPC failing on Windows 10 introduced in 1.17.0 [#5226](https://github.com/sandboxie-plus/Sandboxie/issues/5226)
+- fixed regression Microsoft Edge failing to fully terminate on close
+- fixed crash in Vintage View mode
+- fixed logic for chkNotUntrusted and chkCreateToken
+
+
+
+## [1.17.0 / 5.72.0] - 2026-02-16
 
 ### Added
 - added icons to Sandboxie service applications [#5160](https://github.com/sandboxie-plus/Sandboxie/issues/5160#issuecomment-3706138019)
@@ -17,8 +51,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - added new box border mode 'all', when active the border is shown for all windows of sandboxed processes, not only for the one in focus
 - added missing serial number support to SbieCtrl
 - added mechanism to export/import multiple boxes at once
-- added UseAlternateIpcNaming=y instead of using a separated NT Object namespace in this mode sandboxed objects get a name suffix
-  - Note: this mode can only be used with App Compartment boxes, as else the sbiedrv would block the accesses.
+- added 'UseAlternateIpcNaming=y', instead of using a separated NT Object namespace, in this mode sandboxed objects get a name suffix
+  - Note: this mode can only be used with Application Compartment boxes, as the SbieDrv would otherwise block the accesses
 
 ### Changed
 - validated compatibility with Windows build 28020 and updated DynData
@@ -26,7 +60,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
   - to force 'UseCreateToken=y', 'SandboxieAllGroup=y' is the new default
 - 'NoUntrustedToken=y' can now be set in box options
 - reworked LPC server implementation in SbieSvc, to-do: switch to ALPC
-- improved App Compartment IPC handling
+- improved Application Compartment IPC handling
 - improved RenameSection handling to preserve comments and original section order [#5220](https://github.com/sandboxie-plus/Sandboxie/pull/5220)
 
 ### Fixed
@@ -35,7 +69,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - fixed handle leak in SbieDll.dll
 - fixed the issue with switching sandbox sorting in the view [#5201](https://github.com/sandboxie-plus/Sandboxie/pull/5201) (thanks Catreap)
 - fixed Microsoft Edge 144 crashes in Application Compartment boxes [#5188](https://github.com/sandboxie-plus/Sandboxie/issues/5188)
-- fixed File Searching bar crash when performing multiple searches within a sandbox [#5166](https://github.com/sandboxie-plus/Sandboxie/issues/5166) [#5221](https://github.com/sandboxie-plus/Sandboxie/pull/5221)
+- fixed File Searching bar crashes when performing multiple searches within a sandbox [#5166](https://github.com/sandboxie-plus/Sandboxie/issues/5166) [#5221](https://github.com/sandboxie-plus/Sandboxie/pull/5221)
 
 
 
@@ -1551,7 +1585,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - reworked CreateAppContainerToken hook to return a restricted token for the issue [#2762](https://github.com/sandboxie-plus/Sandboxie/issues/2762)
   - Note: this behaviour can be disabled with 'FakeAppContainerToken=program.exe,n'
-- enabled app container compatibility in App Compartment mode
+- enabled app container compatibility in Application Compartment mode
   - Note: this should improve Microsoft Edge compatibility
 - added web browser compatibility template wizard [#2761](https://github.com/sandboxie-plus/Sandboxie/issues/2761)
 - added a mechanism to dynamically detect Chromium and Firefox based browsers
@@ -1559,7 +1593,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - renamed 'DropAppContainerTokens=program.exe,n' to 'DropAppContainerToken=program.exe,n'
-- 'DropAppContainerToken=program.exe,y' can now be used in App Compartment boxes, however it is not recommended security-wise
+- 'DropAppContainerToken=program.exe,y' can now be used in Application Compartment boxes, however it is not recommended security-wise
 - the desktop security workaround used for Chrome, Firefox and Acrobat is now enabled by default, you can disable it with "UseSbieDeskHack=n"
   - Note: this should allow Electron apps to run without 'SpecialImage=chrome,program.exe'
 - disabled old token hacks, as these seem to be no longer required with the new App Container token

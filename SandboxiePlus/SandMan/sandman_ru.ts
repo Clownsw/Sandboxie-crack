@@ -386,143 +386,143 @@ increases to 512 bits with the application of Leet (L337) speak modifications, a
         <location filename="BoxTransfer.cpp" line="71"/>
         <location filename="BoxTransfer.cpp" line="404"/>
         <source>Export Sandboxes</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспорт песочниц</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="73"/>
         <source>Import Sandboxes</source>
-        <translation type="unfinished"></translation>
+        <translation>Импорт песочниц</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="80"/>
         <source>Box Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя песочницы</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="80"/>
         <source>Status</source>
-        <translation type="unfinished">Статус</translation>
+        <translation>Статус</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="83"/>
         <source>Archive Box Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Название архива песочницы</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="83"/>
         <source>Import As</source>
-        <translation type="unfinished"></translation>
+        <translation>Импорт как</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="83"/>
         <source>Conflict</source>
-        <translation type="unfinished"></translation>
+        <translation>Конфликт</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="93"/>
         <source>Export Global Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспорт глобальной конфигурации</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="93"/>
         <source>Import Global Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Импорт глобальной конфигурации</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="97"/>
         <source>Select All</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрать все</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="101"/>
         <source>Select None</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрать ничего</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="130"/>
         <source>Running</source>
-        <translation type="unfinished">Выполняется</translation>
+        <translation>Выполняется</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="132"/>
         <source>Encrypted</source>
-        <translation type="unfinished"></translation>
+        <translation>Зашифровано</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="134"/>
         <source>Empty</source>
-        <translation type="unfinished">Пусто</translation>
+        <translation>Пусто</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="186"/>
         <source>Exists!</source>
-        <translation type="unfinished"></translation>
+        <translation>Существует!</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="354"/>
         <location filename="BoxTransfer.cpp" line="639"/>
         <source>Select file name</source>
-        <translation type="unfinished">Выберите имя файла</translation>
+        <translation>Выбрать имя файла</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="354"/>
         <location filename="BoxTransfer.cpp" line="406"/>
         <location filename="BoxTransfer.cpp" line="640"/>
         <source>7-Zip Archive (*.7z);;Zip Archive (*.zip)</source>
-        <translation type="unfinished">7-Zip-архив (*.7z);;Zip-архив (*.zip)</translation>
+        <translation>7-Zip-архив (*.7z);;Zip-архив (*.zip)</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="360"/>
         <location filename="BoxTransfer.cpp" line="453"/>
         <source>Exporting: %1</source>
-        <translation type="unfinished">Экспорт: %1</translation>
+        <translation>Экспорт: %1</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="366"/>
         <location filename="BoxTransfer.cpp" line="634"/>
         <source>7-Zip library is not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Библиотека 7-Zip недоступна.</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="385"/>
         <source>Nothing selected for export.</source>
-        <translation type="unfinished"></translation>
+        <translation>Для экспорта ничего не выбрано.</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="419"/>
         <source>Sandbox &apos;%1&apos; has running processes. Skip it?</source>
-        <translation type="unfinished"></translation>
+        <translation>В песочнице &apos;%1&apos; запущены процессы. Пропустить?</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="621"/>
         <location filename="BoxTransfer.cpp" line="771"/>
         <source>Importing: %1</source>
-        <translation type="unfinished">Импорт: %1</translation>
+        <translation>Импорт: %1</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="657"/>
         <source>Failed to open archive, wrong password?</source>
-        <translation type="unfinished">Не удалось открыть архив, неверный пароль?</translation>
+        <translation>Не удалось открыть архив, неверный пароль?</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="666"/>
         <source>Failed to open archive (%1)!</source>
-        <translation type="unfinished">Не удалось открыть архив (%1)!</translation>
+        <translation>Не удалось открыть архив (%1)!</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="707"/>
         <source>The archive does not contain any sandbox data.</source>
-        <translation type="unfinished"></translation>
+        <translation>Архив не содержит никаких данных песочницы.</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="721"/>
         <source>Nothing selected for import.</source>
-        <translation type="unfinished"></translation>
+        <translation>Для импорта ничего не выбрано.</translation>
     </message>
     <message>
         <location filename="BoxTransfer.cpp" line="737"/>
         <source>Sandbox &apos;%1&apos; already exists. Its configuration will be overwritten. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Песочница &apos;%1&apos; уже существует. Ее конфигурация будет перезаписана. Продолжить?</translation>
     </message>
 </context>
 <context>
@@ -936,7 +936,7 @@ Error: %1</source>
     <message>
         <location filename="../MiscHelpers/Common/CheckableComboBox.cpp" line="12"/>
         <source>Select Items...</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбор элементов...</translation>
     </message>
 </context>
 <context>
@@ -944,7 +944,7 @@ Error: %1</source>
     <message>
         <location filename="../MiscHelpers/Common/CheckableMessageBox.cpp" line="52"/>
         <source>Do not ask again</source>
-        <translation type="unfinished"></translation>
+        <translation>Не спрашивать снова</translation>
     </message>
 </context>
 <context>
@@ -961,22 +961,22 @@ Error: %1</source>
         <location filename="../MiscHelpers/Common/CodeEdit.cpp" line="1006"/>
         <location filename="../MiscHelpers/Common/CodeEdit.cpp" line="2095"/>
         <source>Find</source>
-        <translation type="unfinished"></translation>
+        <translation>Найти</translation>
     </message>
     <message>
         <location filename="../MiscHelpers/Common/CodeEdit.cpp" line="1011"/>
         <source>FindNext</source>
-        <translation type="unfinished"></translation>
+        <translation>Найти следующий</translation>
     </message>
     <message>
         <location filename="../MiscHelpers/Common/CodeEdit.cpp" line="1021"/>
         <source>GoTo</source>
-        <translation type="unfinished"></translation>
+        <translation>Перейти</translation>
     </message>
     <message>
         <location filename="../MiscHelpers/Common/CodeEdit.cpp" line="1438"/>
         <source>Did you mean: %1? (Press Ctrl+R to replace)</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы имели в виду: %1? (Нажмите Ctrl+R, чтобы заменить)</translation>
     </message>
     <message>
         <location filename="../MiscHelpers/Common/CodeEdit.cpp" line="2095"/>
@@ -986,12 +986,17 @@ Error: %1</source>
 + Alt: Whole Words
 
 Find String:</source>
-        <translation type="unfinished"></translation>
+        <translation>F3: Найти следующий
++ Shift: Назад
++ Ctrl: С учетом регистра
++ Alt: Целые слова
+
+Найти строку:</translation>
     </message>
     <message>
         <location filename="../MiscHelpers/Common/CodeEdit.cpp" line="2121"/>
         <source>Go to Line:</source>
-        <translation type="unfinished"></translation>
+        <translation>Перейти к строке:</translation>
     </message>
 </context>
 <context>
@@ -1064,142 +1069,142 @@ You can click Finish to close this wizard.</source>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="28"/>
         <source>Validate INI Keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Проверить ключи INI</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="29"/>
         <source>No validation</source>
-        <translation type="unfinished"></translation>
+        <translation>Без проверки</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="29"/>
         <source>Full validation (default)</source>
-        <translation type="unfinished"></translation>
+        <translation>Полная проверка (по умолчанию)</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="31"/>
         <source>Enable INI Tooltips</source>
-        <translation type="unfinished"></translation>
+        <translation>Включить подсказки INI</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="32"/>
         <location filename="Windows/EditorSettingsWindow.cpp" line="35"/>
         <source>No tooltips</source>
-        <translation type="unfinished"></translation>
+        <translation>Без подсказок</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="32"/>
         <location filename="Windows/EditorSettingsWindow.cpp" line="35"/>
         <source>Basic info (default)</source>
-        <translation type="unfinished"></translation>
+        <translation>Основная информация (по умолчанию)</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="32"/>
         <location filename="Windows/EditorSettingsWindow.cpp" line="35"/>
         <source>Full details</source>
-        <translation type="unfinished"></translation>
+        <translation>Полная информация</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="34"/>
         <source>Enable Popup Tooltips</source>
-        <translation type="unfinished"></translation>
+        <translation>Включить всплывающие подсказки</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="37"/>
         <source>Auto Completion Consent</source>
-        <translation type="unfinished"></translation>
+        <translation>Согласие на автозаполнение</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="38"/>
         <source>Not consented (default)</source>
-        <translation type="unfinished"></translation>
+        <translation>Без согласия (по умолчанию)</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="38"/>
         <source>Consented</source>
-        <translation type="unfinished"></translation>
+        <translation>Согласен</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="40"/>
         <source>Enable Auto Completion</source>
-        <translation type="unfinished"></translation>
+        <translation>Включить автозаполнение</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="41"/>
         <location filename="Windows/EditorSettingsWindow.cpp" line="44"/>
         <source>Disabled (default)</source>
-        <translation type="unfinished"></translation>
+        <translation>Отключено (по умолчанию)</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="41"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Вручную</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="41"/>
         <source>While Typing</source>
-        <translation type="unfinished"></translation>
+        <translation>Во время ввода</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="43"/>
         <source>Enable Fuzzy Matching</source>
-        <translation type="unfinished"></translation>
+        <translation>Включить неточное сопоставление</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="44"/>
         <source>Enabled</source>
-        <translation type="unfinished">Включено</translation>
+        <translation>Включено</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="55"/>
         <source>Editor Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки редактора</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="75"/>
         <source>Reset All to Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Сбросить все до значений по умолчанию</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="76"/>
         <source>Reset all settings to their default values and remove custom config entries.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сбросить все настройки до значений по умолчанию и удалить пользовательские записи конфигурации.</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="171"/>
         <source>Setting</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройка</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="171"/>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation>Состояние</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="171"/>
         <source>Unchecked</source>
-        <translation type="unfinished"></translation>
+        <translation>Не отмечено</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="171"/>
         <source>Partial</source>
-        <translation type="unfinished"></translation>
+        <translation>Частично</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="171"/>
         <source>Checked</source>
-        <translation type="unfinished"></translation>
+        <translation>Отмечено</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="171"/>
         <location filename="Windows/EditorSettingsWindow.cpp" line="203"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Сброс</translation>
     </message>
     <message>
         <location filename="Windows/EditorSettingsWindow.cpp" line="204"/>
         <source>Reset this setting to default value</source>
-        <translation type="unfinished"></translation>
+        <translation>Сбросить эту настройку до значения по умолчанию</translation>
     </message>
 </context>
 <context>
@@ -1356,12 +1361,12 @@ You can use %USER% to save each users sandbox to an own folder.</source>
     <message>
         <location filename="../MiscHelpers/Common/Finder.cpp" line="116"/>
         <source>Expand all</source>
-        <translation type="unfinished"></translation>
+        <translation>Развернуть все</translation>
     </message>
     <message>
         <location filename="../MiscHelpers/Common/Finder.cpp" line="122"/>
         <source>Collapse all</source>
-        <translation type="unfinished"></translation>
+        <translation>Свернуть все</translation>
     </message>
 </context>
 <context>
@@ -1471,78 +1476,62 @@ You can use %USER% to save each users sandbox to an own folder.</source>
     <message>
         <location filename="Helpers/IniHighlighter.cpp" line="469"/>
         <source>Validate (Failed)</source>
-        <translation type="unfinished"></translation>
+        <translation>Проверить (не удалось)</translation>
     </message>
     <message>
         <location filename="Helpers/IniHighlighter.cpp" line="802"/>
         <source>Added in version</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавлено в версии</translation>
     </message>
     <message>
         <location filename="Helpers/IniHighlighter.cpp" line="803"/>
         <location filename="Helpers/IniHighlighter.cpp" line="1807"/>
         <source>Removed in version</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалено в версии</translation>
     </message>
     <message>
         <location filename="Helpers/IniHighlighter.cpp" line="804"/>
         <source>Re-added in version</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавлено повторно в версии</translation>
     </message>
     <message>
         <location filename="Helpers/IniHighlighter.cpp" line="805"/>
         <location filename="Helpers/IniHighlighter.cpp" line="1806"/>
         <source>Renamed in version</source>
-        <translation type="unfinished"></translation>
+        <translation>Переименовано в версии</translation>
     </message>
     <message>
         <location filename="Helpers/IniHighlighter.cpp" line="806"/>
         <location filename="Helpers/IniHighlighter.cpp" line="1808"/>
         <source>Superseded by</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Advanced</source>
-        <translation type="obsolete">Расширенный</translation>
-    </message>
-    <message>
-        <source>Debug</source>
-        <translation type="obsolete">Отладка</translation>
-    </message>
-    <message>
-        <source>Program Control</source>
-        <translation type="obsolete">Контроль программ</translation>
-    </message>
-    <message>
-        <source>Resource Access</source>
-        <translation type="obsolete">Доступ к ресурсам</translation>
+        <translation>Заменено</translation>
     </message>
     <message>
         <location filename="Helpers/IniHighlighter.cpp" line="1430"/>
         <source>Category</source>
-        <translation type="unfinished">Категория</translation>
+        <translation>Категория</translation>
     </message>
     <message>
         <location filename="Helpers/IniHighlighter.cpp" line="1431"/>
         <source>Context</source>
-        <translation type="unfinished"></translation>
+        <translation>Контекст</translation>
     </message>
     <message>
         <location filename="Helpers/IniHighlighter.cpp" line="1432"/>
         <source>Requirements</source>
-        <translation type="unfinished"></translation>
+        <translation>Требования</translation>
     </message>
     <message>
         <location filename="Helpers/IniHighlighter.cpp" line="1592"/>
         <location filename="Helpers/IniHighlighter.cpp" line="1833"/>
         <source>Syntax</source>
-        <translation type="unfinished"></translation>
+        <translation>Синтаксис</translation>
     </message>
     <message>
         <location filename="Helpers/IniHighlighter.cpp" line="1593"/>
         <location filename="Helpers/IniHighlighter.cpp" line="1828"/>
         <source>Description</source>
-        <translation type="unfinished">Описание</translation>
+        <translation>Описание</translation>
     </message>
 </context>
 <context>
@@ -1667,32 +1656,32 @@ You can use %USER% to save each users sandbox to an own folder.</source>
     <message>
         <location filename="../MiscHelpers/Common/ItemChooser.cpp" line="7"/>
         <source>Item Chooser</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбор элемента</translation>
     </message>
     <message>
         <location filename="../MiscHelpers/Common/ItemChooser.cpp" line="12"/>
         <source>Select items that will be used.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите элементы, которые будут использоваться.</translation>
     </message>
     <message>
         <location filename="../MiscHelpers/Common/ItemChooser.cpp" line="29"/>
         <source>Add &gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить &gt;</translation>
     </message>
     <message>
         <location filename="../MiscHelpers/Common/ItemChooser.cpp" line="33"/>
         <source>&lt; Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt; Удалить</translation>
     </message>
     <message>
         <location filename="../MiscHelpers/Common/ItemChooser.cpp" line="47"/>
         <source>Move Up</source>
-        <translation type="unfinished">Сдвинуть вверх</translation>
+        <translation>Сдвинуть вверх</translation>
     </message>
     <message>
         <location filename="../MiscHelpers/Common/ItemChooser.cpp" line="51"/>
         <source>Move Down</source>
-        <translation type="unfinished">Сдвинуть вниз</translation>
+        <translation>Сдвинуть вниз</translation>
     </message>
 </context>
 <context>
@@ -1776,7 +1765,7 @@ You can use %USER% to save each users sandbox to an own folder.</source>
     <message>
         <location filename="Views/NtObjectView.cpp" line="213"/>
         <source>%1 - NT Object Namespace</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 - пространство имен объектов NT</translation>
     </message>
 </context>
 <context>
@@ -1784,17 +1773,17 @@ You can use %USER% to save each users sandbox to an own folder.</source>
     <message>
         <location filename="Models/NtObjectModel.cpp" line="726"/>
         <source>Name</source>
-        <translation type="unfinished">Имя</translation>
+        <translation>Имя</translation>
     </message>
     <message>
         <location filename="Models/NtObjectModel.cpp" line="727"/>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="Models/NtObjectModel.cpp" line="728"/>
         <source>Access</source>
-        <translation type="unfinished">Доступ</translation>
+        <translation>Доступ</translation>
     </message>
 </context>
 <context>
@@ -2137,10 +2126,10 @@ Note: The update check is often behind the latest GitHub release to ensure that 
         <location filename="Windows/OptionsWindow.cpp" line="1319"/>
         <location filename="Windows/OptionsAccess.cpp" line="417"/>
         <location filename="Windows/OptionsAccess.cpp" line="649"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="956"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1030"/>
-        <location filename="Windows/OptionsGeneral.cpp" line="653"/>
-        <location filename="Windows/OptionsGeneral.cpp" line="749"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="958"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1032"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="657"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="753"/>
         <location filename="Windows/OptionsNetwork.cpp" line="630"/>
         <location filename="Windows/OptionsNetwork.cpp" line="724"/>
         <location filename="Windows/OptionsNetwork.cpp" line="837"/>
@@ -2154,8 +2143,8 @@ Note: The update check is often behind the latest GitHub release to ensure that 
         <location filename="Windows/OptionsWindow.cpp" line="1335"/>
         <location filename="Windows/OptionsAccess.cpp" line="422"/>
         <location filename="Windows/OptionsAccess.cpp" line="653"/>
-        <location filename="Windows/OptionsGeneral.cpp" line="658"/>
-        <location filename="Windows/OptionsGeneral.cpp" line="753"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="662"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="757"/>
         <location filename="Windows/OptionsNetwork.cpp" line="350"/>
         <location filename="Windows/OptionsNetwork.cpp" line="635"/>
         <location filename="Windows/OptionsNetwork.cpp" line="728"/>
@@ -2189,8 +2178,8 @@ Note: The update check is often behind the latest GitHub release to ensure that 
     </message>
     <message>
         <location filename="Windows/OptionsAccess.cpp" line="628"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1006"/>
-        <location filename="Windows/OptionsGeneral.cpp" line="720"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1008"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="724"/>
         <location filename="Windows/OptionsGrouping.cpp" line="234"/>
         <location filename="Windows/OptionsGrouping.cpp" line="258"/>
         <location filename="Windows/OptionsNetwork.cpp" line="703"/>
@@ -2258,118 +2247,118 @@ Note: The update check is often behind the latest GitHub release to ensure that 
         <translation>Корень IPC песочницы</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="163"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="164"/>
         <source>Name|Type|Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя|Тип|Значение</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="784"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="793"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="786"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="795"/>
         <source>bytes (unlimited)</source>
         <translation>байты (неограниченно)</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="787"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="796"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="789"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="798"/>
         <source>bytes (%1)</source>
         <translation>байт (%1)</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="802"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="804"/>
         <source>unlimited</source>
         <translation>неограниченно</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="977"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="979"/>
         <source>Add special option:</source>
         <translation>Добавить специальную опцию:</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1125"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1129"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1127"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1131"/>
         <source>On Start</source>
         <translation>При запуске</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1126"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1134"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1138"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1142"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1146"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1128"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1136"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1140"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1144"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1148"/>
         <source>Run Command</source>
         <translation>Выполнить комманду</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1130"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1132"/>
         <source>Start Service</source>
         <translation>Запустить службу</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1133"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1135"/>
         <source>On Init</source>
         <translation>При инициализации</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1137"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1139"/>
         <source>On File Recovery</source>
         <translation>При восстановлении файлов</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1141"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1143"/>
         <source>On Delete Content</source>
         <translation>При удалении контента</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1145"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1147"/>
         <source>On Terminate</source>
         <translation>При завершении</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1159"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1179"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1189"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1199"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1209"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1161"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1181"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1191"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1201"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1211"/>
         <source>Please enter the command line to be executed</source>
         <translation>Пожалуйста, введите командную строку для выполнения</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1243"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1245"/>
         <source>Please enter a program file name to allow access to this sandbox</source>
         <translation>Введите имя файла программы, чтобы разрешить доступ к этой песочнице</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1254"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1256"/>
         <source>Please enter a program file name to deny access to this sandbox</source>
         <translation>Введите имя файла программы, чтобы запретить доступ к этой песочнице</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1334"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1336"/>
         <source>Deny</source>
         <translation>Отклонить</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1437"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1439"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1492"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1494"/>
         <source>Global</source>
-        <translation type="unfinished"></translation>
+        <translation>Глобально</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1493"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1495"/>
         <source>Template</source>
-        <translation type="unfinished"></translation>
+        <translation>Шаблон</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1544"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1546"/>
         <source>Failed to retrieve firmware table information.</source>
         <translation>Не удалось получить информацию о таблице прошивки.</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1552"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1554"/>
         <source>Firmware table saved successfully to host registry: HKEY_CURRENT_USER\System\SbieCustom&lt;br /&gt;you can copy it to the sandboxed registry to have a different value for each box.</source>
         <translation>Таблица прошивки успешно сохранена в реестре хоста: HKEY_CURRENT_USER\System\SbieCustom&lt;br /&gt;вы можете скопировать его в реестр песочницы, чтобы иметь разные значения для каждой песочницы.</translation>
     </message>
@@ -2465,32 +2454,31 @@ Note: The update check is often behind the latest GitHub release to ensure that 
         <translation>Отображать, только когда заголовок в фокусе</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="64"/>
         <source>Always show</source>
-        <translation>Всегда отображать</translation>
+        <translation type="vanished">Всегда отображать</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="67"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="68"/>
         <source>Hardened Sandbox with Data Protection</source>
         <translation>Песочница с усиленной изоляцией и защитой данных</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="68"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="69"/>
         <source>Security Hardened Sandbox</source>
         <translation>Песочница с усиленной изоляцией</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="69"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="70"/>
         <source>Sandbox with Data Protection</source>
         <translation>Песочница с защитой данных</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="70"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="71"/>
         <source>Standard Isolation Sandbox (Default)</source>
         <translation>Песочница со стандартной изоляцией (по умолчанию)</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="72"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="73"/>
         <source>Application Compartment with Data Protection</source>
         <translation>Контейнер для приложений с защитой данных</translation>
     </message>
@@ -2502,179 +2490,189 @@ Note: The update check is often behind the latest GitHub release to ensure that 
     <message>
         <location filename="Windows/OptionsGeneral.cpp" line="58"/>
         <source>Don&apos;t show in border</source>
-        <translation type="unfinished"></translation>
+        <translation>Не показывать в рамке</translation>
     </message>
     <message>
         <location filename="Windows/OptionsGeneral.cpp" line="59"/>
         <source>Show within the border</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать в пределах границы</translation>
     </message>
     <message>
         <location filename="Windows/OptionsGeneral.cpp" line="60"/>
         <source>Show above the border</source>
+        <translation>Показать выше границы</translation>
+    </message>
+    <message>
+        <location filename="Windows/OptionsGeneral.cpp" line="64"/>
+        <source>Always show (focused window only)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="73"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="65"/>
+        <source>Show for all windows in this box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Windows/OptionsGeneral.cpp" line="74"/>
         <source>Application Compartment</source>
         <translation>Контейнер для приложений</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="126"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="127"/>
         <source>Custom icon</source>
         <translation>Пользовательская иконка</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="194"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="195"/>
         <source>Version 1</source>
         <translation>Версия 1</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="195"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="196"/>
         <source>Version 2</source>
         <translation>Версия 2</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="255"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="256"/>
         <source>Browse for Program</source>
         <translation>Выбрать программу</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="326"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="330"/>
         <source>Open Box Options</source>
         <translation>Открыть опции песочницы</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="327"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="331"/>
         <source>Browse Content</source>
         <translation>Просмотр содержимого</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="328"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="332"/>
         <source>Start File Recovery</source>
         <translation>Начать восстановление файлов</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="329"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="333"/>
         <source>Show Run Dialog</source>
         <translation>Показать диалог запуска</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="357"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="361"/>
         <source>Indeterminate</source>
         <translation>Неопределено</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="377"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="381"/>
         <source>Backup Image Header</source>
         <translation>Резервная копия заголовка образа</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="378"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="382"/>
         <source>Restore Image Header</source>
         <translation>Восстановить заголовок образа</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="382"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="386"/>
         <source>Change Password</source>
         <translation>Изменить пароль</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="625"/>
-        <location filename="Windows/OptionsGeneral.cpp" line="725"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="629"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="729"/>
         <source>Always copy</source>
         <translation>Всегда копировать</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="626"/>
-        <location filename="Windows/OptionsGeneral.cpp" line="726"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="630"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="730"/>
         <source>Don&apos;t copy</source>
         <translation>Не копировать</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="627"/>
-        <location filename="Windows/OptionsGeneral.cpp" line="727"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="631"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="731"/>
         <source>Copy empty</source>
         <translation>Копировать пустой</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="853"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="857"/>
         <source>kilobytes (%1)</source>
         <translation>килобайт (%1)</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="961"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="965"/>
         <source>Select color</source>
         <translation>Выбрать цвет</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1049"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1053"/>
         <source>Select Program</source>
         <translation>Выбрать программу</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1236"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1240"/>
         <source>The image file does not exist</source>
         <translation>Файл образа не существует</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1237"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1241"/>
         <source>The password is wrong</source>
         <translation>Пароль неправильный</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1238"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1242"/>
         <source>Unexpected error: %1</source>
         <translation>Непредвиденная ошибка: %1</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1266"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1270"/>
         <source>Image Password Changed</source>
         <translation>Пароль образа изменен</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1268"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1272"/>
         <source>Failed to Change Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось изменить пароль</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1277"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1281"/>
         <source>Backup Image Header for %1</source>
         <translation>Резервное копирование заголовка образа для %1</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1285"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1289"/>
         <source>Image Header Backuped</source>
         <translation>Резервная копия заголовка образа создана</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1292"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1296"/>
         <source>Restore Image Header for %1</source>
         <translation>Восстановление заголовка образа для %1</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1300"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1304"/>
         <source>Image Header Restored</source>
         <translation>Заголовок образа восстановлен</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1169"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1171"/>
         <source>Please enter a service identifier</source>
         <translation>Пожалуйста, введите идентификатор службы</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1049"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1053"/>
         <source>Executables (*.exe *.cmd)</source>
         <translation>Исполняемые файлы (*.exe *.cmd)</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1053"/>
-        <location filename="Windows/OptionsGeneral.cpp" line="1074"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1057"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1078"/>
         <source>Please enter a menu title</source>
         <translation>Пожалуйста, введите заголовок меню</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1070"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1074"/>
         <source>Please enter a command</source>
         <translation>Пожалуйста, введите команду</translation>
     </message>
@@ -2758,7 +2756,7 @@ Note: The update check is often behind the latest GitHub release to ensure that 
         <translation>Запись %1 : IP или порт не могут быть пустыми</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1334"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1336"/>
         <location filename="Windows/OptionsNetwork.cpp" line="328"/>
         <location filename="Windows/OptionsNetwork.cpp" line="744"/>
         <source>Allow</source>
@@ -2949,12 +2947,12 @@ Please select a folder which contains this file.</source>
     <message>
         <location filename="Windows/OptionsWindow.cpp" line="1771"/>
         <source>Autocomplete Consent Required</source>
-        <translation type="unfinished"></translation>
+        <translation>Требуется согласие на автозаполнение</translation>
     </message>
     <message>
         <location filename="Windows/OptionsWindow.cpp" line="1773"/>
         <source>Autocomplete feature requires your consent to proceed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Для использования функции автозаполнения необходимо ваше согласие.</translation>
     </message>
     <message>
         <location filename="Windows/OptionsWindow.cpp" line="1775"/>
@@ -2963,37 +2961,41 @@ Please select a folder which contains this file.</source>
 Choose autocomplete mode:
 %1 Manual: Autocomplete suggestions with %2.
 %1 While Typing: Autocomplete suggestions while typing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если вы не уверены в настройках, отображаемых во всплывающем окне автозаполнения, мы настоятельно рекомендуем ознакомиться с документацией или исходным кодом программного обеспечения, прежде чем продолжить. Включение этой функции без надлежащего понимания может привести к непредвиденным последствиям, за которые вы будете нести полную ответственность.
+
+Выберите режим автозаполнения:
+%1 Вручную: предложения автозаполнения с %2.
+%1 Во время ввода: предложения автозаполнения во время ввода.</translation>
     </message>
     <message>
         <location filename="Windows/OptionsWindow.cpp" line="1783"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Вручную</translation>
     </message>
     <message>
         <location filename="Windows/OptionsWindow.cpp" line="1784"/>
         <source>Triggers autocomplete suggestions with %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Запускает автозаполнение предложений с помощью %1.</translation>
     </message>
     <message>
         <location filename="Windows/OptionsWindow.cpp" line="1786"/>
         <source>While Typing</source>
-        <translation type="unfinished"></translation>
+        <translation>Во время ввода</translation>
     </message>
     <message>
         <location filename="Windows/OptionsWindow.cpp" line="1787"/>
         <source>Triggers autocomplete suggestions while typing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Запускает автозаполнение предложений во время ввода текста.</translation>
     </message>
     <message>
         <location filename="Windows/OptionsWindow.cpp" line="1790"/>
         <source>Keeps autocomplete suggestions disabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Отключает предложения автозаполнения.</translation>
     </message>
     <message>
         <location filename="Windows/OptionsWindow.cpp" line="1789"/>
         <source>Cancel</source>
-        <translation type="unfinished">Отмена</translation>
+        <translation>Отмена</translation>
     </message>
 </context>
 <context>
@@ -3001,17 +3003,17 @@ Choose autocomplete mode:
     <message>
         <location filename="../MiscHelpers/Common/SettingsWidgets.cpp" line="31"/>
         <source>Any File (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Любой файл (*.*)</translation>
     </message>
     <message>
         <location filename="../MiscHelpers/Common/SettingsWidgets.cpp" line="37"/>
         <source>Select Directory</source>
-        <translation type="unfinished">Выбрать каталог</translation>
+        <translation>Выбрать каталог</translation>
     </message>
     <message>
         <location filename="../MiscHelpers/Common/SettingsWidgets.cpp" line="38"/>
         <source>Browse</source>
-        <translation type="unfinished">Обзор</translation>
+        <translation>Обзор</translation>
     </message>
 </context>
 <context>
@@ -3352,6 +3354,24 @@ Full path: %4</source>
     </message>
 </context>
 <context>
+    <name>CRenameSandboxDialog</name>
+    <message>
+        <location filename="Windows/RenameSandboxDialog.cpp" line="17"/>
+        <source>Sandboxie-Plus - Rename Sandbox</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Windows/RenameSandboxDialog.cpp" line="23"/>
+        <source>When enabled, alias display is disabled for this sandbox.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Windows/RenameSandboxDialog.cpp" line="24"/>
+        <source>Hide alias input in this dialog. This preference is remembered.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CRunPage</name>
     <message>
         <location filename="Wizards/BoxAssistant.cpp" line="592"/>
@@ -3591,12 +3611,12 @@ Unlike the preview channel, it does not include untested, potentially breaking, 
     <message>
         <location filename="SbiePlusAPI.cpp" line="878"/>
         <source> (Portable)</source>
-        <translation type="unfinished"></translation>
+        <translation> (Портативный)</translation>
     </message>
     <message>
         <location filename="SbiePlusAPI.cpp" line="881"/>
         <source> (Virtual)</source>
-        <translation type="unfinished"></translation>
+        <translation> (Виртуальный)</translation>
     </message>
 </context>
 <context>
@@ -3867,12 +3887,12 @@ Unlike the preview channel, it does not include untested, potentially breaking, 
     <message>
         <location filename="SandMan.cpp" line="514"/>
         <source>Import Boxes</source>
-        <translation type="unfinished"></translation>
+        <translation>Импорт песочниц</translation>
     </message>
     <message>
         <location filename="SandMan.cpp" line="516"/>
         <source>Export Boxes</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспорт песочниц</translation>
     </message>
     <message>
         <location filename="SandMan.cpp" line="653"/>
@@ -3893,12 +3913,12 @@ Unlike the preview channel, it does not include untested, potentially breaking, 
     <message>
         <location filename="SandMan.cpp" line="750"/>
         <source>Import Sandboxes</source>
-        <translation type="unfinished"></translation>
+        <translation>Импорт песочниц</translation>
     </message>
     <message>
         <location filename="SandMan.cpp" line="752"/>
         <source>Export Sandboxes</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспорт песочниц</translation>
     </message>
     <message>
         <location filename="SandMan.cpp" line="856"/>
@@ -4009,10 +4029,6 @@ Please check if there is an update for sandboxie.</source>
         <location filename="SandMan.cpp" line="3593"/>
         <source>Failed to start required Sandboxie components</source>
         <translation>Не удалось запустить необходимые компоненты Sandboxie</translation>
-    </message>
-    <message>
-        <source>Some compatibility templates (%1) are missing, probably deleted, do you want to remove them from all boxes?</source>
-        <translation type="vanished">Некоторые шаблоны совместимости (%1) отсутствуют, вероятно, удалены. Удалить их из всех песочниц?</translation>
     </message>
     <message>
         <location filename="SandMan.cpp" line="1998"/>
@@ -4463,10 +4479,6 @@ No will choose: %2</source>
         <translation>Мастер устранения неполадок</translation>
     </message>
     <message>
-        <source>Import Box</source>
-        <translation type="vanished">Импорт контейнера</translation>
-    </message>
-    <message>
         <location filename="SandMan.cpp" line="519"/>
         <location filename="SandMan.cpp" line="669"/>
         <source>Run Sandboxed</source>
@@ -4493,7 +4505,7 @@ No will choose: %2</source>
     <message>
         <location filename="SandMan.cpp" line="595"/>
         <source>Auto Expand Tree</source>
-        <translation type="unfinished"></translation>
+        <translation>Авто развертывание дерева</translation>
     </message>
     <message>
         <location filename="SandMan.cpp" line="640"/>
@@ -4528,10 +4540,6 @@ No will choose: %2</source>
         <location filename="SandMan.cpp" line="721"/>
         <source>Files and Folders</source>
         <translation>Файлы и папки</translation>
-    </message>
-    <message>
-        <source>Import Sandbox</source>
-        <translation type="vanished">Импорт песочницы</translation>
     </message>
     <message>
         <location filename="SandMan.cpp" line="802"/>
@@ -4614,7 +4622,7 @@ No will choose: %2</source>
     <message>
         <location filename="SandMan.cpp" line="1968"/>
         <source>Some compatibility templates are missing:&lt;br /&gt;&lt;br /&gt;%1&lt;br /&gt;Probably deleted, do you want to remove them from all boxes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Некоторые шаблоны совместимости отсутствуют:&lt;br /&gt;&lt;br /&gt;%1&lt;br /&gt;Вероятно, они были удалены. Хотите удалить их из всех песочниц?</translation>
     </message>
     <message>
         <location filename="SandMan.cpp" line="2055"/>
@@ -5294,16 +5302,12 @@ This file is part of Sandboxie and all change done to it will be reverted next t
     <message>
         <location filename="SbieProcess.cpp" line="112"/>
         <source> fake Admin</source>
-        <translation type="unfinished"></translation>
+        <translation> поддельный Aдминистратор</translation>
     </message>
     <message>
         <location filename="SbieProcess.cpp" line="115"/>
         <source> in session %1</source>
         <translation> в сеансе %1</translation>
-    </message>
-    <message>
-        <source> (%1)</source>
-        <translation type="vanished"> (%1)</translation>
     </message>
 </context>
 <context>
@@ -5347,646 +5351,611 @@ This file is part of Sandboxie and all change done to it will be reverted next t
 <context>
     <name>CSbieView</name>
     <message>
-        <location filename="Views/SbieView.cpp" line="163"/>
-        <location filename="Views/SbieView.cpp" line="334"/>
+        <location filename="Views/SbieView.cpp" line="164"/>
+        <location filename="Views/SbieView.cpp" line="335"/>
         <source>Create New Box</source>
         <translation>Создать новую песочницу</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="463"/>
+        <location filename="Views/SbieView.cpp" line="462"/>
         <source>Remove Group</source>
         <translation>Удалить группу</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="174"/>
-        <location filename="Views/SbieView.cpp" line="345"/>
+        <location filename="Views/SbieView.cpp" line="175"/>
+        <location filename="Views/SbieView.cpp" line="346"/>
         <source>Run</source>
         <translation>Запустить</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="179"/>
+        <location filename="Views/SbieView.cpp" line="180"/>
         <source>Run Program</source>
         <translation>Запустить программу</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="180"/>
+        <location filename="Views/SbieView.cpp" line="181"/>
         <source>Run from Start Menu</source>
         <translation>Запустить из меню &apos;Пуск&apos;</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="191"/>
+        <location filename="Views/SbieView.cpp" line="192"/>
         <source>Default Web Browser</source>
         <translation>Веб-браузер по умолчанию</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="192"/>
+        <location filename="Views/SbieView.cpp" line="193"/>
         <source>Default eMail Client</source>
         <translation>Почтовый клиент по умолчанию</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="194"/>
+        <location filename="Views/SbieView.cpp" line="195"/>
         <source>Windows Explorer</source>
         <translation>Проводник</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="195"/>
+        <location filename="Views/SbieView.cpp" line="196"/>
         <source>Registry Editor</source>
         <translation>Редактор реестра</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="196"/>
+        <location filename="Views/SbieView.cpp" line="197"/>
         <source>Programs and Features</source>
         <translation>Программы и компоненты</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="207"/>
+        <location filename="Views/SbieView.cpp" line="208"/>
         <source>Terminate All Programs</source>
         <translation>Завершить все программы</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="122"/>
-        <location filename="Views/SbieView.cpp" line="217"/>
-        <location filename="Views/SbieView.cpp" line="282"/>
-        <location filename="Views/SbieView.cpp" line="400"/>
-        <location filename="Views/SbieView.cpp" line="442"/>
+        <location filename="Views/SbieView.cpp" line="123"/>
+        <location filename="Views/SbieView.cpp" line="218"/>
+        <location filename="Views/SbieView.cpp" line="283"/>
+        <location filename="Views/SbieView.cpp" line="399"/>
+        <location filename="Views/SbieView.cpp" line="441"/>
         <source>Create Shortcut</source>
         <translation>Создать ярлык</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="219"/>
-        <location filename="Views/SbieView.cpp" line="380"/>
+        <location filename="Views/SbieView.cpp" line="220"/>
+        <location filename="Views/SbieView.cpp" line="381"/>
         <source>Explore Content</source>
         <translation>Открыть в проводнике</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="221"/>
-        <location filename="Views/SbieView.cpp" line="387"/>
+        <location filename="Views/SbieView.cpp" line="222"/>
+        <location filename="Views/SbieView.cpp" line="388"/>
         <source>Snapshots Manager</source>
         <translation>Менеджер снимков</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="211"/>
+        <location filename="Views/SbieView.cpp" line="212"/>
         <source>Recover Files</source>
         <translation>Восстановить файлы</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="212"/>
-        <location filename="Views/SbieView.cpp" line="379"/>
+        <location filename="Views/SbieView.cpp" line="213"/>
+        <location filename="Views/SbieView.cpp" line="380"/>
         <source>Delete Content</source>
         <translation>Удалить содержимое</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="228"/>
+        <location filename="Views/SbieView.cpp" line="229"/>
         <source>Sandbox Presets</source>
         <translation>Предустановки песочницы</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="230"/>
+        <location filename="Views/SbieView.cpp" line="231"/>
         <source>Ask for UAC Elevation</source>
         <translation>Запросить повышение уровня UAC</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="231"/>
+        <location filename="Views/SbieView.cpp" line="232"/>
         <source>Drop Admin Rights</source>
         <translation>Отбросить права администратора</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="232"/>
+        <location filename="Views/SbieView.cpp" line="233"/>
         <source>Emulate Admin Rights</source>
         <translation>Эмуляция прав администратора</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="240"/>
+        <location filename="Views/SbieView.cpp" line="241"/>
         <source>Block Internet Access</source>
         <translation>Блокировать доступ в Интернет</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="242"/>
+        <location filename="Views/SbieView.cpp" line="243"/>
         <source>Allow Network Shares</source>
         <translation>Разрешить сетевые ресурсы</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="223"/>
+        <location filename="Views/SbieView.cpp" line="224"/>
         <source>Sandbox Options</source>
         <translation>Опции песочницы</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="190"/>
+        <location filename="Views/SbieView.cpp" line="191"/>
         <source>Standard Applications</source>
         <translation>Стандартные приложения</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="214"/>
+        <location filename="Views/SbieView.cpp" line="215"/>
         <source>Browse Files</source>
         <translation>Просмотр файлов</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="251"/>
-        <location filename="Views/SbieView.cpp" line="385"/>
+        <location filename="Views/SbieView.cpp" line="252"/>
+        <location filename="Views/SbieView.cpp" line="386"/>
         <source>Sandbox Tools</source>
         <translation>Инструменты песочницы</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="254"/>
+        <location filename="Views/SbieView.cpp" line="255"/>
         <source>Duplicate Box Config</source>
         <translation>Дублировать конфигурацию песочницы</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="260"/>
-        <location filename="Views/SbieView.cpp" line="403"/>
+        <location filename="Views/SbieView.cpp" line="261"/>
+        <location filename="Views/SbieView.cpp" line="402"/>
         <source>Rename Sandbox</source>
         <translation>Переименовать песочницу</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="261"/>
-        <location filename="Views/SbieView.cpp" line="404"/>
+        <location filename="Views/SbieView.cpp" line="262"/>
+        <location filename="Views/SbieView.cpp" line="403"/>
         <source>Move Sandbox</source>
         <translation>Переместить песочницу</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="275"/>
-        <location filename="Views/SbieView.cpp" line="418"/>
+        <location filename="Views/SbieView.cpp" line="276"/>
+        <location filename="Views/SbieView.cpp" line="417"/>
         <source>Remove Sandbox</source>
         <translation>Удалить песочницу</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="280"/>
-        <location filename="Views/SbieView.cpp" line="440"/>
+        <location filename="Views/SbieView.cpp" line="281"/>
+        <location filename="Views/SbieView.cpp" line="439"/>
         <source>Terminate</source>
         <translation>Завершить</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="283"/>
+        <location filename="Views/SbieView.cpp" line="284"/>
         <source>Preset</source>
         <translation>Предустановка</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="120"/>
-        <location filename="Views/SbieView.cpp" line="284"/>
+        <location filename="Views/SbieView.cpp" line="121"/>
+        <location filename="Views/SbieView.cpp" line="285"/>
         <source>Pin to Run Menu</source>
         <translation>Закрепить в меню &apos;Запустить&apos;</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="165"/>
-        <location filename="Views/SbieView.cpp" line="336"/>
+        <location filename="Views/SbieView.cpp" line="166"/>
+        <location filename="Views/SbieView.cpp" line="337"/>
         <source>Import Boxes</source>
-        <translation type="unfinished"></translation>
+        <translation>Импорт песочниц</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="256"/>
+        <location filename="Views/SbieView.cpp" line="257"/>
         <source>Export Boxes</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспорт песочниц</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="286"/>
+        <location filename="Views/SbieView.cpp" line="287"/>
         <source>Block and Terminate</source>
         <translation>Заблокировать и завершить</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="290"/>
+        <location filename="Views/SbieView.cpp" line="291"/>
         <source>Allow internet access</source>
         <translation>Разрешить доступ в Интернет</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="292"/>
+        <location filename="Views/SbieView.cpp" line="293"/>
         <source>Force into this sandbox</source>
         <translation>Принудительно в этой песочнице</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="294"/>
+        <location filename="Views/SbieView.cpp" line="295"/>
         <source>Set Linger Process</source>
         <translation>Установить вторичный процесс</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="296"/>
+        <location filename="Views/SbieView.cpp" line="297"/>
         <source>Set Leader Process</source>
         <translation>Установить первичный процесс</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="602"/>
+        <location filename="Views/SbieView.cpp" line="601"/>
         <source>    File root: %1
 </source>
         <translation>    Корень файла: %1
 </translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="603"/>
+        <location filename="Views/SbieView.cpp" line="602"/>
         <source>    Registry root: %1
 </source>
         <translation>    Корень реестра: %1
 </translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="604"/>
+        <location filename="Views/SbieView.cpp" line="603"/>
         <source>    IPC root: %1
 </source>
         <translation>    Корень IPC: %1
 </translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="608"/>
+        <location filename="Views/SbieView.cpp" line="607"/>
         <source>Options:
     </source>
         <translation>Опции:
     </translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="907"/>
+        <location filename="Views/SbieView.cpp" line="906"/>
         <source>[None]</source>
         <translation>[Нет]</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1241"/>
+        <location filename="Views/SbieView.cpp" line="1240"/>
         <source>Please enter a new group name</source>
         <translation>Пожалуйста, введите новое имя группы</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1074"/>
+        <location filename="Views/SbieView.cpp" line="1073"/>
         <source>Do you really want to remove the selected group(s)?</source>
         <translation>Вы действительно хотите удалить выбранные группы?</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="164"/>
-        <location filename="Views/SbieView.cpp" line="335"/>
+        <location filename="Views/SbieView.cpp" line="165"/>
+        <location filename="Views/SbieView.cpp" line="336"/>
         <source>Create Box Group</source>
         <translation>Создать группу песочниц</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="461"/>
+        <location filename="Views/SbieView.cpp" line="460"/>
         <source>Rename Group</source>
         <translation>Переименовать группу</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="170"/>
-        <location filename="Views/SbieView.cpp" line="341"/>
+        <location filename="Views/SbieView.cpp" line="171"/>
+        <location filename="Views/SbieView.cpp" line="342"/>
         <source>Stop Operations</source>
         <translation>Остановить операции</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="199"/>
+        <location filename="Views/SbieView.cpp" line="200"/>
         <source>Command Prompt</source>
         <translation>Командная строка</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="200"/>
+        <location filename="Views/SbieView.cpp" line="201"/>
         <source>Command Prompt (as Admin)</source>
         <translation>Командная строка (от администратора)</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="204"/>
+        <location filename="Views/SbieView.cpp" line="205"/>
         <source>Command Prompt (32-bit)</source>
         <translation>Командная строка (32-бит)</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="189"/>
+        <location filename="Views/SbieView.cpp" line="190"/>
         <source>Execute Autorun Entries</source>
         <translation>Выполнить записи автозапуска</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="386"/>
+        <location filename="Views/SbieView.cpp" line="387"/>
         <source>Browse Content</source>
         <translation>Просмотр содержимого</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="213"/>
+        <location filename="Views/SbieView.cpp" line="214"/>
         <source>Box Content</source>
         <translation>Содержимое песочницы</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="220"/>
+        <location filename="Views/SbieView.cpp" line="221"/>
         <source>Open Registry</source>
         <translation>Открыть в редакторе реестра</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="216"/>
-        <location filename="Views/SbieView.cpp" line="399"/>
+        <location filename="Views/SbieView.cpp" line="217"/>
+        <location filename="Views/SbieView.cpp" line="398"/>
         <source>Refresh Info</source>
         <translation>Обновить информацию</translation>
     </message>
     <message>
-        <source>Import Box</source>
-        <translation type="vanished">Импорт песочницы</translation>
-    </message>
-    <message>
-        <location filename="Views/SbieView.cpp" line="183"/>
-        <location filename="Views/SbieView.cpp" line="356"/>
+        <location filename="Views/SbieView.cpp" line="184"/>
+        <location filename="Views/SbieView.cpp" line="357"/>
         <source>(Host) Start Menu</source>
         <translation>(Хост) Меню &quot;Пуск&quot;</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="209"/>
-        <location filename="Views/SbieView.cpp" line="376"/>
+        <location filename="Views/SbieView.cpp" line="210"/>
+        <location filename="Views/SbieView.cpp" line="377"/>
         <source>Mount Box Image</source>
         <translation>Подключить образ диска</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="210"/>
-        <location filename="Views/SbieView.cpp" line="377"/>
+        <location filename="Views/SbieView.cpp" line="211"/>
+        <location filename="Views/SbieView.cpp" line="378"/>
         <source>Unmount Box Image</source>
         <translation>Отключить образ песочницы</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="246"/>
+        <location filename="Views/SbieView.cpp" line="247"/>
         <source>Immediate Recovery</source>
         <translation>Немедленное восстановление</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="248"/>
+        <location filename="Views/SbieView.cpp" line="249"/>
         <source>Disable Force Rules</source>
         <translation>Отключить принудительные правила</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="252"/>
+        <location filename="Views/SbieView.cpp" line="253"/>
         <location filename="Views/SbieView.cpp" line="390"/>
         <source>Browse NT Namespace</source>
-        <translation type="unfinished"></translation>
+        <translation>Просмотр пространства имен NT</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="255"/>
+        <location filename="Views/SbieView.cpp" line="256"/>
         <source>Duplicate Box with Content</source>
         <translation>Дублировать песочницу с содержимым</translation>
     </message>
     <message>
-        <source>Export Box</source>
-        <translation type="vanished">Экспорт контейнера</translation>
-    </message>
-    <message>
-        <location filename="Views/SbieView.cpp" line="262"/>
-        <location filename="Views/SbieView.cpp" line="405"/>
+        <location filename="Views/SbieView.cpp" line="263"/>
+        <location filename="Views/SbieView.cpp" line="404"/>
         <source>Move Up</source>
         <translation>Сдвинуть вверх</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="267"/>
-        <location filename="Views/SbieView.cpp" line="410"/>
+        <location filename="Views/SbieView.cpp" line="268"/>
+        <location filename="Views/SbieView.cpp" line="409"/>
         <source>Move Down</source>
         <translation>Сдвинуть вниз</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="298"/>
+        <location filename="Views/SbieView.cpp" line="299"/>
         <source>Suspend</source>
         <translation>Приостановить</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="299"/>
+        <location filename="Views/SbieView.cpp" line="300"/>
         <source>Resume</source>
         <translation>Возобновить</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="350"/>
+        <location filename="Views/SbieView.cpp" line="351"/>
         <source>Run Web Browser</source>
         <translation>Запустить веб-браузер</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="351"/>
+        <location filename="Views/SbieView.cpp" line="352"/>
         <source>Run eMail Reader</source>
         <translation>Запустить почтовый клиент</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="352"/>
+        <location filename="Views/SbieView.cpp" line="353"/>
         <source>Run Any Program</source>
         <translation>Запустить любую программу</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="353"/>
+        <location filename="Views/SbieView.cpp" line="354"/>
         <source>Run From Start Menu</source>
         <translation>Запустить из меню &quot;Пуск&quot;</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="361"/>
+        <location filename="Views/SbieView.cpp" line="362"/>
         <source>Run Windows Explorer</source>
         <translation>Запустить проводник Windows</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="375"/>
+        <location filename="Views/SbieView.cpp" line="376"/>
         <source>Terminate Programs</source>
         <translation>Завершить программы</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="378"/>
+        <location filename="Views/SbieView.cpp" line="379"/>
         <source>Quick Recover</source>
         <translation>Быстрое восстановление</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="383"/>
+        <location filename="Views/SbieView.cpp" line="384"/>
         <source>Sandbox Settings</source>
         <translation>Настройки песочницы</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="393"/>
+        <location filename="Views/SbieView.cpp" line="392"/>
         <source>Duplicate Sandbox Config</source>
         <translation>Дублировать конфигурацию песочницы</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="394"/>
+        <location filename="Views/SbieView.cpp" line="393"/>
         <source>Duplicate Sandbox with Content</source>
         <translation>Дублировать песочницу с содержимым</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="395"/>
+        <location filename="Views/SbieView.cpp" line="394"/>
         <source>Export Sandbox</source>
         <translation>Экспорт песочницы</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="462"/>
+        <location filename="Views/SbieView.cpp" line="461"/>
         <source>Move Group</source>
         <translation>Переместить группу</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="606"/>
+        <location filename="Views/SbieView.cpp" line="605"/>
         <source>    Disk root: %1
 </source>
         <translation>    Корень диска: %1
 </translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1064"/>
+        <location filename="Views/SbieView.cpp" line="1063"/>
         <source>Please enter a new name for the Group.</source>
         <translation>Пожалуйста, введите новое имя для группы.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1111"/>
+        <location filename="Views/SbieView.cpp" line="1110"/>
         <source>Move entries by (negative values move up, positive values move down):</source>
         <translation>Сдвинуть записи на (отрицательные значения сдвигают вверх, положительные значения сдвигают вниз):</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1186"/>
+        <location filename="Views/SbieView.cpp" line="1185"/>
         <source>A group can not be its own parent.</source>
         <translation>Группа не может быть собственным родителем.</translation>
     </message>
     <message>
-        <source>Failed to open archive, wrong password?</source>
-        <translation type="vanished">Не удалось открыть архив, неверный пароль?</translation>
-    </message>
-    <message>
-        <source>Failed to open archive (%1)!</source>
-        <translation type="vanished">Не удалось открыть архив (%1)!</translation>
-    </message>
-    <message>
-        <location filename="Views/SbieView.cpp" line="1307"/>
+        <location filename="Views/SbieView.cpp" line="1306"/>
         <source>&lt;br /&gt;</source>
         <translation>&lt;br /&gt;</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1309"/>
+        <location filename="Views/SbieView.cpp" line="1308"/>
         <source>... and %1 more</source>
         <translation>... и еще %1</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1440"/>
+        <location filename="Views/SbieView.cpp" line="1439"/>
         <source>WARNING: The opened registry editor is not sandboxed, please be careful and only do changes to the preselected sandbox locations.</source>
         <translation>ВНИМАНИЕ: Открытый редактор реестра не находится в песочнице, будьте осторожны и вносите изменения только в предварительно выбранные расположения в песочнице.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1520"/>
+        <location filename="Views/SbieView.cpp" line="1519"/>
         <source>Not Created</source>
         <translation>Не создано</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1529"/>
+        <location filename="Views/SbieView.cpp" line="1528"/>
         <source>Copying: %1</source>
         <translation>Копирование: %1</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1596"/>
+        <location filename="Views/SbieView.cpp" line="1621"/>
         <source>Do you really want to remove the following sandbox(es)?&lt;br /&gt;&lt;br /&gt;%1&lt;br /&gt;&lt;br /&gt;Warning: The box content will also be deleted!</source>
         <translation>Вы действительно хотите удалить следующие песочницы?&lt;br /&gt;&lt;br /&gt;%1&lt;br /&gt;&lt;br /&gt;Внимание: содержимое песочницы также будет удалено!</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1661"/>
+        <location filename="Views/SbieView.cpp" line="1686"/>
         <source>Do you want to delete the content of the following sandbox?&lt;br /&gt;&lt;br /&gt;%1</source>
         <translation>Хотите удалить содержимое следующей песочницы?&lt;br /&gt;&lt;br /&gt;%1</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1676"/>
+        <location filename="Views/SbieView.cpp" line="1701"/>
         <source>Do you really want to delete the content of the following sandboxes?&lt;br /&gt;&lt;br /&gt;%1</source>
         <translation>Вы действительно хотите удалить содержимое следующих песочниц?&lt;br /&gt;&lt;br /&gt;%1</translation>
     </message>
     <message>
-        <source>7-Zip Archive (*.7z);;Zip Archive (*.zip)</source>
-        <translation type="vanished">7-Zip-архив (*.7z);;Zip-архив (*.zip)</translation>
-    </message>
-    <message>
-        <source>Importing: %1</source>
-        <translation type="vanished">Импорт: %1</translation>
-    </message>
-    <message>
-        <location filename="Views/SbieView.cpp" line="1267"/>
+        <location filename="Views/SbieView.cpp" line="1266"/>
         <source>The Sandbox name and Box Group name cannot use the &apos;,()&apos; symbol or control characters.</source>
         <translation>Имя песочницы и имя группы песочниц не могут содержать символ &apos;,()&apos; или управляющие символы.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1272"/>
+        <location filename="Views/SbieView.cpp" line="1271"/>
         <source>This name is already used for a Box Group.</source>
         <translation>Это имя уже используется для группы песочниц.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1277"/>
+        <location filename="Views/SbieView.cpp" line="1276"/>
         <source>This name is already used for a Sandbox.</source>
         <translation>Это имя уже используется для песочницы.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1346"/>
-        <location filename="Views/SbieView.cpp" line="1422"/>
-        <location filename="Views/SbieView.cpp" line="1728"/>
+        <location filename="Views/SbieView.cpp" line="1345"/>
+        <location filename="Views/SbieView.cpp" line="1421"/>
+        <location filename="Views/SbieView.cpp" line="1753"/>
         <source>Don&apos;t show this message again.</source>
         <translation>Больше не показывать это сообщение.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1413"/>
-        <location filename="Views/SbieView.cpp" line="1433"/>
-        <location filename="Views/SbieView.cpp" line="1906"/>
+        <location filename="Views/SbieView.cpp" line="1412"/>
+        <location filename="Views/SbieView.cpp" line="1432"/>
+        <location filename="Views/SbieView.cpp" line="1931"/>
         <source>This Sandbox is empty.</source>
         <translation>Эта песочница пуста.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1441"/>
+        <location filename="Views/SbieView.cpp" line="1440"/>
         <source>Don&apos;t show this warning in future</source>
         <translation>Не показывать это предупреждение в будущем</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1500"/>
+        <location filename="Views/SbieView.cpp" line="1499"/>
         <source>Please enter a new name for the duplicated Sandbox.</source>
         <translation>Введите новое имя копии песочницы.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1500"/>
+        <location filename="Views/SbieView.cpp" line="1499"/>
         <source>%1 Copy</source>
         <translation>%1 Копия</translation>
     </message>
     <message>
-        <source>Select file name</source>
-        <translation type="vanished">Выберите имя файла</translation>
-    </message>
-    <message>
-        <source>Exporting: %1</source>
-        <translation type="vanished">Экспорт: %1</translation>
-    </message>
-    <message>
-        <location filename="Views/SbieView.cpp" line="1549"/>
         <source>Please enter a new name for the Sandbox.</source>
-        <translation>Введите новое имя для песочницы.</translation>
+        <translation type="vanished">Введите новое имя для песочницы.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1549"/>
         <source>Please enter a new alias for the Sandbox.</source>
-        <translation>Введите новый псевдоним для песочницы.</translation>
+        <translation type="vanished">Введите новый псевдоним для песочницы.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1558"/>
         <source>The entered name is not valid, do you want to set it as an alias instead?</source>
-        <translation>Введенное имя недопустимо, хотите ли вы задать его в качестве псевдонима?</translation>
+        <translation type="vanished">Введенное имя недопустимо, хотите ли вы задать его в качестве псевдонима?</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1649"/>
+        <location filename="Views/SbieView.cpp" line="1674"/>
         <source>This Sandbox is already empty.</source>
         <translation>Эта песочница уже пуста.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1666"/>
-        <location filename="Views/SbieView.cpp" line="1689"/>
+        <location filename="Views/SbieView.cpp" line="1691"/>
+        <location filename="Views/SbieView.cpp" line="1714"/>
         <source>Also delete all Snapshots</source>
         <translation>Также удалить все снимки</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1710"/>
+        <location filename="Views/SbieView.cpp" line="1735"/>
         <source>Do you want to terminate all processes in the selected sandbox(es)?</source>
         <translation>Вы хотите завершить все процессы в выбранных песочницах?</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1711"/>
-        <location filename="Views/SbieView.cpp" line="1807"/>
+        <location filename="Views/SbieView.cpp" line="1736"/>
+        <location filename="Views/SbieView.cpp" line="1832"/>
         <source>Terminate without asking</source>
         <translation>Завершить без запроса</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1726"/>
+        <location filename="Views/SbieView.cpp" line="1751"/>
         <source>The Sandboxie Start Menu will now be displayed. Select an application from the menu, and Sandboxie will create a new shortcut icon on your real desktop, which you can use to invoke the selected application under the supervision of Sandboxie.</source>
         <translation>Cтартовое меню Sandboxie теперь будет отображено. Выберите приложение из меню, и Sandboxie создаст новый ярлык на вашем реальном рабочем столе, который вы можете использовать для вызова выбранного приложения под контролем Sandboxie.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1781"/>
-        <location filename="Views/SbieView.cpp" line="1835"/>
+        <location filename="Views/SbieView.cpp" line="1806"/>
+        <location filename="Views/SbieView.cpp" line="1860"/>
         <source>Create Shortcut to sandbox %1</source>
         <translation>Создать ярлык для песочницы %1</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1806"/>
+        <location filename="Views/SbieView.cpp" line="1831"/>
         <source>Do you want to terminate %1?</source>
         <translation>Вы хотите завершить %1?</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1806"/>
+        <location filename="Views/SbieView.cpp" line="1831"/>
         <source>the selected processes</source>
         <translation>выбранные процессы</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1865"/>
+        <location filename="Views/SbieView.cpp" line="1890"/>
         <source>This box does not have Internet restrictions in place, do you want to enable them?</source>
         <translation>В этой песочнице нет ограничений на доступ к Интернет, вы хотите их включить?</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1956"/>
+        <location filename="Views/SbieView.cpp" line="1981"/>
         <source>This sandbox is currently disabled or restricted to specific groups or users. Would you like to allow access for everyone?</source>
         <translation>Эта песочница в настоящее время отключена или ограничена определенными группами или пользователями. Хотите ли вы разрешить доступ для всех?</translation>
     </message>
@@ -6110,18 +6079,17 @@ This file is part of Sandboxie and all change done to it will be reverted next t
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="258"/>
         <source>Remember previous state</source>
-        <oldsource>Remember previouse state</oldsource>
-        <translation type="unfinished"></translation>
+        <translation>Запомнить предыдущее состояние</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="259"/>
         <source>Expand all groups</source>
-        <translation type="unfinished"></translation>
+        <translation>Развернуть все группы</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="260"/>
         <source>Collapse all groups</source>
-        <translation type="unfinished"></translation>
+        <translation>Свернуть все группы</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="262"/>
@@ -6193,7 +6161,7 @@ This file is part of Sandboxie and all change done to it will be reverted next t
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="3361"/>
         <source>Autocomplete Consent Required</source>
-        <translation type="unfinished"></translation>
+        <translation>Требуется согласие на автозаполнение</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="2923"/>
@@ -6203,7 +6171,7 @@ This file is part of Sandboxie and all change done to it will be reverted next t
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="2928"/>
         <source>&lt;br /&gt;&lt;font color=&apos;red&apos;&gt;For the current build Plus features remain enabled&lt;/font&gt;, but you no longer have access to Sandboxie-Live services, including compatibility updates and the online troubleshooting database.</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br /&gt;&lt;font color=&apos;red&apos;&gt;В текущей версии функции Plus остаются включенными&lt;/font&gt;, но у вас больше нет доступа к услугам Sandboxie-Live, включая обновления совместимости и онлайн-базу данных по устранению неполадок.</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="3003"/>
@@ -6219,10 +6187,6 @@ This file is part of Sandboxie and all change done to it will be reverted next t
         <location filename="Windows/SettingsWindow.cpp" line="2936"/>
         <source>This supporter certificate will &lt;font color=&apos;red&apos;&gt;expire in %1 days&lt;/font&gt;, please &lt;a href=&quot;%2&quot;&gt;get an updated certificate&lt;/a&gt;.</source>
         <translation>Срок действия этого сертификата сторонника &lt;font color=&apos;red&apos;&gt;истечет через %1 дней&lt;/font&gt;, пожалуйста, &lt;a href=&quot;%2&quot;&gt;получите обновленный сертификат&lt;/a&gt;.</translation>
-    </message>
-    <message>
-        <source>&lt;br /&gt;&lt;font color=&apos;red&apos;&gt;For the current build Plus features remain enabled&lt;/font&gt;, but you no longer have access to Sandboxie-Live services, including compatibility updates and the troubleshooting database.</source>
-        <translation type="vanished">&lt;br /&gt;&lt;font color=&apos;red&apos;&gt;В текущей сборке функции Plus остаются включенными&lt;/font&gt;, но у вас больше нет доступа к службам Sandboxie-Live, включая обновления совместимости и базу данных для устранения неполадок.</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="2971"/>
@@ -6385,7 +6349,7 @@ You can request up to %3 evaluation certificates for each unique hardware ID.</s
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="3363"/>
         <source>Autocomplete feature requires your consent to proceed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Для использования функции автозаполнения необходимо ваше согласие.</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="3365"/>
@@ -6394,37 +6358,41 @@ You can request up to %3 evaluation certificates for each unique hardware ID.</s
 Choose autocomplete mode:
 %1 Manual: Autocomplete suggestions with %2.
 %1 While Typing: Autocomplete suggestions while typing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если вы не уверены в настройках, отображаемых во всплывающем окне автозаполнения, мы настоятельно рекомендуем ознакомиться с документацией или исходным кодом программного обеспечения, прежде чем продолжить. Включение этой функции без надлежащего понимания может привести к непредвиденным последствиям, за которые вы будете нести полную ответственность.
+
+Выберите режим автозаполнения:
+%1 Вручную: предложения автозаполнения с %2.
+%1 Во время ввода: предложения автозаполнения во время ввода.</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="3373"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Вручную</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="3374"/>
         <source>Triggers autocomplete suggestions with %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Запускает автозаполнение предложений с помощью %1.</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="3376"/>
         <source>While Typing</source>
-        <translation type="unfinished"></translation>
+        <translation>Во время ввода</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="3377"/>
         <source>Triggers autocomplete suggestions while typing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Запускает автозаполнение предложений во время ввода текста.</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="3380"/>
         <source>Keeps autocomplete suggestions disabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Отключает предложения автозаполнения.</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="3379"/>
         <source>Cancel</source>
-        <translation type="unfinished">Отмена</translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="1592"/>
@@ -6677,33 +6645,33 @@ This is a temporary Patreon certificate, valid for 3 months. Once it nears expir
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="2236"/>
         <source>Select Portable Box ini</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрать ini портативной песочницы</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="2236"/>
         <location filename="Windows/SettingsWindow.cpp" line="2246"/>
         <source>Ini Files (*.ini)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ini файлы (*.ini)</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="2246"/>
         <source>Save new Portable Box ini</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить ini новой портативной песочницы</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="2251"/>
         <source>File already exists, please select a different file name.</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл уже существует, выберите другое имя файла.</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="2257"/>
         <source>Invalid box name</source>
-        <translation type="unfinished"></translation>
+        <translation>Недопустимое имя песочницы</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="2278"/>
         <source>Select Root Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрать корневую папку</translation>
     </message>
     <message>
         <location filename="Windows/SettingsWindow.cpp" line="2306"/>
@@ -6919,7 +6887,7 @@ This is a temporary Patreon certificate, valid for 3 months. Once it nears expir
         <location filename="Wizards/BoxAssistant.cpp" line="837"/>
         <source>Selecting partially checked state sends only the message log, but not the trace log.
 Before sending, you can review the logs in the main window.</source>
-        <translation>При выборе частично проверенного состояния отправляется только журнал сообщений, но не журнал трассировки.
+        <translation>При выборе частично отмеченного состояния отправляется только журнал сообщений, но не журнал трассировки.
 Перед отправкой вы можете просмотреть логи в главном окне.</translation>
     </message>
     <message>
@@ -7030,10 +6998,8 @@ This box&apos;s content will be DISCARDED when it&apos;s closed, and the box wil
         <location filename="Wizards/NewBoxWizard.cpp" line="1078"/>
         <source>
 This box will DISCARD its content when it&apos;s closed, it&apos;s suitable only for temporary data.</source>
-        <oldsource>
-This box will DISCARD its content when its closed, its suitable only for temporary data.</oldsource>
-        <translation type="unfinished">
-Эта песочница ТЕРЯЕТ свое содержимое, при закрытии, она подходит только для временных данных.</translation>
+        <translation>
+Эта песочница УДАЛЯЕТ свое содержимое при закрытии, она подходит только для временных данных.</translation>
     </message>
     <message>
         <location filename="Wizards/NewBoxWizard.cpp" line="1080"/>
@@ -7723,12 +7689,12 @@ If you are a Great Supporter on Patreon already, Sandboxie can check online for 
     <message>
         <location filename="Forms/EditorSettingsWindow.ui" line="14"/>
         <source>Editor Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки редактора</translation>
     </message>
     <message>
         <location filename="Forms/EditorSettingsWindow.ui" line="41"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Configure Editor Settings&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Use the checkboxes in the table to configure each setting. The table shows what each state means.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Настройка параметров редактора&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Используйте флажки в таблице, чтобы настроить каждый параметр. В таблице показано, что означает каждое состояние.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -8589,7 +8555,7 @@ This is done to prevent rogue processes inside the sandbox from creating a renam
     <message>
         <location filename="Forms/OptionsWindow.ui" line="383"/>
         <source>Partially checked means prevent box removal but not content deletion.</source>
-        <translation>Частично проверено означает предотвращение удаления контейнера, но не удаление содержимого.</translation>
+        <translation>Частично отмеченно означает предотвращение удаления песочницы, но не удаление содержимого.</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="749"/>
@@ -8644,12 +8610,12 @@ This is done to prevent rogue processes inside the sandbox from creating a renam
     <message>
         <location filename="Forms/OptionsWindow.ui" line="70"/>
         <source>Alpha</source>
-        <translation type="unfinished"></translation>
+        <translation>Прозрачность</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="342"/>
         <source>and/or on border</source>
-        <translation type="unfinished"></translation>
+        <translation>и/или на границе</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="885"/>
@@ -8669,7 +8635,7 @@ This is done to prevent rogue processes inside the sandbox from creating a renam
     <message>
         <location filename="Forms/OptionsWindow.ui" line="1702"/>
         <source>When box root is protected require SandMan to run as Administrator in order to access the files</source>
-        <translation type="unfinished"></translation>
+        <translation>Когда корневой каталог защищен, для доступа к файлам необходимо запустить SandMan от имени администратора</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="1710"/>
@@ -8705,12 +8671,13 @@ Partially checked: No groups will be added to the newly created sandboxed token.
         <location filename="Forms/OptionsWindow.ui" line="2082"/>
         <source>By default, Sandboxie runs processes with an UNTRUSTED integrity token for maximum isolation.
 Enabling this option uses a LOW integrity token instead, which may improve compatibility but reduces sandbox isolation and security.</source>
-        <translation type="unfinished"></translation>
+        <translation>По умолчанию Sandboxie запускает процессы с токеном целостности UNTRUSTED для максимальной изоляции.
+При включении этой опции вместо этого используется токен целостности LOW, что может улучшить совместимость, но снижает изоляцию и безопасность песочницы.</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="2086"/>
         <source>Use LOW integrity token instead of UNTRUSTED (reduces isolation)</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать токен с низким уровнем целостности вместо UNTRUSTED (уменьшает изоляцию)</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="2544"/>
@@ -8870,7 +8837,7 @@ To specify a process use &apos;$:program.exe&apos; as path.</source>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="4452"/>
         <source>Restart forced processes that were launched within a PCA (Program Compatibility Assistant) job object</source>
-        <translation type="unfinished"></translation>
+        <translation>Перезапустить принудительные процессы, которые были запущены в объекте задания PCA (Помощник по совместимости программ)</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="6083"/>
@@ -8890,23 +8857,22 @@ To specify a process use &apos;$:program.exe&apos; as path.</source>
         • &lt;i&gt;Bold values&lt;/i&gt; — Represent defaults (can be omitted)&lt;br&gt;
     &lt;/body&gt;
 &lt;/html&gt;</source>
-        <oldsource>&lt;html&gt;
-    &lt;body style=&quot;color: #333;&quot;&gt;
-        Displays detailed tooltips when hovering over settings.&lt;br&gt;
+        <translation>&lt;html&gt;
+    &lt;body&gt;
+        Отображает подробные всплывающие подсказки при наведении курсора на настройки.&lt;br&gt;
         &lt;br&gt;
-        &lt;b&gt;Modes:&lt;/b&gt;&lt;br&gt;
-        ✓ &lt;span style=&quot;color: #009900;&quot;&gt;Checked&lt;/span&gt;: Full details (versions, syntax, description and more)&lt;br&gt;
-        ◐ &lt;span style=&quot;color: #FF8000;&quot;&gt;Partially Checked&lt;/span&gt;: Essential information only&lt;br&gt;
+        &lt;b&gt;Режимы:&lt;/b&gt;&lt;br&gt;
+        ✓ &lt;span style=&quot;color: #009900;&quot;&gt;Отмеченно&lt;/span&gt;: Полная информация (версии, синтаксис, описание и т. д.)&lt;br&gt;
+        ◐ &lt;span style=&quot;color: #BE4C00;&quot;&gt;Частично отмеченно&lt;/span&gt;: Только основная информация&lt;br&gt;
         &lt;br&gt;
-        &lt;b&gt;Syntax Helpers:&lt;/b&gt;&lt;br&gt;
-        • &lt;i&gt;Pipe&lt;/i&gt; &lt;code&gt;|&lt;/code&gt; — Separates alternative values&lt;br&gt;
-        • &lt;i&gt;Square brackets&lt;/i&gt; &lt;code&gt;[ ]&lt;/code&gt; — Denote optional parameters&lt;br&gt;
-        • &lt;i&gt;Parentheses&lt;/i&gt; &lt;code&gt;( )&lt;/code&gt; — Enclose valid options&lt;br&gt;
-        • &lt;i&gt;Angle brackets&lt;/i&gt; &lt;code&gt;&amp;lt; &amp;gt;&lt;/code&gt; — Indicate replaceable placeholders&lt;br&gt;
-        • &lt;i&gt;Bold values&lt;/i&gt; — Represent defaults (can be omitted)&lt;br&gt;
+        &lt;b&gt;Помощники синтаксиса:&lt;/b&gt;&lt;br&gt;
+        • &lt;i&gt;Вертикальная черта&lt;/i&gt; &lt;code&gt;|&lt;/code&gt; — Разделяет альтернативные значения&lt;br&gt;
+        • &lt;i&gt;Квадратные скобки&lt;/i&gt; &lt;code&gt;[ ]&lt;/code&gt; — Обозначают необязательные параметры&lt;br&gt;
+        • &lt;i&gt;Круглые скобки&lt;/i&gt; &lt;code&gt;( )&lt;/code&gt; — Заключают в себя допустимые опции&lt;br&gt;
+        • &lt;i&gt;Угловые скобки&lt;/i&gt; &lt;code&gt;&amp;lt; &amp;gt;&lt;/code&gt; — Указывают заменяемые заполнители&lt;br&gt;
+        • &lt;i&gt;Жирные значения&lt;/i&gt; — Обозначают значения по умолчанию (могут быть опущены)&lt;br&gt;
     &lt;/body&gt;
-&lt;/html&gt;</oldsource>
-        <translation type="unfinished"></translation>
+&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="6151"/>
@@ -8931,48 +8897,47 @@ To specify a process use &apos;$:program.exe&apos; as path.</source>
        • &lt;code&gt;Tab&lt;/code&gt;: Apply first or confirm selection&lt;br&gt;
     &lt;/body&gt;
 &lt;/html&gt;</source>
-        <oldsource>&lt;html&gt;
+        <translation>&lt;html&gt;
     &lt;body&gt;
-        &lt;b&gt;Auto-Completion &amp; Case Correction&lt;/b&gt;&lt;br&gt;
-        • &lt;u&gt;Auto-complete&lt;/u&gt;: Suggestions popup at 3+ chars&lt;br&gt;
-        &amp;nbsp;&amp;nbsp;→ Select from popup to &lt;u&gt;auto-apply&lt;/u&gt; with correct case&lt;br&gt;
-        &amp;nbsp;&amp;nbsp;→ &lt;code&gt;Enter/Return&lt;/code&gt; to confirm selection&lt;br&gt;
+        &lt;b&gt;Автозаполнение и исправление регистра&lt;/b&gt;&lt;br&gt;
+        • &lt;u&gt;Автозаполнение&lt;/u&gt;: подсказки появляются при вводе 2+ символов&lt;br&gt;
+        &amp;nbsp;&amp;nbsp;→ Выберите из всплывающего окна, чтобы &lt;u&gt;автоматически применить&lt;&lt;/u&gt; с правильным регистром&lt;br&gt;
+        &amp;nbsp;&amp;nbsp;→ &lt;code&gt;Enter/Return&lt;/code&gt; для подтверждения выбора&lt;br&gt;
         &lt;br&gt;
-        • &lt;u&gt;Manual correction&lt;/u&gt;: After typing setting=&lt;br&gt;
-        &amp;nbsp;&amp;nbsp;→ &lt;code&gt;Ctrl+R&lt;/code&gt; prompt appears for case correction&lt;br&gt;
+        • &lt;u&gt;Ручная коррекция&lt;/u&gt;:после ввода настройка=&lt;br&gt;
+        &amp;nbsp;&amp;nbsp;→ &lt;code&gt;Ctrl+R&lt;/code&gt; покажет запрос на коррекцию регистра&lt;br&gt;
         &lt;br&gt;
-        &lt;b&gt;Modes:&lt;/b&gt;&lt;br&gt;
-        ✓ &lt;span style=&quot;color: #009900;&quot;&gt;Checked&lt;/span&gt;: Auto-complete + Case-correction&lt;br&gt;
-        ◐ &lt;span style=&quot;color: #BE4C00;&quot;&gt;Partially Checked&lt;/span&gt;: Only manual &lt;code&gt;Ctrl+R&lt;/code&gt; correction&lt;br&gt;
+        &lt;b&gt;Режимы:&lt;/b&gt;&lt;br&gt;
+        ✓ &lt;span style=&quot;color: #009900;&quot;&gt;Отмеченно&lt;/span&gt;: Автозаполнение + Коррекция регистра&lt;br&gt;
+        ◐ &lt;span style=&quot;color: #BE4C00;&quot;&gt;Частично отмеченно&lt;/span&gt;: Только ручная &lt;code&gt;Ctrl+R&lt;/code&gt; коррекция&lt;br&gt;
         &lt;br&gt;
-        &lt;b&gt;Navigation:&lt;/b&gt;&lt;br&gt;
-        • &lt;code&gt;↑/↓/PgUp/PgDn&lt;/code&gt;: Move through popup&lt;br&gt;
-        • &lt;code&gt;Enter/Return&lt;/code&gt;: Confirm selection&lt;br&gt;
-        • &lt;code&gt;Ctrl+Space&lt;/code&gt;: Force-open suggestions&lt;br&gt;
-       • &lt;code&gt;Tab&lt;/code&gt;: Apply first or confirm selection&lt;br&gt;
+        &lt;b&gt;Навигация:&lt;/b&gt;&lt;br&gt;
+        • &lt;code&gt;↑/↓/PgUp/PgDn&lt;/code&gt;: Перемещение по всплывающему окну&lt;br&gt;
+        • &lt;code&gt;Enter/Return&lt;/code&gt;: Подтвердить выбор&lt;br&gt;
+        • &lt;code&gt;Ctrl+Space&lt;/code&gt;: Принудительно открыть предложения&lt;br&gt;
+       • &lt;code&gt;Tab&lt;/code&gt;: Применить первое или подтвердить выбор&lt;br&gt;
     &lt;/body&gt;
-&lt;/html&gt;</oldsource>
-        <translation type="unfinished"></translation>
+&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="6174"/>
         <source>Complete</source>
-        <translation type="unfinished"></translation>
+        <translation>Полный</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="6227"/>
         <source>Editor settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки редактора</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="6230"/>
         <source>⚙</source>
-        <translation type="unfinished"></translation>
+        <translation>⚙</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="6101"/>
         <source>Tooltips</source>
-        <translation type="unfinished"></translation>
+        <translation>Подсказки</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="6184"/>
@@ -8991,25 +8956,26 @@ To specify a process use &apos;$:program.exe&apos; as path.</source>
         &lt;p&gt;&lt;span style=&quot;font-weight:600;&quot;&gt;Note&lt;/span&gt;: Only valid/known settings are functional in this version. However, no global or per-box validation is performed. Some settings may appear valid but might not work in all contexts.&lt;/p&gt;
     &lt;/body&gt;
 &lt;/html&gt;</source>
-        <oldsource>&lt;html&gt;&lt;head/&gt;&lt;body style=&quot;color: #333;&quot;&gt;
-&lt;p&gt;When enabled, key names will be checked and highlighted based on the INI file. Turn off to disable checking and highlighting.&lt;/p&gt;
-&lt;br/&gt;
-&lt;table cellspacing=&quot;3&quot; cellpadding=&quot;0&quot;&gt;
-  &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;font-style: italic; color:#000000; background-color:#ffff00;&quot;&gt;Black Text, Yellow BG, Italic&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Renamed key (old name - invalid)&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;text-decoration: line-through; color:#ffffff; background-color:#000000;&quot;&gt;White Text, Black BG, Strikeout&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Removed key (no longer available)&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;color:#008b8b; background-color:#ffffff;&quot;&gt;Dark Cyan Text, White BG&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Future key (unavailable)&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;text-decoration: underline; color: #ff0000;&quot;&gt;Red Spell Check Underline&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Invalid/unknown key&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;color:#c03224;&quot;&gt;Dark/Light Red Text&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Valid/known key&lt;/td&gt;&lt;/tr&gt;
-&lt;/table&gt;
-&lt;br/&gt;
-&lt;p&gt;&lt;span style=&quot;font-weight:600;&quot;&gt;Note&lt;/span&gt;: Only valid/known keys are functional in this version. However, no global or per-box validation is performed. Some settings may appear valid but might not work in all contexts.&lt;/p&gt;
-&lt;/body&gt;&lt;/html&gt;</oldsource>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;
+    &lt;body&gt;
+        &lt;p&gt;При включении настройки будут проверяться и выделяться на основе файла INI. Отключите, чтобы отключить проверку и выделение.&lt;/p&gt;
+        &lt;br/&gt;
+        &lt;table cellspacing=&quot;3&quot; cellpadding=&quot;0&quot;&gt;
+            &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;font-style: italic; color:#000000; background-color:#ffff00;&quot;&gt;Black Text, Yellow BG, Italic&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Переименованная настройка (старое название - недействительно)&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;text-decoration: line-through; color:#ffffff; background-color:#000000;&quot;&gt;White Text, Black BG, Strikeout&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Удаленная настройка (больше не доступна)&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;color:#008b8b; background-color:#ffffff;&quot;&gt;Dark Cyan Text, White BG&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Будущая настройка (недоступна)&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;text-decoration: underline; color: #ff0000;&quot;&gt;Red Spell Check Underline&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Недопустимая/неизвестная настройка&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;color:#c03224;&quot;&gt;Dark/Light Red Text&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Допустимая/известная настройка&lt;/td&gt;&lt;/tr&gt;
+        &lt;/table&gt;
+        &lt;br/&gt;
+        &lt;p&gt;&lt;span style=&quot;font-weight:600;&quot;&gt;Примечание&lt;/span&gt;: В этой версии работают только действительные/известные настройки. Однако глобальная проверка или проверка по полям не выполняется. Некоторые настройки могут казаться действительными, но не работать во всех контекстах.&lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="6201"/>
         <source>Validate</source>
-        <translation type="unfinished"></translation>
+        <translation>Проверить</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="702"/>
@@ -9887,32 +9853,32 @@ Please note that this values are currently user specific and saved globally for 
     <message>
         <location filename="Forms/OptionsWindow.ui" line="5560"/>
         <source>Debug Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Опции отладки</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="5637"/>
         <source>Config Dump</source>
-        <translation type="unfinished"></translation>
+        <translation>Дамп конфига</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="5668"/>
         <source>No Templates</source>
-        <translation type="unfinished"></translation>
+        <translation>Без шаблонов</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="5678"/>
         <source>No Global</source>
-        <translation type="unfinished"></translation>
+        <translation>Без глобального</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="5688"/>
         <source>No Expand</source>
-        <translation type="unfinished"></translation>
+        <translation>Без раскрытия</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="5698"/>
         <source>Refresh</source>
-        <translation type="unfinished">Обновить</translation>
+        <translation>Обновить</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="5743"/>
@@ -9969,14 +9935,14 @@ Please note that this values are currently user specific and saved globally for 
 <context>
     <name>QObject</name>
     <message>
-        <location filename="Views/SbieView.cpp" line="1763"/>
+        <location filename="Views/SbieView.cpp" line="1788"/>
         <source>Drive %1</source>
         <translation>Диск %1</translation>
     </message>
     <message>
         <location filename="../MiscHelpers/Common/FlexError.h" line="21"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка</translation>
     </message>
 </context>
 <context>
@@ -10058,6 +10024,34 @@ Please note that this values are currently user specific and saved globally for 
         <location filename="Forms/RecoveryWindow.ui" line="187"/>
         <source>TextLabel</source>
         <translation>Текстовая метка</translation>
+    </message>
+</context>
+<context>
+    <name>RenameSandboxDialog</name>
+    <message>
+        <location filename="Forms/RenameSandboxDialog.ui" line="20"/>
+        <source>Rename Sandbox</source>
+        <translation type="unfinished">Переименовать песочницу</translation>
+    </message>
+    <message>
+        <location filename="Forms/RenameSandboxDialog.ui" line="31"/>
+        <source>Please enter a new name for the Sandbox.</source>
+        <translation type="unfinished">Введите новое имя для песочницы.</translation>
+    </message>
+    <message>
+        <location filename="Forms/RenameSandboxDialog.ui" line="38"/>
+        <source>Please enter a new alias for the Sandbox.</source>
+        <translation type="unfinished">Введите новый псевдоним для песочницы.</translation>
+    </message>
+    <message>
+        <location filename="Forms/RenameSandboxDialog.ui" line="52"/>
+        <source>Disable alias</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Forms/RenameSandboxDialog.ui" line="59"/>
+        <source>Hide alias</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -10393,10 +10387,6 @@ Please note that this values are currently user specific and saved globally for 
         <translation>Возможности песочницы</translation>
     </message>
     <message>
-        <source>Sandboxie.ini Presets</source>
-        <translation type="vanished">Пресеты Sandboxie.ini</translation>
-    </message>
-    <message>
         <location filename="Forms/SettingsWindow.ui" line="2546"/>
         <source>Change Password</source>
         <translation>Изменить пароль</translation>
@@ -10474,8 +10464,7 @@ Please note that this values are currently user specific and saved globally for 
     <message>
         <location filename="Forms/SettingsWindow.ui" line="2336"/>
         <source>Hook selected Win32k system calls to enable GPU acceleration (required for chrome, firefox and more)</source>
-        <oldsource>Hook selected Win32k system calls to enable GPU acceleration (experimental)</oldsource>
-        <translation type="unfinished">Перехватить выбранные системные вызовы Win32k, чтобы включить ускорение графического процессора (экспериментально)</translation>
+        <translation>Перехватить выбранные системные вызовы Win32k для включения ускорения GPU (требуется для Chrome, Firefox и других браузеров)</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="154"/>
@@ -10704,10 +10693,6 @@ Please note that this values are currently user specific and saved globally for 
         <translation>Командная строка</translation>
     </message>
     <message>
-        <source>Ini Options</source>
-        <translation type="vanished">Опции Ini</translation>
-    </message>
-    <message>
         <location filename="Forms/SettingsWindow.ui" line="1198"/>
         <source>External Ini Editor</source>
         <translation>Внешний Ini-редактор</translation>
@@ -10885,7 +10870,7 @@ Please note that this values are currently user specific and saved globally for 
     <message>
         <location filename="Forms/SettingsWindow.ui" line="1382"/>
         <source>Ini Editor Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметры редактора Ini</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="1905"/>
@@ -10967,8 +10952,7 @@ Unlike the preview channel, it does not include untested, potentially breaking, 
     <message>
         <location filename="Forms/SettingsWindow.ui" line="2197"/>
         <source>Add &quot;Sandboxie\All Sandboxes&quot; group to the sandboxed token</source>
-        <oldsource>Add &quot;Sandboxie\All Sandboxes&quot; group to the sandboxed token (experimental)</oldsource>
-        <translation type="unfinished">Добавить группу &quot;Sandboxie\All Sandboxes&quot; в изолированный токен (Экспериментально)</translation>
+        <translation>Добавить группу &quot;Sandboxie\Все песочницы&quot; в изолированный токен</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="2326"/>
@@ -10988,83 +10972,82 @@ Unlike the preview channel, it does not include untested, potentially breaking, 
     <message>
         <location filename="Forms/SettingsWindow.ui" line="274"/>
         <source>Use the new SandMan style on Windows 11</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать новый стиль SandMan в Windows 11</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="707"/>
         <source>Remember last used box</source>
-        <translation type="unfinished"></translation>
+        <translation>Запомнить последнюю использованную песочницу</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="1160"/>
         <source>Group state on start</source>
-        <translation type="unfinished"></translation>
+        <translation>Состояние группы при запуске</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="1396"/>
         <source>UI Font</source>
-        <translation type="unfinished"></translation>
+        <translation>Шрифт UI</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="1418"/>
         <source>Select Font</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрать шрифт</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="1428"/>
         <source>Reset Font</source>
-        <translation type="unfinished"></translation>
+        <translation>Сбросить шрифт</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="2422"/>
         <source>Use Sandboxie&apos;s own enhanced UAC prompt (recommended)</source>
-        <oldsource>Use Sandboxie&apos;s own enhanced UAC prompt (experimental)</oldsource>
-        <translation type="unfinished"></translation>
+        <translation>Использовать собственное улучшенное окно UAC Sandboxie (рекомендуется)</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="2432"/>
         <source>Sandboxie.ini</source>
-        <translation type="unfinished"></translation>
+        <translation>Sandboxie.ini</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="2444"/>
         <source>Remove Entry</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить запись</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="2452"/>
         <source>Import Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Путь импорта</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="2473"/>
         <source>Sandbox Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Конфигурация песочницы</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="2486"/>
         <source>Create Portable Box</source>
-        <translation type="unfinished"></translation>
+        <translation>Создать портативную песочницу</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="2512"/>
         <source>Import Portable Box</source>
-        <translation type="unfinished"></translation>
+        <translation>Импорт портативной песочницы</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="2573"/>
         <source>&lt;b&gt;Config protection applyess only to Sandboxie.ini portable box configuration is not protected by the below mechanisms&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Защита конфигурации применяется только к Sandboxie.ini. Конфигурация портативной песочницы не защищена нижеуказанными механизмами&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="2583"/>
         <source>In the below list you can add paths to configuration inis of portable boxes</source>
-        <translation type="unfinished"></translation>
+        <translation>В приведенном ниже списке вы можете добавить пути к конфигурационным файлам портативных песочниц</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="2603"/>
         <source>Add Portable Root</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить портативный корень</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="2712"/>
@@ -11139,7 +11122,22 @@ Unlike the preview channel, it does not include untested, potentially breaking, 
         • &lt;i&gt;Bold values&lt;/i&gt; — Represent defaults (can be omitted)&lt;br&gt;
     &lt;/body&gt;
 &lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;
+    &lt;body&gt;
+        Отображает подробные всплывающие подсказки при наведении курсора на настройки.&lt;br&gt;
+        &lt;br&gt;
+        &lt;b&gt;Режимы:&lt;/b&gt;&lt;br&gt;
+        ✓ &lt;span style=&quot;color: #009900;&quot;&gt;Отмечено&lt;/span&gt;: Полная информация (версии, синтаксис, описание и т. д.)&lt;br&gt;
+        ◐ &lt;span style=&quot;color: #BE4C00;&quot;&gt;Частично отмечено&lt;/span&gt;: Только основная информация&lt;br&gt;
+        &lt;br&gt;
+        &lt;b&gt;Помощники синтаксиса:&lt;/b&gt;&lt;br&gt;
+        • &lt;i&gt;Вертикальная черта&lt;/i&gt; &lt;code&gt;|&lt;/code&gt; — Разделяет альтернативные значения&lt;br&gt;
+        • &lt;i&gt;Квадратные скобки&lt;/i&gt; &lt;code&gt;[ ]&lt;/code&gt; — Обозначают необязательные параметры&lt;br&gt;
+        • &lt;i&gt;Круглые скобки&lt;/i&gt; &lt;code&gt;( )&lt;/code&gt; — Заключают в себя допустимые опции&lt;br&gt;
+        • &lt;i&gt;Угловые скобки&lt;/i&gt; &lt;code&gt;&amp;lt; &amp;gt;&lt;/code&gt; — Указывают заменяемые заполнители&lt;br&gt;
+        • &lt;i&gt;Жирные значения&lt;/i&gt; — Обозначают значения по умолчанию (могут быть опущены)&lt;br&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="3170"/>
@@ -11164,53 +11162,52 @@ Unlike the preview channel, it does not include untested, potentially breaking, 
        • &lt;code&gt;Tab&lt;/code&gt;: Apply first or confirm selection&lt;br&gt;
     &lt;/body&gt;
 &lt;/html&gt;</source>
-        <oldsource>&lt;html&gt;
+        <translation>&lt;html&gt;
     &lt;body&gt;
-        &lt;b&gt;Auto-Completion &amp; Case Correction&lt;/b&gt;&lt;br&gt;
-        • &lt;u&gt;Auto-complete&lt;/u&gt;: Suggestions popup at 3+ chars&lt;br&gt;
-        &amp;nbsp;&amp;nbsp;→ Select from popup to &lt;u&gt;auto-apply&lt;/u&gt; with correct case&lt;br&gt;
-        &amp;nbsp;&amp;nbsp;→ &lt;code&gt;Enter/Return&lt;/code&gt; to confirm selection&lt;br&gt;
+        &lt;b&gt;Автозаполнение и исправление регистра&lt;/b&gt;&lt;br&gt;
+        • &lt;u&gt;Автозаполнение&lt;/u&gt;: подсказки появляются при вводе 2+ символов&lt;br&gt;
+        &amp;nbsp;&amp;nbsp;→ Выберите из всплывающего окна, чтобы &lt;u&gt;автоматически применить&lt;/u&gt; с правильныйм регистром&lt;br&gt;
+        &amp;nbsp;&amp;nbsp;→ &lt;code&gt;Enter/Return&lt;/code&gt; для подтверждения выбора&lt;br&gt;
         &lt;br&gt;
-        • &lt;u&gt;Manual correction&lt;/u&gt;: After typing setting=&lt;br&gt;
-        &amp;nbsp;&amp;nbsp;→ &lt;code&gt;Ctrl+R&lt;/code&gt; prompt appears for case correction&lt;br&gt;
+        • &lt;u&gt;Ручная коррекция&lt;/u&gt;:  после ввода настройка=&lt;br&gt;
+        &amp;nbsp;&amp;nbsp;→ &lt;code&gt;Ctrl+R&lt;/code&gt; выводит запрос на коррекцию регистра&lt;br&gt;
         &lt;br&gt;
-        &lt;b&gt;Modes:&lt;/b&gt;&lt;br&gt;
-        ✓ &lt;span style=&quot;color: #009900;&quot;&gt;Checked&lt;/span&gt;: Auto-complete + Case-correction&lt;br&gt;
-        ◐ &lt;span style=&quot;color: #BE4C00;&quot;&gt;Partially Checked&lt;/span&gt;: Only manual &lt;code&gt;Ctrl+R&lt;/code&gt; correction&lt;br&gt;
+        &lt;b&gt;Режимы:&lt;/b&gt;&lt;br&gt;
+        ✓ &lt;span style=&quot;color: #009900;&quot;&gt;Отмеченно&lt;/span&gt;: Автозаполнение + Коррекция регистра&lt;br&gt;
+        ◐ &lt;span style=&quot;color: #BE4C00;&quot;&gt;Частично отмеченно&lt;/span&gt;: Только ручная &lt;code&gt;Ctrl+R&lt;/code&gt; коррекция&lt;br&gt;
         &lt;br&gt;
-        &lt;b&gt;Navigation:&lt;/b&gt;&lt;br&gt;
-        • &lt;code&gt;↑/↓/PgUp/PgDn&lt;/code&gt;: Move through popup&lt;br&gt;
-        • &lt;code&gt;Enter/Return&lt;/code&gt;: Confirm selection&lt;br&gt;
-        • &lt;code&gt;Ctrl+Space&lt;/code&gt;: Force-open suggestions&lt;br&gt;
-       • &lt;code&gt;Tab&lt;/code&gt;: Apply first or confirm selection&lt;br&gt;
+        &lt;b&gt;Навигация:&lt;/b&gt;&lt;br&gt;
+        • &lt;code&gt;↑/↓/PgUp/PgDn&lt;/code&gt;: Перемещение по всплывающему окну&lt;br&gt;
+        • &lt;code&gt;Enter/Return&lt;/code&gt;: Подтвердить выбор&lt;br&gt;
+        • &lt;code&gt;Ctrl+Space&lt;/code&gt;: Принудительно открыть предложения&lt;br&gt;
+       • &lt;code&gt;Tab&lt;/code&gt;: Применить первое или подтвердить выбор&lt;br&gt;
     &lt;/body&gt;
-&lt;/html&gt;</oldsource>
-        <translation type="unfinished"></translation>
+&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="3193"/>
         <source>Complete</source>
-        <translation type="unfinished"></translation>
+        <translation>Завершить</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="3259"/>
         <source>Editor settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки редактора</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="3262"/>
         <source>⚙</source>
-        <translation type="unfinished"></translation>
+        <translation>⚙</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="3140"/>
         <source>Tooltips</source>
-        <translation type="unfinished"></translation>
+        <translation>Всплывающие подсказки</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="3243"/>
         <source>Validate</source>
-        <translation type="unfinished"></translation>
+        <translation>Проверить</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="2927"/>
@@ -11274,20 +11271,21 @@ Unlike the preview channel, it does not include untested, potentially breaking, 
         &lt;p&gt;&lt;span style=&quot;font-weight:600;&quot;&gt;Note&lt;/span&gt;: Only valid/known settings are functional in this version. However, no global or per-box validation is performed. Some settings may appear valid but might not work in all contexts.&lt;/p&gt;
     &lt;/body&gt;
 &lt;/html&gt;</source>
-        <oldsource>&lt;html&gt;&lt;head/&gt;&lt;body style=&quot;color: #333;&quot;&gt;
-&lt;p&gt;When enabled, key names will be checked and highlighted based on the INI file. Turn off to disable checking and highlighting.&lt;/p&gt;
-&lt;br/&gt;
-&lt;table cellspacing=&quot;3&quot; cellpadding=&quot;0&quot;&gt;
-  &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;font-style: italic; color:#000000; background-color:#ffff00;&quot;&gt;Black Text, Yellow BG, Italic&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Renamed key (old name - invalid)&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;text-decoration: line-through; color:#ffffff; background-color:#000000;&quot;&gt;White Text, Black BG, Strikeout&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Removed key (no longer available)&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;color:#008b8b; background-color:#ffffff;&quot;&gt;Dark Cyan Text, White BG&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Future key (unavailable)&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;text-decoration: underline; color: #ff0000;&quot;&gt;Red Spell Check Underline&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Invalid/unknown key&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;color:#c03224;&quot;&gt;Dark/Light Red Text&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Valid/known key&lt;/td&gt;&lt;/tr&gt;
-&lt;/table&gt;
-&lt;br/&gt;
-&lt;p&gt;&lt;span style=&quot;font-weight:600;&quot;&gt;Note&lt;/span&gt;: Only valid/known keys are functional in this version. However, no global or per-box validation is performed. Some settings may appear valid but might not work in all contexts.&lt;/p&gt;
-&lt;/body&gt;&lt;/html&gt;</oldsource>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;
+    &lt;body&gt;
+        &lt;p&gt;При включении настройки будут проверяться и выделяться на основе файла INI. Отключите, чтобы отключить проверку и выделение.&lt;/p&gt;
+        &lt;br/&gt;
+        &lt;table cellspacing=&quot;3&quot; cellpadding=&quot;0&quot;&gt;
+            &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;font-style: italic; color:#000000; background-color:#ffff00;&quot;&gt;Black Text, Yellow BG, Italic&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Переименованная настройка (старое название - недействительно)&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;text-decoration: line-through; color:#ffffff; background-color:#000000;&quot;&gt;White Text, Black BG, Strikeout&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Удаленная настройка (больше не доступна)&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;color:#008b8b; background-color:#ffffff;&quot;&gt;Dark Cyan Text, White BG&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Будущая настройка (недоступна)&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;text-decoration: underline; color: #ff0000;&quot;&gt;Red Spell Check Underline&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Недопустимая/неизвестная настройка&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td style=&quot;white-space: nowrap;&quot;&gt;- &lt;span style=&quot;color:#c03224;&quot;&gt;Dark/Light Red Text&lt;/span&gt;&lt;/td&gt;&lt;td&gt;: Допустимая/известная настройка&lt;/td&gt;&lt;/tr&gt;
+        &lt;/table&gt;
+        &lt;br/&gt;
+        &lt;p&gt;&lt;span style=&quot;font-weight:600;&quot;&gt;Примечание&lt;/span&gt;: В этой версии работают только действительные/известные настройки. Однако глобальная проверка или проверка по полям не выполняется. Некоторые настройки могут казаться действительными, но не работать во всех контекстах.&lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="Forms/SettingsWindow.ui" line="3206"/>

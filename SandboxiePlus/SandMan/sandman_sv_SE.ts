@@ -2375,8 +2375,8 @@ Notera: Uppdateringskontrollen är ofta bakom senaste GitHub-utgivningen för at
         <location filename="Windows/OptionsWindow.cpp" line="1335"/>
         <location filename="Windows/OptionsAccess.cpp" line="422"/>
         <location filename="Windows/OptionsAccess.cpp" line="653"/>
-        <location filename="Windows/OptionsGeneral.cpp" line="658"/>
-        <location filename="Windows/OptionsGeneral.cpp" line="753"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="662"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="757"/>
         <location filename="Windows/OptionsNetwork.cpp" line="350"/>
         <location filename="Windows/OptionsNetwork.cpp" line="635"/>
         <location filename="Windows/OptionsNetwork.cpp" line="728"/>
@@ -2599,10 +2599,10 @@ Vill du aktivera autoavsluta?</translation>
         <location filename="Windows/OptionsWindow.cpp" line="1319"/>
         <location filename="Windows/OptionsAccess.cpp" line="417"/>
         <location filename="Windows/OptionsAccess.cpp" line="649"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="956"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1030"/>
-        <location filename="Windows/OptionsGeneral.cpp" line="653"/>
-        <location filename="Windows/OptionsGeneral.cpp" line="749"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="958"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1032"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="657"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="753"/>
         <location filename="Windows/OptionsNetwork.cpp" line="630"/>
         <location filename="Windows/OptionsNetwork.cpp" line="724"/>
         <location filename="Windows/OptionsNetwork.cpp" line="837"/>
@@ -2638,8 +2638,8 @@ Vill du aktivera autoavsluta?</translation>
     </message>
     <message>
         <location filename="Windows/OptionsAccess.cpp" line="628"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1006"/>
-        <location filename="Windows/OptionsGeneral.cpp" line="720"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1008"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="724"/>
         <location filename="Windows/OptionsGrouping.cpp" line="234"/>
         <location filename="Windows/OptionsGrouping.cpp" line="258"/>
         <location filename="Windows/OptionsNetwork.cpp" line="703"/>
@@ -2709,99 +2709,99 @@ Vill du aktivera autoavsluta?</translation>
         <translation>Sandlåda IPC-roten</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="163"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="164"/>
         <source>Name|Type|Value</source>
         <translation>Namn|Typ|Värde</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="784"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="793"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="786"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="795"/>
         <source>bytes (unlimited)</source>
         <translation>bytes (obegränsat)</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="787"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="796"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="789"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="798"/>
         <source>bytes (%1)</source>
         <translation>bytes (%1)</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="802"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="804"/>
         <source>unlimited</source>
         <translation>obegränsad</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="977"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="979"/>
         <source>Add special option:</source>
         <translation>Addera speciellt alternativ:</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1125"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1129"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1127"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1131"/>
         <source>On Start</source>
         <translation>Vid start</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1126"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1134"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1138"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1142"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1146"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1128"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1136"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1140"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1144"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1148"/>
         <source>Run Command</source>
         <translation>Kör kommandot</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1130"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1132"/>
         <source>Start Service</source>
         <translation>Starta tjänst</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1133"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1135"/>
         <source>On Init</source>
         <translation>Vid start</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1137"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1139"/>
         <source>On File Recovery</source>
         <translation>Vid filåterställande</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1141"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1143"/>
         <source>On Delete Content</source>
         <translation>Vid radering av innehåll</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1145"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1147"/>
         <source>On Terminate</source>
         <translation>Vid terminering</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1243"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1245"/>
         <source>Please enter a program file name to allow access to this sandbox</source>
         <translation>Vänligen för in ett programfilsnamn för att tillåta tillgång till denna sandlåda</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1254"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1256"/>
         <source>Please enter a program file name to deny access to this sandbox</source>
         <translation>Vänligen för in ett programfilsnamn för att neka tillgång till denna sandlåda</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1492"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1494"/>
         <source>Global</source>
         <translation>Global</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1493"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1495"/>
         <source>Template</source>
         <translation>Mall</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1544"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1546"/>
         <source>Failed to retrieve firmware table information.</source>
         <translation>Lyckades inte skaffa mjukvarutabellinformation.</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1552"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1554"/>
         <source>Firmware table saved successfully to host registry: HKEY_CURRENT_USER\System\SbieCustom&lt;br /&gt;you can copy it to the sandboxed registry to have a different value for each box.</source>
         <translation>Mjukvarutabell sparad framgångsrikt till värdregister: HKEY_CURRENT_USER\System\SbieCustom&lt;br /&gt;du kan kopiera det till det sandlådade registret för att ha olika värden för varje låda.</translation>
     </message>
@@ -2810,16 +2810,16 @@ Vill du aktivera autoavsluta?</translation>
         <translation type="vanished">Vid raderande</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1159"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1179"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1189"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1199"/>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1209"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1161"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1181"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1191"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1201"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1211"/>
         <source>Please enter the command line to be executed</source>
         <translation>Vänligen för in  kommandoraden som ska verkställas</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1169"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1171"/>
         <source>Please enter a service identifier</source>
         <translation>Vänligen för in en tjänstidentifierare</translation>
     </message>
@@ -2828,12 +2828,12 @@ Vill du aktivera autoavsluta?</translation>
         <translation type="vanished">Vänligen ange ett programfilsnamn</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1334"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1336"/>
         <source>Deny</source>
         <translation>Neka</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1437"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1439"/>
         <source>%1 (%2)</source>
         <translation>%1 (%2)</translation>
     </message>
@@ -2936,32 +2936,31 @@ Vill du aktivera autoavsluta?</translation>
         <translation>Visa endast när titeln är i fokus</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="64"/>
         <source>Always show</source>
-        <translation>Visa alltid</translation>
+        <translation type="vanished">Visa alltid</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="67"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="68"/>
         <source>Hardened Sandbox with Data Protection</source>
         <translation>Härdad sandlåda med dataskydd</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="68"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="69"/>
         <source>Security Hardened Sandbox</source>
         <translation>Säkerhetshärdad sandlåda</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="69"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="70"/>
         <source>Sandbox with Data Protection</source>
         <translation>Sandlåda med dataskydd</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="70"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="71"/>
         <source>Standard Isolation Sandbox (Default)</source>
         <translation>Standardisolerad sandlåda (standard)</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="72"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="73"/>
         <source>Application Compartment with Data Protection</source>
         <translation>Applikationsutrymme med dataskydd</translation>
     </message>
@@ -2990,161 +2989,171 @@ Vill du aktivera autoavsluta?</translation>
         <translation>Visa ovanför gränsen</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="73"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="64"/>
+        <source>Always show (focused window only)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Windows/OptionsGeneral.cpp" line="65"/>
+        <source>Show for all windows in this box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Windows/OptionsGeneral.cpp" line="74"/>
         <source>Application Compartment</source>
         <translation>Applikationsutrymme</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="126"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="127"/>
         <source>Custom icon</source>
         <translation>Anpassad ikon</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="194"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="195"/>
         <source>Version 1</source>
         <translation>Version 1</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="195"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="196"/>
         <source>Version 2</source>
         <translation>Version 2</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="255"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="256"/>
         <source>Browse for Program</source>
         <translation>Bläddra efter program</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="326"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="330"/>
         <source>Open Box Options</source>
         <translation>Öppna lådalternativ</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="327"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="331"/>
         <source>Browse Content</source>
         <translation>Bläddra i innehållet</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="328"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="332"/>
         <source>Start File Recovery</source>
         <translation>Starta filåterställande</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="329"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="333"/>
         <source>Show Run Dialog</source>
         <translation>Visa kördialogen</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="357"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="361"/>
         <source>Indeterminate</source>
         <translation>Obestämbar</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="377"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="381"/>
         <source>Backup Image Header</source>
         <translation>Backa upp avbildsrubrik</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="378"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="382"/>
         <source>Restore Image Header</source>
         <translation>Återställ avbildsrubrik</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="382"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="386"/>
         <source>Change Password</source>
         <translation>Ändra lösenord</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="625"/>
-        <location filename="Windows/OptionsGeneral.cpp" line="725"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="629"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="729"/>
         <source>Always copy</source>
         <translation>Kopiera alltid</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="626"/>
-        <location filename="Windows/OptionsGeneral.cpp" line="726"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="630"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="730"/>
         <source>Don&apos;t copy</source>
         <translation>Kopiera inte</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="627"/>
-        <location filename="Windows/OptionsGeneral.cpp" line="727"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="631"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="731"/>
         <source>Copy empty</source>
         <translation>Kopiera tomt</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="853"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="857"/>
         <source>kilobytes (%1)</source>
         <translation>kilobytes (%1)</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="961"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="965"/>
         <source>Select color</source>
         <translation>Välj färg</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1049"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1053"/>
         <source>Select Program</source>
         <translation>Välj program</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1049"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1053"/>
         <source>Executables (*.exe *.cmd)</source>
         <translation>Verkställare (*.exe *.cmd)</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1053"/>
-        <location filename="Windows/OptionsGeneral.cpp" line="1074"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1057"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1078"/>
         <source>Please enter a menu title</source>
         <translation>Vänligen för in en menytitel</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1070"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1074"/>
         <source>Please enter a command</source>
         <translation>Vänligen för in ett kommando</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1236"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1240"/>
         <source>The image file does not exist</source>
         <translation>Avbildsfilen existerar inte</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1237"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1241"/>
         <source>The password is wrong</source>
         <translation>Lösenordet är fel</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1238"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1242"/>
         <source>Unexpected error: %1</source>
         <translation>Oväntat fel: %1</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1266"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1270"/>
         <source>Image Password Changed</source>
         <translation>Avbildslösenord ändrades</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1268"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1272"/>
         <source>Failed to Change Password</source>
         <translation>Misslyckades att ändra lösenord</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1277"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1281"/>
         <source>Backup Image Header for %1</source>
         <translation>Backa upp avbildsrubrik för %1</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1285"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1289"/>
         <source>Image Header Backuped</source>
         <translation>Avbildsrubrik uppbackad</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1292"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1296"/>
         <source>Restore Image Header for %1</source>
         <translation>Återställ avbildsrubrik för %1</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsGeneral.cpp" line="1300"/>
+        <location filename="Windows/OptionsGeneral.cpp" line="1304"/>
         <source>Image Header Restored</source>
         <translation>Avbildsrubrik återställd</translation>
     </message>
@@ -3233,7 +3242,7 @@ Vill du aktivera autoavsluta?</translation>
         <translation type="vanished"> entrè: Adressen måste vara IP, inte värdnamn</translation>
     </message>
     <message>
-        <location filename="Windows/OptionsAdvanced.cpp" line="1334"/>
+        <location filename="Windows/OptionsAdvanced.cpp" line="1336"/>
         <location filename="Windows/OptionsNetwork.cpp" line="328"/>
         <location filename="Windows/OptionsNetwork.cpp" line="744"/>
         <source>Allow</source>
@@ -3736,6 +3745,24 @@ Full sökväg: %4</translation>
         <location filename="Windows/RecoveryWindow.cpp" line="590"/>
         <source>There are %1 files and %2 folders in the sandbox, occupying %3 of disk space.</source>
         <translation>Det finns %1 filer och %2 mappar i sandlådan, som upptar %3 av diskutrymmet.</translation>
+    </message>
+</context>
+<context>
+    <name>CRenameSandboxDialog</name>
+    <message>
+        <location filename="Windows/RenameSandboxDialog.cpp" line="17"/>
+        <source>Sandboxie-Plus - Rename Sandbox</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Windows/RenameSandboxDialog.cpp" line="23"/>
+        <source>When enabled, alias display is disabled for this sandbox.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Windows/RenameSandboxDialog.cpp" line="24"/>
+        <source>Hide alias input in this dialog. This preference is remembered.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5961,41 +5988,41 @@ Notera: Uppdateringskollen är ofta bakom senaste GitHub-utgivningen för att s�
 <context>
     <name>CSbieView</name>
     <message>
-        <location filename="Views/SbieView.cpp" line="163"/>
-        <location filename="Views/SbieView.cpp" line="334"/>
+        <location filename="Views/SbieView.cpp" line="164"/>
+        <location filename="Views/SbieView.cpp" line="335"/>
         <source>Create New Box</source>
         <translation>Skapa ny låda</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="164"/>
-        <location filename="Views/SbieView.cpp" line="335"/>
+        <location filename="Views/SbieView.cpp" line="165"/>
+        <location filename="Views/SbieView.cpp" line="336"/>
         <source>Create Box Group</source>
         <translation>Skapa lådgrupp</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="461"/>
+        <location filename="Views/SbieView.cpp" line="460"/>
         <source>Rename Group</source>
         <translation>Namnändra grupp</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="463"/>
+        <location filename="Views/SbieView.cpp" line="462"/>
         <source>Remove Group</source>
         <translation>Ta bort grupp</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="170"/>
-        <location filename="Views/SbieView.cpp" line="341"/>
+        <location filename="Views/SbieView.cpp" line="171"/>
+        <location filename="Views/SbieView.cpp" line="342"/>
         <source>Stop Operations</source>
         <translation>Stoppa operationer</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="174"/>
-        <location filename="Views/SbieView.cpp" line="345"/>
+        <location filename="Views/SbieView.cpp" line="175"/>
+        <location filename="Views/SbieView.cpp" line="346"/>
         <source>Run</source>
         <translation>Kör</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="179"/>
+        <location filename="Views/SbieView.cpp" line="180"/>
         <source>Run Program</source>
         <translation>Kör program</translation>
     </message>
@@ -6004,22 +6031,22 @@ Notera: Uppdateringskollen är ofta bakom senaste GitHub-utgivningen för att s�
         <translation type="vanished">Startmeny</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="180"/>
+        <location filename="Views/SbieView.cpp" line="181"/>
         <source>Run from Start Menu</source>
         <translation>Kör från startmenyn</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="191"/>
+        <location filename="Views/SbieView.cpp" line="192"/>
         <source>Default Web Browser</source>
         <translation>Standardwebbläsare</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="192"/>
+        <location filename="Views/SbieView.cpp" line="193"/>
         <source>Default eMail Client</source>
         <translation>Standard e-postklient</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="199"/>
+        <location filename="Views/SbieView.cpp" line="200"/>
         <source>Command Prompt</source>
         <translation>Kommandotolken</translation>
     </message>
@@ -6028,89 +6055,89 @@ Notera: Uppdateringskollen är ofta bakom senaste GitHub-utgivningen för att s�
         <translation type="vanished">Lådade verktyg</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="200"/>
+        <location filename="Views/SbieView.cpp" line="201"/>
         <source>Command Prompt (as Admin)</source>
         <translation>Kommandotolken (som admin)</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="204"/>
+        <location filename="Views/SbieView.cpp" line="205"/>
         <source>Command Prompt (32-bit)</source>
         <translation>Kommandotolken (32-bit)</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="194"/>
+        <location filename="Views/SbieView.cpp" line="195"/>
         <source>Windows Explorer</source>
         <translation>Windows utforskare</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="195"/>
+        <location filename="Views/SbieView.cpp" line="196"/>
         <source>Registry Editor</source>
         <translation>Registerredigeraren</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="196"/>
+        <location filename="Views/SbieView.cpp" line="197"/>
         <source>Programs and Features</source>
         <translation>Program och funktioner</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="189"/>
+        <location filename="Views/SbieView.cpp" line="190"/>
         <source>Execute Autorun Entries</source>
         <translation>Verkställ autorun-poster</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="190"/>
+        <location filename="Views/SbieView.cpp" line="191"/>
         <source>Standard Applications</source>
         <translation>Standardapplikationer</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="207"/>
+        <location filename="Views/SbieView.cpp" line="208"/>
         <source>Terminate All Programs</source>
         <translation>Avsluta alla program</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="214"/>
+        <location filename="Views/SbieView.cpp" line="215"/>
         <source>Browse Files</source>
         <translation>Bläddra i filer</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="261"/>
-        <location filename="Views/SbieView.cpp" line="404"/>
+        <location filename="Views/SbieView.cpp" line="262"/>
+        <location filename="Views/SbieView.cpp" line="403"/>
         <source>Move Sandbox</source>
         <translation>Flytta sandlåda</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="386"/>
+        <location filename="Views/SbieView.cpp" line="387"/>
         <source>Browse Content</source>
         <translation>Bläddra i innehåll</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="213"/>
+        <location filename="Views/SbieView.cpp" line="214"/>
         <source>Box Content</source>
         <translation>Lådinnehåll</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="122"/>
-        <location filename="Views/SbieView.cpp" line="217"/>
-        <location filename="Views/SbieView.cpp" line="282"/>
-        <location filename="Views/SbieView.cpp" line="400"/>
-        <location filename="Views/SbieView.cpp" line="442"/>
+        <location filename="Views/SbieView.cpp" line="123"/>
+        <location filename="Views/SbieView.cpp" line="218"/>
+        <location filename="Views/SbieView.cpp" line="283"/>
+        <location filename="Views/SbieView.cpp" line="399"/>
+        <location filename="Views/SbieView.cpp" line="441"/>
         <source>Create Shortcut</source>
         <translation>Skapa genväg</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="219"/>
-        <location filename="Views/SbieView.cpp" line="380"/>
+        <location filename="Views/SbieView.cpp" line="220"/>
+        <location filename="Views/SbieView.cpp" line="381"/>
         <source>Explore Content</source>
         <translation>Utforska innehåll</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="220"/>
+        <location filename="Views/SbieView.cpp" line="221"/>
         <source>Open Registry</source>
         <translation>Öppet register</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="216"/>
-        <location filename="Views/SbieView.cpp" line="399"/>
+        <location filename="Views/SbieView.cpp" line="217"/>
+        <location filename="Views/SbieView.cpp" line="398"/>
         <source>Refresh Info</source>
         <translation>Uppdatera info</translation>
     </message>
@@ -6119,65 +6146,65 @@ Notera: Uppdateringskollen är ofta bakom senaste GitHub-utgivningen för att s�
         <translation type="vanished">Fler verktyg</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="221"/>
-        <location filename="Views/SbieView.cpp" line="387"/>
+        <location filename="Views/SbieView.cpp" line="222"/>
+        <location filename="Views/SbieView.cpp" line="388"/>
         <source>Snapshots Manager</source>
         <translation>Ögonblicksbildhanterare</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="211"/>
+        <location filename="Views/SbieView.cpp" line="212"/>
         <source>Recover Files</source>
         <translation>Återställ filer</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="165"/>
-        <location filename="Views/SbieView.cpp" line="336"/>
+        <location filename="Views/SbieView.cpp" line="166"/>
+        <location filename="Views/SbieView.cpp" line="337"/>
         <source>Import Boxes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="212"/>
-        <location filename="Views/SbieView.cpp" line="379"/>
+        <location filename="Views/SbieView.cpp" line="213"/>
+        <location filename="Views/SbieView.cpp" line="380"/>
         <source>Delete Content</source>
         <translation>Radera innehåll</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="223"/>
+        <location filename="Views/SbieView.cpp" line="224"/>
         <source>Sandbox Options</source>
         <translation>Sandlådealternativ</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="228"/>
+        <location filename="Views/SbieView.cpp" line="229"/>
         <source>Sandbox Presets</source>
         <translation>Sandlådeförinställningar</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="230"/>
+        <location filename="Views/SbieView.cpp" line="231"/>
         <source>Ask for UAC Elevation</source>
         <translation>Fråga om UAC-förhöjning</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="231"/>
+        <location filename="Views/SbieView.cpp" line="232"/>
         <source>Drop Admin Rights</source>
         <translation>Skippa adminrättigheter</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="232"/>
+        <location filename="Views/SbieView.cpp" line="233"/>
         <source>Emulate Admin Rights</source>
         <translation>Efterlikna adminrättigheter</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="240"/>
+        <location filename="Views/SbieView.cpp" line="241"/>
         <source>Block Internet Access</source>
         <translation>Blockera internettillgång</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="242"/>
+        <location filename="Views/SbieView.cpp" line="243"/>
         <source>Allow Network Shares</source>
         <translation>Tillåt nätverksdelningar</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="246"/>
+        <location filename="Views/SbieView.cpp" line="247"/>
         <source>Immediate Recovery</source>
         <translation>Omedelbart återställande</translation>
     </message>
@@ -6186,8 +6213,8 @@ Notera: Uppdateringskollen är ofta bakom senaste GitHub-utgivningen för att s�
         <translation type="vanished">Kopiera sandlåda</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="260"/>
-        <location filename="Views/SbieView.cpp" line="403"/>
+        <location filename="Views/SbieView.cpp" line="261"/>
+        <location filename="Views/SbieView.cpp" line="402"/>
         <source>Rename Sandbox</source>
         <translation>Namnändra sandlåda</translation>
     </message>
@@ -6196,90 +6223,90 @@ Notera: Uppdateringskollen är ofta bakom senaste GitHub-utgivningen för att s�
         <translation type="vanished">Flytta låda/grupp</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="262"/>
-        <location filename="Views/SbieView.cpp" line="405"/>
+        <location filename="Views/SbieView.cpp" line="263"/>
+        <location filename="Views/SbieView.cpp" line="404"/>
         <source>Move Up</source>
         <translation>Flytta upp</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="267"/>
-        <location filename="Views/SbieView.cpp" line="410"/>
+        <location filename="Views/SbieView.cpp" line="268"/>
+        <location filename="Views/SbieView.cpp" line="409"/>
         <source>Move Down</source>
         <translation>Flytta ner</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="275"/>
-        <location filename="Views/SbieView.cpp" line="418"/>
+        <location filename="Views/SbieView.cpp" line="276"/>
+        <location filename="Views/SbieView.cpp" line="417"/>
         <source>Remove Sandbox</source>
         <translation>Ta bort sandlåda</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="280"/>
-        <location filename="Views/SbieView.cpp" line="440"/>
+        <location filename="Views/SbieView.cpp" line="281"/>
+        <location filename="Views/SbieView.cpp" line="439"/>
         <source>Terminate</source>
         <translation>Avsluta</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="283"/>
+        <location filename="Views/SbieView.cpp" line="284"/>
         <source>Preset</source>
         <translation>Förinställning</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="120"/>
-        <location filename="Views/SbieView.cpp" line="284"/>
+        <location filename="Views/SbieView.cpp" line="121"/>
+        <location filename="Views/SbieView.cpp" line="285"/>
         <source>Pin to Run Menu</source>
         <translation>Fäst på körmenyn</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="252"/>
+        <location filename="Views/SbieView.cpp" line="253"/>
         <location filename="Views/SbieView.cpp" line="390"/>
         <source>Browse NT Namespace</source>
         <translation>Bläddra NT-namnutrymme</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="255"/>
+        <location filename="Views/SbieView.cpp" line="256"/>
         <source>Duplicate Box with Content</source>
         <translation>Kopiera lådan med innehåll</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="256"/>
+        <location filename="Views/SbieView.cpp" line="257"/>
         <source>Export Boxes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="286"/>
+        <location filename="Views/SbieView.cpp" line="287"/>
         <source>Block and Terminate</source>
         <translation>Blockera och avsluta</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="290"/>
+        <location filename="Views/SbieView.cpp" line="291"/>
         <source>Allow internet access</source>
         <translation>Tillåt internettillgång</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="292"/>
+        <location filename="Views/SbieView.cpp" line="293"/>
         <source>Force into this sandbox</source>
         <translation>Tvinga in i denna sandlåda</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="294"/>
+        <location filename="Views/SbieView.cpp" line="295"/>
         <source>Set Linger Process</source>
         <translation>Ange kvardröjningsprocess</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="296"/>
+        <location filename="Views/SbieView.cpp" line="297"/>
         <source>Set Leader Process</source>
         <translation>Ange ledarprocess</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="602"/>
+        <location filename="Views/SbieView.cpp" line="601"/>
         <source>    File root: %1
 </source>
         <translation>    Filrot: %1
 </translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="603"/>
+        <location filename="Views/SbieView.cpp" line="602"/>
         <source>    Registry root: %1
 </source>
         <translation>    Registerrot: %1
@@ -6292,13 +6319,13 @@ Notera: Uppdateringskollen är ofta bakom senaste GitHub-utgivningen för att s�
 </translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="251"/>
-        <location filename="Views/SbieView.cpp" line="385"/>
+        <location filename="Views/SbieView.cpp" line="252"/>
+        <location filename="Views/SbieView.cpp" line="386"/>
         <source>Sandbox Tools</source>
         <translation>Sandlådeverktyg</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="254"/>
+        <location filename="Views/SbieView.cpp" line="255"/>
         <source>Duplicate Box Config</source>
         <translation>Kopiera lådkonfigurationen</translation>
     </message>
@@ -6311,108 +6338,108 @@ Notera: Uppdateringskollen är ofta bakom senaste GitHub-utgivningen för att s�
         <translation type="vanished">Kör sandlådad</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="350"/>
+        <location filename="Views/SbieView.cpp" line="351"/>
         <source>Run Web Browser</source>
         <translation>Kör webbläsare</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="351"/>
+        <location filename="Views/SbieView.cpp" line="352"/>
         <source>Run eMail Reader</source>
         <translation>Kör e-postläsare</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="352"/>
+        <location filename="Views/SbieView.cpp" line="353"/>
         <source>Run Any Program</source>
         <translation>Kör valfritt program</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="353"/>
+        <location filename="Views/SbieView.cpp" line="354"/>
         <source>Run From Start Menu</source>
         <translation>Kör från startmenyn</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="361"/>
+        <location filename="Views/SbieView.cpp" line="362"/>
         <source>Run Windows Explorer</source>
         <translation>Kör Windows utforskare</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="375"/>
+        <location filename="Views/SbieView.cpp" line="376"/>
         <source>Terminate Programs</source>
         <translation>Avsluta program</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="378"/>
+        <location filename="Views/SbieView.cpp" line="379"/>
         <source>Quick Recover</source>
         <translation>Omedelbar återställning</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="383"/>
+        <location filename="Views/SbieView.cpp" line="384"/>
         <source>Sandbox Settings</source>
         <translation>Sandlådeinställningar</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="393"/>
+        <location filename="Views/SbieView.cpp" line="392"/>
         <source>Duplicate Sandbox Config</source>
         <translation>Kopiera sandlådekonfigurering</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="394"/>
+        <location filename="Views/SbieView.cpp" line="393"/>
         <source>Duplicate Sandbox with Content</source>
         <translation>Kopiera sandlådan med innehåll</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="395"/>
+        <location filename="Views/SbieView.cpp" line="394"/>
         <source>Export Sandbox</source>
         <translation>Exportera sandlåda</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="462"/>
+        <location filename="Views/SbieView.cpp" line="461"/>
         <source>Move Group</source>
         <translation>Flytta grupp</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="604"/>
+        <location filename="Views/SbieView.cpp" line="603"/>
         <source>    IPC root: %1
 </source>
         <translation>    IPC-rot: %1
 </translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="606"/>
+        <location filename="Views/SbieView.cpp" line="605"/>
         <source>    Disk root: %1
 </source>
         <translation>    Diskrot: %1
 </translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="608"/>
+        <location filename="Views/SbieView.cpp" line="607"/>
         <source>Options:
     </source>
         <translation>Alternativ:
     </translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="907"/>
+        <location filename="Views/SbieView.cpp" line="906"/>
         <source>[None]</source>
         <translation>[Ingen]</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1064"/>
+        <location filename="Views/SbieView.cpp" line="1063"/>
         <source>Please enter a new name for the Group.</source>
         <translation>Vänligen för in ett nytt namn för gruppen.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1074"/>
+        <location filename="Views/SbieView.cpp" line="1073"/>
         <source>Do you really want to remove the selected group(s)?</source>
         <translation>Vill du verkligen ta bort vald(a) grupp(er)?</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1111"/>
+        <location filename="Views/SbieView.cpp" line="1110"/>
         <source>Move entries by (negative values move up, positive values move down):</source>
         <translation>Flytta poster genom (negativa värden - upp, positiva värden - ner):</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1186"/>
+        <location filename="Views/SbieView.cpp" line="1185"/>
         <source>A group can not be its own parent.</source>
         <translation>En grupp kan inte vara sin egna förälder.</translation>
     </message>
@@ -6425,42 +6452,42 @@ Notera: Uppdateringskollen är ofta bakom senaste GitHub-utgivningen för att s�
         <translation type="vanished">Lyckades inte öppna arkiv (%1)!</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1307"/>
+        <location filename="Views/SbieView.cpp" line="1306"/>
         <source>&lt;br /&gt;</source>
         <translation>&lt;br /&gt;</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1309"/>
+        <location filename="Views/SbieView.cpp" line="1308"/>
         <source>... and %1 more</source>
         <translation>... och %1 mer</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1440"/>
+        <location filename="Views/SbieView.cpp" line="1439"/>
         <source>WARNING: The opened registry editor is not sandboxed, please be careful and only do changes to the preselected sandbox locations.</source>
         <translation>VARNING: Den öppnade registerredigeraren är inte sandlådad, vänligen var försiktig och gör endast ändringar till de förvalda sandlådeplatserna.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1520"/>
+        <location filename="Views/SbieView.cpp" line="1519"/>
         <source>Not Created</source>
         <translation>Inte skapad</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1529"/>
+        <location filename="Views/SbieView.cpp" line="1528"/>
         <source>Copying: %1</source>
         <translation>Kopierar: %1</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1596"/>
+        <location filename="Views/SbieView.cpp" line="1621"/>
         <source>Do you really want to remove the following sandbox(es)?&lt;br /&gt;&lt;br /&gt;%1&lt;br /&gt;&lt;br /&gt;Warning: The box content will also be deleted!</source>
         <translation>Vill du verkligen ta bort följande sandlåd(a)(or)?&lt;br /&gt;&lt;br /&gt;%1&lt;br /&gt;&lt;br /&gt;Varning: Lådinnehållet kommer också att raderas!</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1661"/>
+        <location filename="Views/SbieView.cpp" line="1686"/>
         <source>Do you want to delete the content of the following sandbox?&lt;br /&gt;&lt;br /&gt;%1</source>
         <translation>Vill du radera innehållet hos följande sandlåda?&lt;br /&gt;&lt;br /&gt;%1</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1676"/>
+        <location filename="Views/SbieView.cpp" line="1701"/>
         <source>Do you really want to delete the content of the following sandboxes?&lt;br /&gt;&lt;br /&gt;%1</source>
         <translation>Vill du verkligen radera innehållet hos följande sandlådor?&lt;br /&gt;&lt;br /&gt;%1</translation>
     </message>
@@ -6477,37 +6504,37 @@ Notera: Uppdateringskollen är ofta bakom senaste GitHub-utgivningen för att s�
         <translation type="vanished">Importerar :%1</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1241"/>
+        <location filename="Views/SbieView.cpp" line="1240"/>
         <source>Please enter a new group name</source>
         <translation>Vänligen för in ett nytt gruppnamn</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1267"/>
+        <location filename="Views/SbieView.cpp" line="1266"/>
         <source>The Sandbox name and Box Group name cannot use the &apos;,()&apos; symbol or control characters.</source>
         <oldsource>The Sandbox name and Box Group name cannot use the &apos;,()&apos; symbol or control charakters.</oldsource>
         <translation>Sandlådenamnet och lådgruppsnamnet kan inte använda &quot;,()&quot; symbolen eller kontrolltecknen.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1272"/>
+        <location filename="Views/SbieView.cpp" line="1271"/>
         <source>This name is already used for a Box Group.</source>
         <translation>Detta namn används redan för en lådgrupp.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1277"/>
+        <location filename="Views/SbieView.cpp" line="1276"/>
         <source>This name is already used for a Sandbox.</source>
         <translation>Detta namn används redan för en sandlåda.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1346"/>
-        <location filename="Views/SbieView.cpp" line="1422"/>
-        <location filename="Views/SbieView.cpp" line="1728"/>
+        <location filename="Views/SbieView.cpp" line="1345"/>
+        <location filename="Views/SbieView.cpp" line="1421"/>
+        <location filename="Views/SbieView.cpp" line="1753"/>
         <source>Don&apos;t show this message again.</source>
         <translation>Visa inte detta meddelande igen.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1413"/>
-        <location filename="Views/SbieView.cpp" line="1433"/>
-        <location filename="Views/SbieView.cpp" line="1906"/>
+        <location filename="Views/SbieView.cpp" line="1412"/>
+        <location filename="Views/SbieView.cpp" line="1432"/>
+        <location filename="Views/SbieView.cpp" line="1931"/>
         <source>This Sandbox is empty.</source>
         <translation>Denna sandlåda är tom.</translation>
     </message>
@@ -6516,17 +6543,17 @@ Notera: Uppdateringskollen är ofta bakom senaste GitHub-utgivningen för att s�
         <translation type="vanished">VARNING: Den öppnade registerredigeraren är inte sandlådad, vänligen var försiktig och gör endast ändringar till de förvalda sandlådeplatserna.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1441"/>
+        <location filename="Views/SbieView.cpp" line="1440"/>
         <source>Don&apos;t show this warning in future</source>
         <translation>Visa inte denna varning i framtiden</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1500"/>
+        <location filename="Views/SbieView.cpp" line="1499"/>
         <source>Please enter a new name for the duplicated Sandbox.</source>
         <translation>Vänligen för in ett nytt namn för den kopierade sandlådan.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1500"/>
+        <location filename="Views/SbieView.cpp" line="1499"/>
         <source>%1 Copy</source>
         <translation>%1 Kopiera</translation>
     </message>
@@ -6539,29 +6566,29 @@ Notera: Uppdateringskollen är ofta bakom senaste GitHub-utgivningen för att s�
         <translation type="vanished">Importera låda</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="209"/>
-        <location filename="Views/SbieView.cpp" line="376"/>
+        <location filename="Views/SbieView.cpp" line="210"/>
+        <location filename="Views/SbieView.cpp" line="377"/>
         <source>Mount Box Image</source>
         <translation>Montera lådavbild</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="210"/>
-        <location filename="Views/SbieView.cpp" line="377"/>
+        <location filename="Views/SbieView.cpp" line="211"/>
+        <location filename="Views/SbieView.cpp" line="378"/>
         <source>Unmount Box Image</source>
         <translation>Avmontera lådavbild</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="248"/>
+        <location filename="Views/SbieView.cpp" line="249"/>
         <source>Disable Force Rules</source>
         <translation>Inaktivera Tvingande regler</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="298"/>
+        <location filename="Views/SbieView.cpp" line="299"/>
         <source>Suspend</source>
         <translation>Skjut upp</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="299"/>
+        <location filename="Views/SbieView.cpp" line="300"/>
         <source>Resume</source>
         <translation>Återuppta</translation>
     </message>
@@ -6574,26 +6601,23 @@ Notera: Uppdateringskollen är ofta bakom senaste GitHub-utgivningen för att s�
         <translation type="vanished">Exporterar: %1</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1549"/>
         <source>Please enter a new name for the Sandbox.</source>
-        <translation>Vänligen för in ett nytt namn för sandlådan.</translation>
+        <translation type="vanished">Vänligen för in ett nytt namn för sandlådan.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1549"/>
         <source>Please enter a new alias for the Sandbox.</source>
-        <translation>Vänligen för in ett nytt alias för sandlådan.</translation>
+        <translation type="vanished">Vänligen för in ett nytt alias för sandlådan.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1558"/>
         <source>The entered name is not valid, do you want to set it as an alias instead?</source>
-        <translation>Det införda namnet är inte giltigt, vill du ange det som ett alias istället?</translation>
+        <translation type="vanished">Det införda namnet är inte giltigt, vill du ange det som ett alias istället?</translation>
     </message>
     <message>
         <source>Do you really want to remove the selected sandbox(es)?&lt;br /&gt;&lt;br /&gt;Warning: The box content will also be deleted!</source>
         <translation type="vanished">Vill du verkligen ta bort de(n) valda sandlåd(orna)(an)?&lt;br /&gt;&lt;br /&gt;Varning: Lådinnehållet kommer också raderas!</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1649"/>
+        <location filename="Views/SbieView.cpp" line="1674"/>
         <source>This Sandbox is already empty.</source>
         <translation>Denna sandlåda är redan tom.</translation>
     </message>
@@ -6602,8 +6626,8 @@ Notera: Uppdateringskollen är ofta bakom senaste GitHub-utgivningen för att s�
         <translation type="vanished">Vill du radera innehållet hos den valda sandlådan?</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1666"/>
-        <location filename="Views/SbieView.cpp" line="1689"/>
+        <location filename="Views/SbieView.cpp" line="1691"/>
+        <location filename="Views/SbieView.cpp" line="1714"/>
         <source>Also delete all Snapshots</source>
         <translation>Radera också alla ögonblicksbilder</translation>
     </message>
@@ -6612,53 +6636,53 @@ Notera: Uppdateringskollen är ofta bakom senaste GitHub-utgivningen för att s�
         <translation type="vanished">Vill du verkligen radera innehållet hos alla valda sandlådor?</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1710"/>
+        <location filename="Views/SbieView.cpp" line="1735"/>
         <source>Do you want to terminate all processes in the selected sandbox(es)?</source>
         <translation>Vill du avsluta alla processer i de(n) valda sandlåd(orna)(an)?</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1711"/>
-        <location filename="Views/SbieView.cpp" line="1807"/>
+        <location filename="Views/SbieView.cpp" line="1736"/>
+        <location filename="Views/SbieView.cpp" line="1832"/>
         <source>Terminate without asking</source>
         <translation>Avsluta utan att fråga</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1726"/>
+        <location filename="Views/SbieView.cpp" line="1751"/>
         <source>The Sandboxie Start Menu will now be displayed. Select an application from the menu, and Sandboxie will create a new shortcut icon on your real desktop, which you can use to invoke the selected application under the supervision of Sandboxie.</source>
         <oldsource>The Sandboxie Start Menu will now be displayed. Select an application from the menu, and Sandboxie will create a newshortcut icon on your real desktop, which you can use to invoke the selected application under the supervision of Sandboxie.</oldsource>
         <translation>Sandboxies startmeny kommer nu visas. Välj en applikation från menyn och Sandboxie kommer att skapa en ny genvägsikon på ditt verkliga skrivbord, med vilken du kan starta vald applikation under Sandboxies övervakning.</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1781"/>
-        <location filename="Views/SbieView.cpp" line="1835"/>
+        <location filename="Views/SbieView.cpp" line="1806"/>
+        <location filename="Views/SbieView.cpp" line="1860"/>
         <source>Create Shortcut to sandbox %1</source>
         <translation>Skapa genväg till sandlåda %1</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1806"/>
+        <location filename="Views/SbieView.cpp" line="1831"/>
         <source>Do you want to terminate %1?</source>
         <oldsource>Do you want to %1 %2?</oldsource>
         <translation>Vill du avsluta %1?</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1806"/>
+        <location filename="Views/SbieView.cpp" line="1831"/>
         <source>the selected processes</source>
         <translation>de valda processerna</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1865"/>
+        <location filename="Views/SbieView.cpp" line="1890"/>
         <source>This box does not have Internet restrictions in place, do you want to enable them?</source>
         <translation>Denna låda har inte internetbegränsningar på plats, vill du aktivera dem?</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1956"/>
+        <location filename="Views/SbieView.cpp" line="1981"/>
         <source>This sandbox is currently disabled or restricted to specific groups or users. Would you like to allow access for everyone?</source>
         <oldsource>This sandbox is disabled or restricted to a group/user, do you want to allow box for everybody ?</oldsource>
         <translation>Denna sandlåda är för närvarande inaktiverad eller begränsad till specifika grupper eller användare. Vill du tillåta tillgång för alla?</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="183"/>
-        <location filename="Views/SbieView.cpp" line="356"/>
+        <location filename="Views/SbieView.cpp" line="184"/>
+        <location filename="Views/SbieView.cpp" line="357"/>
         <source>(Host) Start Menu</source>
         <translation>(Värd) Startmeny</translation>
     </message>
@@ -11110,7 +11134,7 @@ istället för &quot;*&quot;.</translation>
         <translation type="vanished">Enhet: %1</translation>
     </message>
     <message>
-        <location filename="Views/SbieView.cpp" line="1763"/>
+        <location filename="Views/SbieView.cpp" line="1788"/>
         <source>Drive %1</source>
         <translation>Enhet %1</translation>
     </message>
@@ -11199,6 +11223,34 @@ istället för &quot;*&quot;.</translation>
         <location filename="Forms/RecoveryWindow.ui" line="61"/>
         <source>Delete Content</source>
         <translation>Radera innehåll</translation>
+    </message>
+</context>
+<context>
+    <name>RenameSandboxDialog</name>
+    <message>
+        <location filename="Forms/RenameSandboxDialog.ui" line="20"/>
+        <source>Rename Sandbox</source>
+        <translation type="unfinished">Namnändra sandlåda</translation>
+    </message>
+    <message>
+        <location filename="Forms/RenameSandboxDialog.ui" line="31"/>
+        <source>Please enter a new name for the Sandbox.</source>
+        <translation type="unfinished">Vänligen för in ett nytt namn för sandlådan.</translation>
+    </message>
+    <message>
+        <location filename="Forms/RenameSandboxDialog.ui" line="38"/>
+        <source>Please enter a new alias for the Sandbox.</source>
+        <translation type="unfinished">Vänligen för in ett nytt alias för sandlådan.</translation>
+    </message>
+    <message>
+        <location filename="Forms/RenameSandboxDialog.ui" line="52"/>
+        <source>Disable alias</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="Forms/RenameSandboxDialog.ui" line="59"/>
+        <source>Hide alias</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
