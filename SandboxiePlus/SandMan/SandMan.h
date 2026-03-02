@@ -459,6 +459,7 @@ private:
 	QWidgetAction*		m_pTrayList;
 	QTreeWidget*		m_pTrayBoxes;
 	int					m_iTrayPos;
+
 	//QMenu*				m_pBoxMenu;
 	bool				m_bIconEmpty;
 	int					m_iIconDisabled;
@@ -475,8 +476,10 @@ private:
 	CPopUpWindow*		m_pPopUpWindow;
 
 	bool				m_StartMenuUpdatePending;
+	quint64				m_LastCheckInternetMs;
+	bool				m_bHasInternet;
 public:
-
+	QMap<QString, QPair<QString, QIcon>> m_TrayIconCache; // boxName -> (configKey, icon)
 	bool				m_ThemeUpdatePending;
 	QString				m_DefaultStyle;
 	QPalette			m_DefaultPalett;

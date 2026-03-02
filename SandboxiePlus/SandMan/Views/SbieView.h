@@ -239,6 +239,8 @@ private:
 	QMenu*					m_pCurMenu;
 
 	QFileIconProvider		m_IconProvider;
+	QMap<QString, QIcon>	m_RunMenuWinIconCache;
+	QMap<QString, QIcon>	m_RunMenuFileIconCache;
 
 	QList<CSandBoxPtr>		m_CurSandBoxes;
 	QList<CBoxedProcessPtr>	m_CurProcesses;

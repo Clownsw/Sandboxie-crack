@@ -327,22 +327,22 @@ _FX void Com_LoadClsidList(const WCHAR* setting, GUID** pClsids, ULONG* pNumClsi
     GUID* guid;
     NTSTATUS status;
     WCHAR wbuf[196];
-    WCHAR* buf = wbuf;
     const WCHAR* ImageName = NULL;
     if (BoxName == NULL) // sandboxed process not in service
         ImageName = Dll_ImageName;
 
     counter = 0;
     for (index = 0; ; ++index) {
+        WCHAR* buf = wbuf;
         status = SbieApi_QueryConfAsIs(
-            BoxName, setting, index, buf, 190 * sizeof(WCHAR));
+            BoxName, setting, index, wbuf, 190 * sizeof(WCHAR));
         if (!NT_SUCCESS(status))
             break;
 
-        WCHAR* ptr = wcschr(buf, L',');
+        WCHAR* ptr = wcschr(wbuf, L',');
         if (ptr) {
             *ptr = L'\0';
-            if (ImageName && !SbieDll_MatchImage(buf, ImageName, BoxName))
+            if (ImageName && !SbieDll_MatchImage(wbuf, ImageName, BoxName))
                 continue;
             buf = ptr + 1;
         }
@@ -363,17 +363,20 @@ _FX void Com_LoadClsidList(const WCHAR* setting, GUID** pClsids, ULONG* pNumClsi
 
     if (counter) {
 
+        ULONG guid_index = 0;
+
         for (index = 0; counter > 0; ++index) {
+            WCHAR* buf = wbuf;
 
             status = SbieApi_QueryConfAsIs(
-                BoxName, setting, index, buf, 190 * sizeof(WCHAR));
+                BoxName, setting, index, wbuf, 190 * sizeof(WCHAR));
             if (!NT_SUCCESS(status))
                 break;
 
-            WCHAR* ptr = wcschr(buf, L',');
+            WCHAR* ptr = wcschr(wbuf, L',');
             if (ptr) {
                 *ptr = L'\0';
-                if (ImageName && !SbieDll_MatchImage(buf, ImageName, BoxName))
+                if (ImageName && !SbieDll_MatchImage(wbuf, ImageName, BoxName))
                     continue;
                 buf = ptr + 1;
             }
@@ -386,7 +389,7 @@ _FX void Com_LoadClsidList(const WCHAR* setting, GUID** pClsids, ULONG* pNumClsi
             if (space)
                 *space = L'\0';
 
-            guid = &(*pClsids)[index];
+            guid = &(*pClsids)[guid_index++];
 
             if (!__sys_IIDFromString) {
                 // if called from SbieSvc
@@ -3397,25 +3400,25 @@ _FX void Com_LoadRTList(const WCHAR* setting, WCHAR** pNames)
     ULONG cur_pos;
     NTSTATUS status;
     WCHAR wbuf[196];
-    WCHAR* buf = wbuf;
     const WCHAR* ImageName = Dll_ImageName;
 
     total_len = 1;
     for (index = 0; ; ++index) {
+        WCHAR* buf = wbuf;
         status = SbieApi_QueryConfAsIs(
-            NULL, setting, index, buf, 190 * sizeof(WCHAR));
+            NULL, setting, index, wbuf, 190 * sizeof(WCHAR));
         if (!NT_SUCCESS(status))
             break;
 
-        WCHAR* ptr = wcschr(buf, L',');
+        WCHAR* ptr = wcschr(wbuf, L',');
         if (ptr) {
             *ptr = L'\0';
-            if (ImageName && !SbieDll_MatchImage(buf, ImageName, NULL))
+            if (ImageName && !SbieDll_MatchImage(wbuf, ImageName, NULL))
                 continue;
             buf = ptr + 1;
         }
 
-        if (*buf != L'\0') continue;
+        if (*buf == L'\0') continue;
 
         total_len += wcslen(buf) + 1;
     }
@@ -3430,21 +3433,22 @@ _FX void Com_LoadRTList(const WCHAR* setting, WCHAR** pNames)
     
     cur_pos = 0;
     for (index = 0; total_len > cur_pos; ++index) {
+        WCHAR* buf = wbuf;
 
         status = SbieApi_QueryConfAsIs(
-            NULL, setting, index, buf, 190 * sizeof(WCHAR));
+            NULL, setting, index, wbuf, 190 * sizeof(WCHAR));
         if (!NT_SUCCESS(status))
             break;
 
-        WCHAR* ptr = wcschr(buf, L',');
+        WCHAR* ptr = wcschr(wbuf, L',');
         if (ptr) {
             *ptr = L'\0';
-            if (ImageName && !SbieDll_MatchImage(buf, ImageName, NULL))
+            if (ImageName && !SbieDll_MatchImage(wbuf, ImageName, NULL))
                 continue;
             buf = ptr + 1;
         }
 
-        if (*buf != L'\0') continue;
+        if (*buf == L'\0') continue;
 
         wcscpy((*pNames) + cur_pos, buf);
 
