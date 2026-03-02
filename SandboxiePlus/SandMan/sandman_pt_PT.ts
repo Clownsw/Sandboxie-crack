@@ -3845,7 +3845,7 @@ Ao contrário do canal preview, ele não inclui alterações não testadas, pote
         <translation>A fundir Instantâneo Finalizado...</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="375"/>
+        <location filename="SbiePlusAPI.cpp" line="327"/>
         <source>Copying folder: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3853,7 +3853,7 @@ Ao contrário do canal preview, ele não inclui alterações não testadas, pote
 <context>
     <name>CSandBoxPlus</name>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="833"/>
+        <location filename="SbiePlusAPI.cpp" line="785"/>
         <source>Disabled</source>
         <translation>Desactivado</translation>
     </message>
@@ -3866,42 +3866,42 @@ Ao contrário do canal preview, ele não inclui alterações não testadas, pote
         <translation type="vanished">NÃO SEGURO (definir depuração)</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="844"/>
+        <location filename="SbiePlusAPI.cpp" line="796"/>
         <source>OPEN Root Access</source>
         <translation>ABRIR Acesso Raiz</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="846"/>
+        <location filename="SbiePlusAPI.cpp" line="798"/>
         <source>Application Compartment</source>
         <translation>Compartimento de Aplicação</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="848"/>
+        <location filename="SbiePlusAPI.cpp" line="800"/>
         <source>NOT SECURE</source>
         <translation>NÃO SEGURO</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="850"/>
+        <location filename="SbiePlusAPI.cpp" line="802"/>
         <source>Reduced Isolation</source>
         <translation>Isolamento Reduzido</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="852"/>
+        <location filename="SbiePlusAPI.cpp" line="804"/>
         <source>Enhanced Isolation</source>
         <translation>Isolamento Aprimorado</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="855"/>
+        <location filename="SbiePlusAPI.cpp" line="807"/>
         <source>Privacy Enhanced</source>
         <translation>Privacidade Aprimorada</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="878"/>
+        <location filename="SbiePlusAPI.cpp" line="830"/>
         <source> (Portable)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="881"/>
+        <location filename="SbiePlusAPI.cpp" line="833"/>
         <source> (Virtual)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3910,33 +3910,33 @@ Ao contrário do canal preview, ele não inclui alterações não testadas, pote
         <translation type="vanished">Registro de API</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="859"/>
+        <location filename="SbiePlusAPI.cpp" line="811"/>
         <source>No INet (with Exceptions)</source>
         <translation>Sem INet (com Exceções)</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="861"/>
+        <location filename="SbiePlusAPI.cpp" line="813"/>
         <source>No INet</source>
         <translation>Sem Internet</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="864"/>
+        <location filename="SbiePlusAPI.cpp" line="816"/>
         <source>Net Share</source>
         <translatorcomment>Kept original for lack of good German wording</translatorcomment>
         <translation>Compartilhar Rede</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="866"/>
+        <location filename="SbiePlusAPI.cpp" line="818"/>
         <source>No Admin</source>
         <translation>Sem Administrador</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="869"/>
+        <location filename="SbiePlusAPI.cpp" line="821"/>
         <source>Auto Delete</source>
         <translation>Auto eliminar</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="874"/>
+        <location filename="SbiePlusAPI.cpp" line="826"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
@@ -5914,38 +5914,38 @@ Não vou definir: %2</translation>
 <context>
     <name>CSbieTemplatesEx</name>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="1283"/>
+        <location filename="SbiePlusAPI.cpp" line="1235"/>
         <source>Failed to initialize COM</source>
         <translation>Falha ao inicializar COM</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="1289"/>
+        <location filename="SbiePlusAPI.cpp" line="1241"/>
         <source>Failed to create update session</source>
         <translation>Falha ao criar sessão de actualização</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="1295"/>
+        <location filename="SbiePlusAPI.cpp" line="1247"/>
         <source>Failed to create update searcher</source>
         <translation>Falha ao criar procurador de actualização</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="1301"/>
+        <location filename="SbiePlusAPI.cpp" line="1253"/>
         <source>Failed to set search options</source>
         <translation>Falha ao definir opções de procura</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="1309"/>
+        <location filename="SbiePlusAPI.cpp" line="1261"/>
         <source>Failed to enumerate installed Windows updates</source>
         <oldsource>Failed to search for updates</oldsource>
         <translation>Falha ao enumerar as actualizações instaladas do Windows</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="1315"/>
+        <location filename="SbiePlusAPI.cpp" line="1267"/>
         <source>Failed to retrieve update list from search result</source>
         <translation>Falha ao recuperar a lista de actualizações do resultado da procura</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="1322"/>
+        <location filename="SbiePlusAPI.cpp" line="1274"/>
         <source>Failed to get update count</source>
         <translation>Falha ao obter contagem de actualizações</translation>
     </message>

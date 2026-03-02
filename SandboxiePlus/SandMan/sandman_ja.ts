@@ -3547,7 +3547,7 @@ Unlike the preview channel, it does not include untested, potentially breaking, 
         <translation>スナップショットのマージを完了中...</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="375"/>
+        <location filename="SbiePlusAPI.cpp" line="327"/>
         <source>Copying folder: %1</source>
         <translation>フォルダをコピー中: %1</translation>
     </message>
@@ -3555,77 +3555,77 @@ Unlike the preview channel, it does not include untested, potentially breaking, 
 <context>
     <name>CSandBoxPlus</name>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="833"/>
+        <location filename="SbiePlusAPI.cpp" line="785"/>
         <source>Disabled</source>
         <translation>無効</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="844"/>
+        <location filename="SbiePlusAPI.cpp" line="796"/>
         <source>OPEN Root Access</source>
         <translation>オープンルートアクセス</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="846"/>
+        <location filename="SbiePlusAPI.cpp" line="798"/>
         <source>Application Compartment</source>
         <translation>アプリケーションコンパートメント</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="848"/>
+        <location filename="SbiePlusAPI.cpp" line="800"/>
         <source>NOT SECURE</source>
         <translation>安全でない</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="850"/>
+        <location filename="SbiePlusAPI.cpp" line="802"/>
         <source>Reduced Isolation</source>
         <translation>緩和された隔離</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="852"/>
+        <location filename="SbiePlusAPI.cpp" line="804"/>
         <source>Enhanced Isolation</source>
         <translation>強化された隔離</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="855"/>
+        <location filename="SbiePlusAPI.cpp" line="807"/>
         <source>Privacy Enhanced</source>
         <translation>プライバシー強化</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="859"/>
+        <location filename="SbiePlusAPI.cpp" line="811"/>
         <source>No INet (with Exceptions)</source>
         <translation>INetなし(例外あり)</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="861"/>
+        <location filename="SbiePlusAPI.cpp" line="813"/>
         <source>No INet</source>
         <translation>INetなし</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="864"/>
+        <location filename="SbiePlusAPI.cpp" line="816"/>
         <source>Net Share</source>
         <translation>Net共有</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="866"/>
+        <location filename="SbiePlusAPI.cpp" line="818"/>
         <source>No Admin</source>
         <translation>管理者権限なし</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="869"/>
+        <location filename="SbiePlusAPI.cpp" line="821"/>
         <source>Auto Delete</source>
         <translation>自動削除</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="874"/>
+        <location filename="SbiePlusAPI.cpp" line="826"/>
         <source>Normal</source>
         <translation>標準</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="878"/>
+        <location filename="SbiePlusAPI.cpp" line="830"/>
         <source> (Portable)</source>
         <translation> (ポータブル)</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="881"/>
+        <location filename="SbiePlusAPI.cpp" line="833"/>
         <source> (Virtual)</source>
         <translation> (仮想)</translation>
     </message>
@@ -5381,37 +5381,37 @@ This file is part of Sandboxie and all change done to it will be reverted next t
 <context>
     <name>CSbieTemplatesEx</name>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="1283"/>
+        <location filename="SbiePlusAPI.cpp" line="1235"/>
         <source>Failed to initialize COM</source>
         <translation>COMの初期化に失敗しました</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="1289"/>
+        <location filename="SbiePlusAPI.cpp" line="1241"/>
         <source>Failed to create update session</source>
         <translation>更新セッションの作成に失敗しました</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="1295"/>
+        <location filename="SbiePlusAPI.cpp" line="1247"/>
         <source>Failed to create update searcher</source>
         <translation>更新サーチャーの作成に失敗しました</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="1301"/>
+        <location filename="SbiePlusAPI.cpp" line="1253"/>
         <source>Failed to set search options</source>
         <translation>検索オプションの設定に失敗しました</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="1309"/>
+        <location filename="SbiePlusAPI.cpp" line="1261"/>
         <source>Failed to enumerate installed Windows updates</source>
         <translation>インストール済みのWindows更新プログラムの列挙に失敗しました</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="1315"/>
+        <location filename="SbiePlusAPI.cpp" line="1267"/>
         <source>Failed to retrieve update list from search result</source>
         <translation>検索結果から更新リストの取得に失敗しました</translation>
     </message>
     <message>
-        <location filename="SbiePlusAPI.cpp" line="1322"/>
+        <location filename="SbiePlusAPI.cpp" line="1274"/>
         <source>Failed to get update count</source>
         <translation>更新数の取得に失敗しました</translation>
     </message>
