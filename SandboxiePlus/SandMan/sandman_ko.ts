@@ -1495,7 +1495,7 @@ You can use %USER% to save each users sandbox to an own fodler.</oldsource>
     <message>
         <location filename="Wizards/NewBoxWizard.cpp" line="663"/>
         <source>Enable Immediate Recovery of files from recovery locations</source>
-        <translation>복구 위치에서 파일 즉시 복구 사용</translation>
+        <translation>복구 위치에서 파일을 즉시 복구 사용</translation>
     </message>
     <message>
         <location filename="Wizards/NewBoxWizard.cpp" line="707"/>
@@ -4500,17 +4500,17 @@ This box &lt;a href=&quot;sbie://docs/privacy-mode&quot;&gt;prevents access to a
     <message>
         <location filename="SandManTray.cpp" line="302"/>
         <source>No pinned sandboxes to show.</source>
-        <translation type="unfinished"></translation>
+        <translation>표시할 고정된 샌드박스가 없습니다.</translation>
     </message>
     <message>
         <location filename="SandManTray.cpp" line="304"/>
         <source>No active or pinned sandboxes to show.</source>
-        <translation type="unfinished"></translation>
+        <translation>No active or pinned sandboxes to show.</translation>
     </message>
     <message>
         <location filename="SandManTray.cpp" line="305"/>
         <source>No sandboxes to show.</source>
-        <translation type="unfinished"></translation>
+        <translation>표시할 샌드박스가 없습니다.</translation>
     </message>
     <message>
         <location filename="SandManTray.cpp" line="508"/>
@@ -6244,7 +6244,7 @@ This file is part of Sandboxie and all changed done to it will be reverted next 
     <message>
         <location filename="Views/SbieView.cpp" line="1095"/>
         <source>Do you really want to remove the selected group(s)?</source>
-        <translation>선택한 그룹을 제거하시겠습니까?</translation>
+        <translation>선택한 그룹을 정말로 삭제하시겠습니까?</translation>
     </message>
     <message>
         <location filename="Views/SbieView.cpp" line="167"/>
@@ -10250,7 +10250,7 @@ To specify a process use &apos;$:program.exe&apos; as path.</source>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="4515"/>
         <source>Use heuristics to identify Electron/Chromium based processes</source>
-        <translation type="unfinished"></translation>
+        <translation>휴리스틱을 사용하여 Electron/Chromium 기반 프로세스 식별</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="6112"/>
@@ -10656,7 +10656,7 @@ Tooltips include version details, syntax requirements, and descriptions to help 
     <message>
         <location filename="Forms/OptionsWindow.ui" line="4464"/>
         <source>When the global hotkey is pressed 3 times in short succession this exception will be ignored.</source>
-        <translation>전역 단축키를 짧게 3번 누르면 이 예외가 무시됩니다.</translation>
+        <translation>전역 단축키를 짧게 3번 연속적으로 누르면 이 예외가 무시됩니다.</translation>
     </message>
     <message>
         <location filename="Forms/OptionsWindow.ui" line="4467"/>
