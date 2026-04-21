@@ -12,6 +12,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - added workaround for SBIE2205 OpenDesktop when requesting default desktop
 
+### Fixed
+- fixed box rename failing with "The parameter is incorrect" since 1.17.3, caused by multi-line section content being rejected by the new ContainsCRLF check in CIniFile::AddValue
+- fixed renamed sandbox not being re-selected in the UI after a successful rename
+- fixed sandboxed app tray icons not showing with `OpenWinClass=*` by proxying `Shell_NotifyIcon`; can be disabled with `UseShellNotifyIconProxy` (default enabled, supports `process` and `!process` selectors)
+
 
 
 ## [1.17.4 / 5.72.4] - 2026-04-12
