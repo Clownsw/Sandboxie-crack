@@ -114,6 +114,8 @@
 
 // other includes
 
+#include "../QSbieAPI/SbieDefs.h"
+
 //#define _T(x)      L ## x
 
 #define STR2(X) #X

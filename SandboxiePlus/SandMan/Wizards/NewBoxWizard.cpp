@@ -346,7 +346,6 @@ CBoxTypePage::CBoxTypePage(bool bAlowTemp, QWidget *parent)
     layout->addWidget(new QLabel(tr("Enter box name:")), row++, 0);
 
     m_pBoxName = new QLineEdit();
-    m_pBoxName->setMaxLength(32); // BOXNAME_COUNT
     m_pBoxName->setText(theAPI->MkNewName("New Box"));
     m_pBoxName->setFocus();
     layout->addWidget(m_pBoxName, row++, 1, 1, 2);

@@ -3789,7 +3789,7 @@ _FX HRESULT WINAPI SH32_IShellWindows_FindWindowSW(
                 if (__sys_GetWindowThreadProcessId)
                     __sys_GetWindowThreadProcessId((HWND)(LONG_PTR)*phwnd, &ownerPid);
                 if (ownerPid) {
-                    WCHAR sbxname[BOXNAME_COUNT];
+                    WCHAR sbxname[BOXNAME_MAX_LEN + 1];
                     LONG st = SbieApi_QueryProcess(
                         (HANDLE)(ULONG_PTR)ownerPid, sbxname, NULL, NULL, NULL);
                     ownerInSandbox = NT_SUCCESS(st) && sbxname[0] != L'\0';

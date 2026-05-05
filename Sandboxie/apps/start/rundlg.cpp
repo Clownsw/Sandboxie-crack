@@ -488,7 +488,7 @@ INT_PTR RunDialogProc(
     static HWND hwndToolTip = NULL;
     HWND ctrl;
     OPENFILENAME ofn;
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR boxname[BOXNAME_MAX_LEN + 1];
     WCHAR title[128];
     TOOLINFO ti;
 

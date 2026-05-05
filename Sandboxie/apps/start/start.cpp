@@ -82,7 +82,7 @@ extern "C" {
 //---------------------------------------------------------------------------
 
 
-WCHAR BoxName[BOXNAME_COUNT];
+WCHAR BoxName[BOXNAME_MAX_LEN + 1];
 WCHAR BoxKey[128+1];
 
 PWSTR ChildCmdLine = NULL;
@@ -506,7 +506,7 @@ BOOL Parse_Command_Line(void)
                 }
             }
 
-            if (tmp == cmd || (cmd - tmp > (BOXNAME_COUNT - 2))) {
+            if (tmp == cmd || (cmd - tmp > BOXNAME_MAX_LEN)) {
 
                 if (run_silent)
                     ExitProcess(ERROR_UNKNOWN_PROPERTY);
@@ -1335,7 +1335,7 @@ struct SDialogParams
     HWND            hYes;
     HWND            hNo;
     HWND            hCancel;
-    WCHAR           BoxName[BOXNAME_COUNT];
+    WCHAR           BoxName[BOXNAME_MAX_LEN + 1];
     WCHAR           ExeName[99];
     WCHAR           AppName[99];
     int             DialogResult;

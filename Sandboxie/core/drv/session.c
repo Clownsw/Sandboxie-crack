@@ -518,7 +518,7 @@ _FX NTSTATUS Session_Api_ForceChildren(PROCESS *proc, ULONG64 *parms)
 {
     HANDLE process_id;
     WCHAR *user_boxname;
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR boxname[BOXNAME_MAX_LEN + 1];
 
     if (proc)
         return STATUS_NOT_IMPLEMENTED;
@@ -531,9 +531,14 @@ _FX NTSTATUS Session_Api_ForceChildren(PROCESS *proc, ULONG64 *parms)
     memzero(boxname, sizeof(boxname));
     user_boxname = (WCHAR *)parms[2];
     if (user_boxname) {
-        ProbeForRead(user_boxname, sizeof(WCHAR) * (BOXNAME_COUNT - 2), sizeof(UCHAR));
-        if (user_boxname[0])
-            wcsncpy(boxname, user_boxname, (BOXNAME_COUNT - 2));
+        SIZE_T n = 0;
+        ProbeForRead(user_boxname, sizeof(WCHAR), sizeof(UCHAR));
+        while (user_boxname[n] && n < BOXNAME_MAX_LEN) {
+            ProbeForRead((WCHAR *)(user_boxname + n), sizeof(WCHAR), sizeof(UCHAR));
+            boxname[n] = user_boxname[n];
+            n++;
+        }
+        boxname[n] = L'\0';
     }
     if(!process_id || process_id == (HANDLE)-1 || !boxname[0])
         return STATUS_INVALID_PARAMETER;

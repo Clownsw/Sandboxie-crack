@@ -1018,18 +1018,28 @@ _FX BOOL SbieDll_RunSandboxed(
     env = File_AllocAndInitEnvironment(NULL, TRUE, TRUE, &env_len);
     env_len /= sizeof(WCHAR);
 
+    ULONG box_len = (ULONG)wcslen(box_name);
+
     req_len = sizeof(PROCESS_RUN_SANDBOXED_REQ)
-            + (cmd_len + dir_len + env_len + 8) * sizeof(WCHAR);
+            + (box_len + cmd_len + dir_len + env_len + 8) * sizeof(WCHAR);
     req = Dll_AllocTemp(req_len);
 
     req->h.length = req_len;
     req->h.msgid = MSGID_PROCESS_RUN_SANDBOXED;
-    wcscpy(req->boxname, box_name);
     req->si_flags = si->dwFlags;
     req->si_show_window = si->wShowWindow;
     req->creation_flags = creation_flags;
 
     ptr = (WCHAR *)((ULONG_PTR)req + sizeof(PROCESS_RUN_SANDBOXED_REQ));
+
+    req->box_ofs = (ULONG)((ULONG_PTR)ptr - (ULONG_PTR)req);
+    req->box_len = box_len;
+    if (box_len) {
+        wmemcpy(ptr, box_name, box_len);
+        ptr += box_len;
+    }
+    *ptr = L'\0';
+    ++ptr;
 
     req->cmd_ofs = (ULONG)((ULONG_PTR)ptr - (ULONG_PTR)req);
     req->cmd_len = cmd_len;

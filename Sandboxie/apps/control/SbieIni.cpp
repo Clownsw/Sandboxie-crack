@@ -159,8 +159,9 @@ BOOL CSbieIni::GetUser(CString &Section, CString &Name, BOOL &IsAdmin)
             if (rpl->h.status == 0) {
                 if (rpl->admin)
                     IsAdmin = TRUE;
-                Section = CString(rpl->section);
-                Name    = CString(rpl->name);
+                WCHAR *section_ptr = (WCHAR *)((UCHAR *)rpl + rpl->section_ofs);
+                Section = CString(section_ptr, rpl->section_len);
+                Name    = CString(rpl->name, rpl->name_len);
             }
             SbieDll_FreeMem(rpl);
         }

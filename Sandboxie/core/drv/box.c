@@ -53,23 +53,23 @@ static BOOLEAN Box_ExpandString(
 
 _FX BOOLEAN Box_IsValidName(const WCHAR *name)
 {
-    int i;
+    const WCHAR *ptr = name;
+    SIZE_T len = 0;
 
-    for (i = 0; i < (BOXNAME_COUNT - 2); ++i) {
-        if (! name[i])
-            break;
-        if (name[i] >= L'0' && name[i] <= L'9')
-            continue;
-        if (name[i] >= L'A' && name[i] <= L'Z')
-            continue;
-        if (name[i] >= L'a' && name[i] <= L'z')
-            continue;
-        if (name[i] == L'_')
-            continue;
+    if (!ptr || !ptr[0])
+        return FALSE;
+
+    while (*ptr) {
+        if (*ptr >= L'0' && *ptr <= L'9') { ptr++; len++; continue; }
+        if (*ptr >= L'A' && *ptr <= L'Z') { ptr++; len++; continue; }
+        if (*ptr >= L'a' && *ptr <= L'z') { ptr++; len++; continue; }
+        if (*ptr == L'_')                { ptr++; len++; continue; }
         return FALSE;
     }
-    if (i == 0 || name[i])
+
+    if (len > BOXNAME_MAX_LEN)
         return FALSE;
+
     return TRUE;
 }
 
@@ -92,8 +92,16 @@ _FX BOX *Box_Alloc(POOL *pool, const WCHAR *boxname, ULONG session_id)
 
     memzero(box, sizeof(BOX));
 
+    box->name_len = (wcslen(boxname) + 1) * sizeof(WCHAR);
+    box->name = Mem_Alloc(pool, box->name_len);
+    if (! box->name) {
+        Mem_Free(box, sizeof(BOX));
+        Log_Status_Ex_Session(
+            MSG_BOX_CREATE, 0x10, STATUS_INSUFFICIENT_RESOURCES,
+            boxname, session_id);
+        return NULL;
+    }
     wcscpy(box->name, boxname);
-    box->name_len = (wcslen(box->name) + 1) * sizeof(WCHAR);
 
     return box;
 }
@@ -107,6 +115,8 @@ _FX BOX *Box_Alloc(POOL *pool, const WCHAR *boxname, ULONG session_id)
 _FX void Box_Free(BOX *box)
 {
     if (box) {
+        if (box->name)
+            Mem_Free(box->name, box->name_len);
         if (box->sid)
             Mem_Free(box->sid, box->sid_len);
         if (box->expand_args)
@@ -282,7 +292,7 @@ _FX BOOLEAN Box_InitPaths(POOL *pool, BOX *box)
         L"\\Sandbox\\%USER%\\%SANDBOX%\\Session_%SESSION%";
 
     const WCHAR *value;
-    WCHAR suffix[80];
+    WCHAR *suffix;
     BOOLEAN ok;
     WCHAR *ptr1;
     WCHAR KeyPath[256];
@@ -292,6 +302,11 @@ _FX BOOLEAN Box_InitPaths(POOL *pool, BOX *box)
     // we look for BoxRootFolder before reverting to the default.
     // if we find it, we use old-style suffix \Sandbox\BoxName.
     //
+
+    ULONG suffix_alloc_len = (wcslen(Driver_Sandbox) + 1 + wcslen(box->name) + 1) * sizeof(WCHAR);
+    suffix = Mem_Alloc(pool, suffix_alloc_len);
+    if (!suffix)
+        return FALSE;
 
     suffix[0] = L'\0';
 
@@ -399,6 +414,8 @@ _FX BOOLEAN Box_InitPaths(POOL *pool, BOX *box)
         } else
             ptr1 += wcslen(ptr1);
     }
+
+    Mem_Free(suffix, suffix_alloc_len);
 
     return TRUE;
 }

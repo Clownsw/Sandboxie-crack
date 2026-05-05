@@ -176,9 +176,9 @@ MSG_HEADER *ProcessServer::KillOneHandler(MSG_HEADER *msg)
 {
     HANDLE CallerProcessId;
     ULONG TargetSessionId;
-    WCHAR TargetBoxName[BOXNAME_COUNT];
+    WCHAR TargetBoxName[BOXNAME_MAX_LEN + 1];
     ULONG CallerSessionId;
-    WCHAR CallerBoxName[BOXNAME_COUNT];
+    WCHAR CallerBoxName[BOXNAME_MAX_LEN + 1];
     NTSTATUS status;
 
     //
@@ -249,9 +249,9 @@ MSG_HEADER *ProcessServer::KillAllHandler(MSG_HEADER *msg)
 {
     HANDLE CallerProcessId;
     ULONG TargetSessionId;
-    WCHAR TargetBoxName[BOXNAME_COUNT];
+    WCHAR *TargetBoxName = NULL;
     ULONG CallerSessionId;
-    WCHAR CallerBoxName[BOXNAME_COUNT];
+    WCHAR CallerBoxName[BOXNAME_MAX_LEN + 1];
     BOOLEAN TerminateJob;
     NTSTATUS status;
 
@@ -264,9 +264,11 @@ MSG_HEADER *ProcessServer::KillAllHandler(MSG_HEADER *msg)
         return SHORT_REPLY(STATUS_INVALID_PARAMETER);
 
     TargetSessionId = req->session_id;
-    wcscpy(TargetBoxName, req->boxname);
-    if (! TargetBoxName[0])
+    TargetBoxName = RunSandboxedCopyString(&req->h, req->box_ofs, req->box_len);
+    if (! TargetBoxName || ! TargetBoxName[0]) {
+        if (TargetBoxName) HeapFree(GetProcessHeap(), 0, TargetBoxName);
         return SHORT_REPLY(STATUS_INVALID_PARAMETER);
+    }
 
     //
     // get session id for caller.  if sandboxed, get also box name
@@ -283,8 +285,10 @@ MSG_HEADER *ProcessServer::KillAllHandler(MSG_HEADER *msg)
 
         CallerSessionId = PipeServer::GetCallerSessionId();
 
-    } else if (status != STATUS_SUCCESS)
+    } else if (status != STATUS_SUCCESS) {
+        HeapFree(GetProcessHeap(), 0, TargetBoxName);
         return SHORT_REPLY(status);
+    }
 
     if (status != STATUS_INVALID_CID) // if this is true the caller is boxed, should be rpcss
         TerminateJob = FALSE; // if rpcss requests box termination, don't use the job method, fix-me: we get some stuck request in the queue
@@ -297,11 +301,15 @@ MSG_HEADER *ProcessServer::KillAllHandler(MSG_HEADER *msg)
 
     if (TargetSessionId == -1)
         TargetSessionId = CallerSessionId;
-    else if (CallerSessionId != TargetSessionId && !PipeServer::IsCallerAdmin())
+    else if (CallerSessionId != TargetSessionId && !PipeServer::IsCallerAdmin()) {
+        HeapFree(GetProcessHeap(), 0, TargetBoxName);
         return SHORT_REPLY(STATUS_ACCESS_DENIED);
+    }
 
-    if (CallerBoxName[0] && _wcsicmp(CallerBoxName, TargetBoxName) != 0)
+    if (CallerBoxName[0] && _wcsicmp(CallerBoxName, TargetBoxName) != 0) {
+        HeapFree(GetProcessHeap(), 0, TargetBoxName);
         return SHORT_REPLY(STATUS_ACCESS_DENIED);
+    }
 
     //
     // kill target processes
@@ -309,6 +317,7 @@ MSG_HEADER *ProcessServer::KillAllHandler(MSG_HEADER *msg)
 
     status = KillAllHelper(TargetBoxName, TargetSessionId, TerminateJob);
 
+    HeapFree(GetProcessHeap(), 0, TargetBoxName);
     return SHORT_REPLY(status);
 }
 
@@ -332,12 +341,19 @@ NTSTATUS ProcessServer::KillAllHelper(const WCHAR *BoxName, ULONG SessionId, BOO
         // try killing the entire job in one go first
         //
 
-        GUI_KILL_JOB_REQ data;
-        data.msgid = GUI_KILL_JOB;
-        if (BoxName) wcscpy(data.boxname, BoxName);
-        else data.boxname[0] = L'\0';
+        ULONG name_len = BoxName ? (ULONG)wcslen(BoxName) : 0;
+        ULONG data_len = sizeof(GUI_KILL_JOB_REQ) + (name_len + 1) * sizeof(WCHAR);
+        GUI_KILL_JOB_REQ *data = (GUI_KILL_JOB_REQ *)HeapAlloc(GetProcessHeap(), 0, data_len);
+        if (data) {
+            data->msgid = GUI_KILL_JOB;
+            data->box_ofs = sizeof(GUI_KILL_JOB_REQ);
+            data->box_len = name_len;
+            if (BoxName) wmemcpy((WCHAR *)((UCHAR *)data + data->box_ofs), BoxName, name_len + 1);
+            else *(WCHAR *)((UCHAR *)data + data->box_ofs) = L'\0';
 
-        GuiServer::GetInstance()->SendMessageToSlave(SessionId, &data, sizeof(data));
+            GuiServer::GetInstance()->SendMessageToSlave(SessionId, data, data_len);
+            HeapFree(GetProcessHeap(), 0, data);
+        }
 
         //
         // as fallback and for the case where jobs are not used run the manual termination
@@ -516,6 +532,7 @@ MSG_HEADER *ProcessServer::RunSandboxedHandler(MSG_HEADER *msg)
     WCHAR *cmd = RunSandboxedCopyString(&req->h, req->cmd_ofs, req->cmd_len);
     WCHAR *dir = RunSandboxedCopyString(&req->h, req->dir_ofs, req->dir_len);
     WCHAR *env = RunSandboxedCopyString(&req->h, req->env_ofs, req->env_len);
+    WCHAR *req_boxname = RunSandboxedCopyString(&req->h, req->box_ofs, req->box_len);
 
     PROCESS_INFORMATION piReply;
     memzero(&piReply, sizeof(PROCESS_INFORMATION));
@@ -548,7 +565,7 @@ MSG_HEADER *ProcessServer::RunSandboxedHandler(MSG_HEADER *msg)
 
             LONG_PTR BoxNameOrModelPid;
             bool CallerInSandbox;
-            WCHAR boxname[BOXNAME_COUNT] = { 0 };
+            WCHAR boxname[BOXNAME_MAX_LEN + 1] = { 0 };
             WCHAR sid[96];
             ULONG session_id;
             BOOL FilterHandles = FALSE;
@@ -564,18 +581,18 @@ MSG_HEADER *ProcessServer::RunSandboxedHandler(MSG_HEADER *msg)
                 }
             } else {
                 CallerInSandbox = false;
-                if (*req->boxname == L'-') {
-                    int Pid = _wtoi(req->boxname + 1);
+                if (*req_boxname == L'-') {
+                    int Pid = _wtoi(req_boxname + 1);
                     SbieApi_QueryProcess((HANDLE)(ULONG_PTR)Pid, boxname, NULL, sid, &session_id);
                     BoxNameOrModelPid = -Pid;
                 } else {
-                    BoxNameOrModelPid = (LONG_PTR)req->boxname;
-                    wcscpy(boxname, req->boxname);
+                    BoxNameOrModelPid = (LONG_PTR)req_boxname;
+                    wcscpy(boxname, req_boxname);
                 }
             }
 
 #ifndef DRV_BREAKOUT
-            if (CallerInSandbox && wcscmp(req->boxname, L"*UNBOXED*") == 0 && *cmd == L'\"') {
+            if (CallerInSandbox && wcscmp(req_boxname, L"*UNBOXED*") == 0 && *cmd == L'\"') {
 
                 //ULONG flags = 0;
                 //if (!NT_SUCCESS(SbieApi_Call(API_QUERY_DRIVER_INFO, 2, 0, (ULONG_PTR)&flags)) || (flags & SBIE_FEATURE_FLAG_CERTIFIED) == 0) {
@@ -614,7 +631,7 @@ MSG_HEADER *ProcessServer::RunSandboxedHandler(MSG_HEADER *msg)
                             // check if it should end up in another box
                             //
 
-                            WCHAR BoxName[BOXNAME_COUNT];
+                            WCHAR BoxName[BOXNAME_MAX_LEN + 1];
                             int index = -1;
                             while (1) {
                                 index = SbieApi_EnumBoxesEx(index, BoxName, TRUE);
@@ -735,6 +752,8 @@ MSG_HEADER *ProcessServer::RunSandboxedHandler(MSG_HEADER *msg)
         HeapFree(GetProcessHeap(), 0, dir);
     if (cmd)
         HeapFree(GetProcessHeap(), 0, cmd);
+    if (req_boxname)
+        HeapFree(GetProcessHeap(), 0, req_boxname);
 
     if (lvl) {
 
@@ -1408,7 +1427,7 @@ WCHAR *ProcessServer::RunSandboxedComServer(ULONG CallerProcessId)
     if ((CallerProcessFlags & (_FlagsOn | _FlagsOff)) != _FlagsOn)
         return NULL;
 
-    WCHAR CallerBoxName[BOXNAME_COUNT];
+    WCHAR CallerBoxName[BOXNAME_MAX_LEN + 1];
     if (0 != SbieApi_QueryProcess(
                             CallerPid, CallerBoxName, NULL, NULL, NULL))
         return NULL;
@@ -2125,7 +2144,7 @@ MSG_HEADER *ProcessServer::SuspendOneHandler(MSG_HEADER *msg)
 {
     HANDLE CallerProcessId;
     ULONG TargetSessionId;
-    WCHAR TargetBoxName[BOXNAME_COUNT];
+    WCHAR TargetBoxName[BOXNAME_MAX_LEN + 1];
     ULONG CallerSessionId;
     NTSTATUS status;
 
@@ -2194,7 +2213,7 @@ MSG_HEADER *ProcessServer::SuspendAllHandler(MSG_HEADER *msg)
 {
     HANDLE CallerProcessId;
     ULONG TargetSessionId;
-    WCHAR TargetBoxName[BOXNAME_COUNT];
+    WCHAR *TargetBoxName = NULL;
     ULONG CallerSessionId;
     //BOOLEAN FreezeJob;
     //NTSTATUS status;
@@ -2208,9 +2227,11 @@ MSG_HEADER *ProcessServer::SuspendAllHandler(MSG_HEADER *msg)
         return SHORT_REPLY(STATUS_INVALID_PARAMETER);
 
     TargetSessionId = req->session_id;
-    wcscpy(TargetBoxName, req->boxname);
-    if (! TargetBoxName[0])
+    TargetBoxName = RunSandboxedCopyString(&req->h, req->box_ofs, req->box_len);
+    if (! TargetBoxName || ! TargetBoxName[0]) {
+        if (TargetBoxName) HeapFree(GetProcessHeap(), 0, TargetBoxName);
         return SHORT_REPLY(STATUS_INVALID_PARAMETER);
+    }
 
     //
     // get session id for caller.
@@ -2223,8 +2244,10 @@ MSG_HEADER *ProcessServer::SuspendAllHandler(MSG_HEADER *msg)
     // only unsandboxed programs are allowed to use this mechanism
     //
 
-    if(SbieApi_QueryProcessInfo((HANDLE)(ULONG_PTR)CallerProcessId, 0))
+    if(SbieApi_QueryProcessInfo((HANDLE)(ULONG_PTR)CallerProcessId, 0)) {
+        HeapFree(GetProcessHeap(), 0, TargetBoxName);
         return SHORT_REPLY(STATUS_ACCESS_DENIED);
+    }
 
     //FreezeJob = FALSE;
 
@@ -2234,8 +2257,10 @@ MSG_HEADER *ProcessServer::SuspendAllHandler(MSG_HEADER *msg)
 
     if (TargetSessionId == -1)
         TargetSessionId = CallerSessionId;
-    else if (CallerSessionId != TargetSessionId && !PipeServer::IsCallerAdmin())
+    else if (CallerSessionId != TargetSessionId && !PipeServer::IsCallerAdmin()) {
+        HeapFree(GetProcessHeap(), 0, TargetBoxName);
         return SHORT_REPLY(STATUS_ACCESS_DENIED);
+    }
 
     //
     // suspend/resume target processes
@@ -2247,6 +2272,8 @@ MSG_HEADER *ProcessServer::SuspendAllHandler(MSG_HEADER *msg)
 
     ULONG* pids = (ULONG*)HeapAlloc(GetProcessHeap(), HEAP_GENERATE_EXCEPTIONS, sizeof(ULONG) * pid_count);
     SbieApi_EnumProcessEx(TargetBoxName, FALSE, TargetSessionId, pids, &pid_count); // query pids
+
+    HeapFree(GetProcessHeap(), 0, TargetBoxName);
 
     for (ULONG i = 0; i < pid_count; ++i) {
 

@@ -760,7 +760,7 @@ _FX BOOLEAN Gui_PostThreadMessage_Check(ULONG idThread, UINT uMsg)
     //
 
     HANDLE ThreadHandle;
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR boxname[BOXNAME_MAX_LEN + 1];
     WCHAR temp[48];
     NTSTATUS status;
     ULONG ProcessId;

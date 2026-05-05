@@ -111,7 +111,7 @@ _FX NTSTATUS Process_Api_Start(PROCESS *proc, ULONG64 *parms)
         // thread impersonation token specifies SID and session
         //
 
-        WCHAR boxname[BOXNAME_COUNT];
+        WCHAR boxname[BOXNAME_MAX_LEN + 1];
 
         void *TokenObject;
         BOOLEAN CopyOnOpen;
@@ -617,7 +617,7 @@ _FX NTSTATUS Process_Api_QueryBoxPath(PROCESS *proc, ULONG64 *parms)
 
     } else {
 
-        WCHAR boxname[BOXNAME_COUNT];
+        WCHAR boxname[BOXNAME_MAX_LEN + 1];
         BOOLEAN ok = Api_CopyBoxNameFromUser(
             boxname, (WCHAR *)args->box_name.val);
         if (! ok)
@@ -1067,10 +1067,10 @@ _FX NTSTATUS Process_Api_Enum(PROCESS *proc, ULONG64 *parms)
     NTSTATUS status;
     ULONG count;
     ULONG *user_pids;                   // user mode ULONG [512]
-    WCHAR *user_boxname;                // user mode WCHAR [BOXNAME_COUNT]
+    WCHAR *user_boxname;                // user mode WCHAR [BOXNAME_MAX_LEN + 1]
     BOOLEAN all_sessions;
     ULONG session_id;
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR boxname[BOXNAME_MAX_LEN + 1];
     ULONG *user_count;
 
     // get boxname from second parameter
@@ -1080,9 +1080,14 @@ _FX NTSTATUS Process_Api_Enum(PROCESS *proc, ULONG64 *parms)
         wcscpy(boxname, proc->box->name);
     user_boxname = (WCHAR *)parms[2];
     if ((! boxname[0]) && user_boxname) {
-        ProbeForRead(user_boxname, sizeof(WCHAR) * (BOXNAME_COUNT - 2), sizeof(UCHAR));
-        if (user_boxname[0])
-            wcsncpy(boxname, user_boxname, (BOXNAME_COUNT - 2));
+        SIZE_T n = 0;
+        ProbeForRead(user_boxname, sizeof(WCHAR), sizeof(UCHAR));
+        while (user_boxname[n] && n < BOXNAME_MAX_LEN) {
+            ProbeForRead((WCHAR *)(user_boxname + n), sizeof(WCHAR), sizeof(UCHAR));
+            boxname[n] = user_boxname[n];
+            n++;
+        }
+        boxname[n] = L'\0';
     }
 
     // get "all users/current user only" flag from third parameter

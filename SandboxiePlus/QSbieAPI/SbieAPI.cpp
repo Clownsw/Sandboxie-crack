@@ -1070,8 +1070,10 @@ QString CSbieAPI::GetUserSection(QString* pUserName, bool* pIsAdmin) const
 
 	if (rpl->h.status == 0) {
 		if (pIsAdmin) *pIsAdmin = rpl->admin;
-		UserSection = QString::fromWCharArray(rpl->section);
-		if (pUserName) *pUserName = QString::fromWCharArray(rpl->name);
+		SBIE_INI_GET_USER_RPL *rplRaw = rpl;
+		WCHAR *section_ptr = (WCHAR *)((UCHAR *)rplRaw + rplRaw->section_ofs);
+		UserSection = QString::fromWCharArray(section_ptr, rplRaw->section_len);
+		if (pUserName) *pUserName = QString::fromWCharArray(rplRaw->name, rplRaw->name_len);
 	}
 
 	return UserSection;
@@ -1408,7 +1410,7 @@ QString CSbieAPI::SbieIniGet2(const QString& Section, const QString& Setting, qu
 
 SB_STATUS CSbieAPI::ValidateName(const QString& BoxName)
 {
-	if (BoxName.length() > (BOXNAME_COUNT - 2) || BoxName.isEmpty())
+	if (BoxName.isEmpty() || BoxName.length() > BOXNAME_MAX_LEN)
 		return SB_ERR(SB_NameLenLimit);
 
 	/* invalid file name characters on windows
@@ -1475,8 +1477,8 @@ SB_STATUS CSbieAPI::CreateBox(const QString& BoxName, bool bReLoad)
 
 SB_STATUS CSbieAPI__GetProcessPIDs(SSbieAPI* m, const QString& BoxName, bool bAllSessions, ULONG* pids, ULONG* count)
 {
-	WCHAR box_name[BOXNAME_COUNT];
-	BoxName.toWCharArray(box_name); // fix-me: potential overflow
+	WCHAR box_name[BOXNAME_MAX_LEN + 1];
+	BoxName.toWCharArray(box_name);
 	box_name[BoxName.size()] = L'\0';
 	BOOLEAN all_sessions = bAllSessions ? TRUE : false;
 	ULONG which_session = -1; // -1 means current session, ignoreewd when all_sessions == true
@@ -1650,7 +1652,7 @@ SB_STATUS CSbieAPI::UpdateBoxPaths(CSandBox* pSandBox)
 
 SB_STATUS CSbieAPI::UpdateProcessInfo(const CBoxedProcessPtr& pProcess)
 {
-	WCHAR box_name[BOXNAME_COUNT] = { 0 };
+	WCHAR box_name[BOXNAME_MAX_LEN + 1] = { 0 };
 	WCHAR image_name[MAX_PATH];
 	//WCHAR sid[96];
 	ULONG session_id;
@@ -1753,15 +1755,21 @@ quint64 CSbieAPI::QueryProcessInfo(quint32 ProcessId, quint32 InfoClass)
 
 SB_STATUS CSbieAPI::TerminateAll(const QString& BoxName)
 {
-	PROCESS_KILL_ALL_REQ req;
-	req.h.length = sizeof(PROCESS_KILL_ALL_REQ);
-	req.h.msgid = MSGID_PROCESS_KILL_ALL;
-	req.session_id = -1;
-	BoxName.toWCharArray(req.boxname); // fix-me: potential overflow
-	req.boxname[BoxName.size()] = L'\0';
+	ULONG name_len = (ULONG)BoxName.length();
+	ULONG req_len = sizeof(PROCESS_KILL_ALL_REQ) + (name_len + 1) * sizeof(WCHAR);
+	SScoped<PROCESS_KILL_ALL_REQ> req(malloc(req_len));
+	memset(req, 0, req_len);
+
+	req->h.length = req_len;
+	req->h.msgid = MSGID_PROCESS_KILL_ALL;
+	req->session_id = -1;
+	req->box_ofs = sizeof(PROCESS_KILL_ALL_REQ);
+	req->box_len = name_len;
+	BoxName.toWCharArray((WCHAR*)((UCHAR*)req.Value() + req->box_ofs));
+	((WCHAR*)((UCHAR*)req.Value() + req->box_ofs))[name_len] = L'\0';
 
 	SScoped<MSG_HEADER> rpl;
-	SB_STATUS Status = CallServer(&req.h, &rpl);
+	SB_STATUS Status = CallServer(&req->h, &rpl);
 	if (!Status || !rpl)
 		return Status;
 	if(rpl->status != 0) 
@@ -1802,16 +1810,22 @@ SB_STATUS CSbieAPI::Terminate(quint32 ProcessId)
 
 SB_STATUS CSbieAPI::SetSuspendedAll(const QString& BoxName, bool bSuspended)
 {
-	PROCESS_SUSPEND_RESUME_ALL_REQ req;
-	req.h.length = sizeof(PROCESS_SUSPEND_RESUME_ALL_REQ);
-	req.h.msgid = MSGID_PROCESS_SUSPEND_RESUME_ALL;
-	req.session_id = -1;
-	BoxName.toWCharArray(req.boxname); // fix-me: potential overflow
-	req.boxname[BoxName.size()] = L'\0';
-	req.suspend = bSuspended ? TRUE : FALSE;
+	ULONG name_len = (ULONG)BoxName.length();
+	ULONG req_len = sizeof(PROCESS_SUSPEND_RESUME_ALL_REQ) + (name_len + 1) * sizeof(WCHAR);
+	SScoped<PROCESS_SUSPEND_RESUME_ALL_REQ> req(malloc(req_len));
+	memset(req, 0, req_len);
+
+	req->h.length = req_len;
+	req->h.msgid = MSGID_PROCESS_SUSPEND_RESUME_ALL;
+	req->session_id = -1;
+	req->box_ofs = sizeof(PROCESS_SUSPEND_RESUME_ALL_REQ);
+	req->box_len = name_len;
+	BoxName.toWCharArray((WCHAR*)((UCHAR*)req.Value() + req->box_ofs));
+	((WCHAR*)((UCHAR*)req.Value() + req->box_ofs))[name_len] = L'\0';
+	req->suspend = bSuspended ? TRUE : FALSE;
 
 	SScoped<MSG_HEADER> rpl;
-	SB_STATUS Status = CallServer(&req.h, &rpl);
+	SB_STATUS Status = CallServer(&req->h, &rpl);
 	if (!Status || !rpl)
 		return Status;
 	if(rpl->status != 0) 
@@ -1949,18 +1963,17 @@ SB_STATUS CSbieAPI::RunSandboxed(const QString& BoxName, const QString& Command,
 	ULONG dir_len = WrkDir.length();
 	QByteArray env = MakeEnvironment(true);
 	ULONG env_len = (env.size() - 1) / sizeof(WCHAR);
+	ULONG box_len = (ULONG)BoxName.length();
 
-	ULONG req_len = sizeof(PROCESS_RUN_SANDBOXED_REQ) + (cmd_len + dir_len + env_len + 8) * sizeof(WCHAR);
+	ULONG req_len = sizeof(PROCESS_RUN_SANDBOXED_REQ) + (box_len + cmd_len + dir_len + env_len + 8) * sizeof(WCHAR);
 	SScoped<PROCESS_RUN_SANDBOXED_REQ> req(malloc(req_len));
 	memset(req, 0, req_len);
 
 	req->h.length = req_len;
 	req->h.msgid = MSGID_PROCESS_RUN_SANDBOXED;
-	BoxName.toWCharArray(req->boxname); // fix-me: potential overflow
-	req->boxname[BoxName.length()] = L'\0';
 	req->si_flags = STARTF_FORCEOFFFEEDBACK;
 /*#ifdef _DEBUG
-	if ((QGuiApplication::queryKeyboardModifiers() & Qt::ShiftModifier) != 0)
+	if ((QGuiApplication::queryKeyboardModifiers() & Qt::ShiftModifier) != 0) 
 		req->si_flags |= 0x80000000;
 #endif*/
 	req->si_show_window = wShowWindow;
@@ -1969,6 +1982,14 @@ SB_STATUS CSbieAPI::RunSandboxed(const QString& BoxName, const QString& Command,
 	req->creation_flags = Flags;
 
 	WCHAR* ptr = (WCHAR*)((ULONG_PTR)req.Value() + sizeof(PROCESS_RUN_SANDBOXED_REQ));
+
+	req->box_ofs = (ULONG)((ULONG_PTR)ptr - (ULONG_PTR)req.Value());
+	req->box_len = box_len;
+	if (box_len) {
+		BoxName.toWCharArray(ptr);
+		ptr += box_len;
+	}
+	*ptr++ = L'\0';
 
 	req->cmd_ofs = (ULONG)((ULONG_PTR)ptr - (ULONG_PTR)req.Value());
 	req->cmd_len = cmd_len;

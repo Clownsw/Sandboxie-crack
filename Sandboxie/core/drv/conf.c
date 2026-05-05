@@ -875,7 +875,7 @@ _FX NTSTATUS Conf_Import_Includes(CONF_DATA *data, ULONG session_id, const WCHAR
     ULONG BufferSize = 1024;
     PVOID Buffer = NULL;
 	
-	path_len = (wcslen(include_path) + 6 + BOXNAME_COUNT + 4) * sizeof(WCHAR); // \??\C:\...\RootPath\BoxName.ini
+	path_len = (wcslen(include_path) + 6 + BOXNAME_MAX_LEN + 4) * sizeof(WCHAR); // \??\C:\...\RootPath\BoxName.ini
     path = Mem_Alloc(data->pool, path_len);
     if (!path) {
         status = STATUS_INSUFFICIENT_RESOURCES;
@@ -921,7 +921,7 @@ _FX NTSTATUS Conf_Import_Includes(CONF_DATA *data, ULONG session_id, const WCHAR
         PFILE_DIRECTORY_INFORMATION FileInfo = (PFILE_DIRECTORY_INFORMATION)Buffer;
         for(;;) {
 
-            if(FileInfo->FileNameLength/sizeof(WCHAR) > BOXNAME_COUNT + 4 || FileInfo->FileNameLength/sizeof(WCHAR) < 5)
+            if(FileInfo->FileNameLength/sizeof(WCHAR) > BOXNAME_MAX_LEN + 4 || FileInfo->FileNameLength/sizeof(WCHAR) < 5)
                 goto next; // the filename is to long or to short, skip this file
 
 			DirectoryPath.Buffer[DirectoryPath.Length / sizeof(WCHAR)] = L'\\';
@@ -1270,8 +1270,8 @@ _FX NTSTATUS Conf_Merge_Template(
 {
     CONF_SECTION *tmpl = NULL;
 
-    WCHAR section_name[130]; // 128 + 2 // max regular section length is 64
-    if (wcslen(tmpl_name) < 119) { // 128 - wcslen(Conf_Template_)
+    WCHAR section_name[BOXNAME_MAX_LEN + 20]; // Template_ prefix + box name
+    if (wcslen(tmpl_name) < BOXNAME_MAX_LEN + 9) { // BOXNAME_MAX_LEN + wcslen("Template_")
         wcscpy(section_name, Conf_Template_);
         wcscat(section_name, tmpl_name);
         tmpl = Conf_Get_Section(data, section_name);

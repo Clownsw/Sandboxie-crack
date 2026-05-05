@@ -146,7 +146,7 @@ _FX WCHAR *BoxOrder_ReadSetting(const WCHAR *section_name)
             }
         }
         if (rpl && rpl->h.status == 0)
-            section_name = rpl->section;
+            section_name = (WCHAR *)((UCHAR *)rpl + rpl->section_ofs);
     }
 
     if (section_name) {
@@ -318,7 +318,7 @@ _FX int BoxOrder_ReadFindBox(BOX_ORDER_ENTRY *entry, const WCHAR *name)
 
 _FX void BoxOrder_ReadMissing(BOX_ORDER_ENTRY *parent)
 {
-    WCHAR work_name[BOXNAME_COUNT], *all_names, *name;
+    WCHAR work_name[BOXNAME_MAX_LEN + 1], *all_names, *name;
     int box_count, box_index, name_index, small_index, alloc_len;
 
     box_count = 0;
@@ -334,13 +334,13 @@ _FX void BoxOrder_ReadMissing(BOX_ORDER_ENTRY *parent)
     if (! box_count)
         return;
 
-    alloc_len = box_count * (BOXNAME_COUNT * sizeof(WCHAR));
+    alloc_len = box_count * ((BOXNAME_MAX_LEN + 1) * sizeof(WCHAR));
     all_names = HeapAlloc(GetProcessHeap(), 0, alloc_len);
 
     name_index = 0;
     box_index = -1;
     while (name_index < box_count) {
-        name = &all_names[name_index * BOXNAME_COUNT];
+        name = &all_names[name_index * (BOXNAME_MAX_LEN + 1)];
         box_index = SbieApi_EnumBoxesEx(
                         box_index, name, TRUE);
         if (box_index == -1)
@@ -352,13 +352,13 @@ _FX void BoxOrder_ReadMissing(BOX_ORDER_ENTRY *parent)
     while (1) {
         small_index = -1;
         for (name_index = 0; name_index < box_count; ++name_index) {
-            name = &all_names[name_index * BOXNAME_COUNT];
+            name = &all_names[name_index * (BOXNAME_MAX_LEN + 1)];
             if (! *name)
                 continue;
             if (small_index == -1)
                 small_index = name_index;
             else {
-                const WCHAR *small_name = &all_names[small_index * BOXNAME_COUNT];
+                const WCHAR *small_name = &all_names[small_index * (BOXNAME_MAX_LEN + 1)];
                 if (_wcsicmp(small_name, name) > 0)
                     small_index = name_index;
             }
@@ -366,7 +366,7 @@ _FX void BoxOrder_ReadMissing(BOX_ORDER_ENTRY *parent)
 
         if (small_index == -1)
             break;
-        name = &all_names[small_index * BOXNAME_COUNT];
+        name = &all_names[small_index * (BOXNAME_MAX_LEN + 1)];
         if (! BoxOrder_ReadFindBox(parent, name)) {
 
             BOX_ORDER_ENTRY *new_entry = BoxOrder_Alloc(name);

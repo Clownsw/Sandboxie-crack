@@ -528,7 +528,7 @@ MSG_HEADER *TerminalServer::GetUserToken(MSG_HEADER *msg)
 
     } else {
 
-        WCHAR boxname[BOXNAME_COUNT];
+        WCHAR boxname[BOXNAME_MAX_LEN + 1];
         boxname[0] = L'\0';
         SbieApi_QueryProcess(idProcess, boxname, NULL, NULL, NULL);
 

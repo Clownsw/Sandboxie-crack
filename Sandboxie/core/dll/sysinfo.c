@@ -345,7 +345,7 @@ _FX void SysInfo_DiscardProcesses(SYSTEM_PROCESS_INFORMATION *buf)
 {
     SYSTEM_PROCESS_INFORMATION *curr = buf;
     SYSTEM_PROCESS_INFORMATION *next;
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR boxname[BOXNAME_MAX_LEN + 1];
 
 	BOOL hideOther = SbieApi_QueryConfBool(NULL, L"HideOtherBoxes", TRUE);
     BOOL hideNonSys = SbieApi_QueryConfBool(NULL, L"HideNonSystemProcesses", FALSE);

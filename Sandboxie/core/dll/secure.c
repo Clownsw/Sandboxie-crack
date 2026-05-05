@@ -1698,7 +1698,7 @@ _FX BOOLEAN Secure_IsLocalSystemToken(BOOLEAN CheckThreadToken)
 
 _FX BOOLEAN Secure_IsSameBox(HANDLE idProcess)
 {
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR boxname[BOXNAME_MAX_LEN + 1];
     ULONG session_id;
     NTSTATUS status =
         SbieApi_QueryProcess(idProcess, boxname, NULL, NULL, &session_id);

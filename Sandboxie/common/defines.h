@@ -51,9 +51,13 @@
 #define PAGE_SIZE 4096
 #endif
 
+// BOXNAME_COUNT is the legacy minimum buffer hint for stack allocations.
+// Box name validation no longer uses this as a hard limit.
+// Actual box names can be up to CONF_LINE_LEN characters.
 #define BOXNAME_COUNT				(38 + 2)
 
 #define CONF_LINE_LEN               2000
+#define BOXNAME_MAX_LEN             (CONF_LINE_LEN - 1)
 #define CONF_MAX_LINES              100000
 
 #define CONF_UPDATE_VALUE		    1

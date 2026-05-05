@@ -77,7 +77,7 @@ void DriverAssist::InjectLow(void *_msg)
 		goto finish;
 	}
 
-	WCHAR boxname[BOXNAME_COUNT];
+	WCHAR boxname[BOXNAME_MAX_LEN + 1];
     if (!NT_SUCCESS(SbieApi_QueryProcessEx2((HANDLE)msg->process_id, 0, boxname, NULL, NULL, NULL, NULL))) {
         errlvl = 0x11;
         goto finish;

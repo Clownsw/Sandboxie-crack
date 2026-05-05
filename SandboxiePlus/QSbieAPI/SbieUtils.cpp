@@ -644,8 +644,7 @@ bool CSbieUtils::GetStartMenuShortcut(CSbieAPI* pApi, QString &BoxName, QString 
 	
 
 	struct SLnk {
-		WCHAR box_name[BOXNAME_COUNT];		//0
-		WCHAR reserved[64 - BOXNAME_COUNT];	//40
+		WCHAR box_name[64];			//0 - fixed 64 WCHARs for binary compat
 		WCHAR link_path[956];				//64
 		ULONG IconIndex;					//1020
 		WCHAR unused[2];					//1022

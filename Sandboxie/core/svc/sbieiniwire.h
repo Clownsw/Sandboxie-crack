@@ -103,9 +103,10 @@ struct tagSBIE_INI_GET_USER_RPL
 {
     MSG_HEADER h;       // status is STATUS_SUCCESS or STATUS_UNSUCCESSFUL
     BOOLEAN admin;
-    WCHAR section[BOXNAME_COUNT];
+    ULONG section_ofs;  // byte offset to section name string
+    ULONG section_len;  // WCHAR count, excluding NULL
     ULONG name_len;
-    WCHAR name[1];
+    WCHAR name[1];      // variable-length: section name at section_ofs, then username
 };
 
 typedef struct tagSBIE_INI_GET_USER_REQ SBIE_INI_GET_USER_REQ;
@@ -122,7 +123,7 @@ struct tagSBIE_INI_SETTING_REQ
     MSG_HEADER h;
     WCHAR password[66];
     BOOLEAN refresh;
-    WCHAR section[66];
+    WCHAR section[260];     // box name or section name (increased for long box names)
     WCHAR setting[66];
     ULONG value_len;
     WCHAR value[1];

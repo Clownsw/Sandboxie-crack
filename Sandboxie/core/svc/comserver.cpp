@@ -96,7 +96,7 @@ typedef struct _COM_SLAVE {
     LIST_ELEM list_elem;
 
     WCHAR SidString[96];
-    WCHAR BoxName[BOXNAME_COUNT];
+    WCHAR BoxName[BOXNAME_MAX_LEN + 1];
     ULONG SessionId;
     BOOLEAN IsWow64;
 
@@ -678,7 +678,7 @@ void *ComServer::LockSlave(HANDLE idProcess, ULONG msgid)
     ULONG session_id;
     union {
         struct {
-            WCHAR boxname[BOXNAME_COUNT];
+            WCHAR boxname[BOXNAME_MAX_LEN + 1];
             WCHAR sid[96];
         } s;
         WCHAR path[192];

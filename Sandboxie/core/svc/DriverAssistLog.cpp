@@ -274,15 +274,17 @@ void DriverAssist::LogMessage_Multi(
     ptr = ptr2;
     while (ptr > text && *ptr != L'[')
         --ptr;
-    if ((ptr == text) || (ptr2 - ptr <= 1) || (ptr2 - ptr > BOXNAME_COUNT))
+    if ((ptr == text) || (ptr2 - ptr <= 1) || (ptr2 - ptr > BOXNAME_MAX_LEN))
         return;
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR *boxname = (WCHAR*)HeapAlloc(GetProcessHeap(), 0, (ptr2 - ptr + 1) * sizeof(WCHAR));
     wmemcpy(boxname, ptr + 1, ptr2 - ptr - 1);
     boxname[ptr2 - ptr - 1] = L'\0';
 
     LONG rc = SbieApi_IsBoxEnabled(boxname);
-    if (rc != STATUS_SUCCESS && rc != STATUS_ACCOUNT_RESTRICTION)
+    if (rc != STATUS_SUCCESS && rc != STATUS_ACCOUNT_RESTRICTION) {
+        HeapFree(GetProcessHeap(), 0, boxname);
         return;
+    }
 
     // append _boxname to log file name
     ptr = wcsrchr((WCHAR*)path, L'.');
@@ -291,8 +293,10 @@ void DriverAssist::LogMessage_Multi(
     ULONG len = wcslen(path) + 128;
     WCHAR *path2 = (WCHAR *)HeapAlloc(
                                 GetProcessHeap(), 0, len * sizeof(WCHAR));
-    if (! path2)
+    if (! path2) {
+        HeapFree(GetProcessHeap(), 0, boxname);
         return;
+    }
     wmemcpy(path2, path, ptr - path);
     path2[ptr - path] = L'_';
     wcscpy(&path2[ptr - path + 1], boxname);
@@ -301,6 +305,7 @@ void DriverAssist::LogMessage_Multi(
     LogMessage_Write(path2, text);
 
     HeapFree(GetProcessHeap(), 0, path2);
+    HeapFree(GetProcessHeap(), 0, boxname);
 }
 
 

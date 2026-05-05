@@ -1011,13 +1011,18 @@ _FX BOOLEAN Key_MountHive3(
                 else {
                     ok = TRUE;
 
-                    SVC_REGHIVE_MSG msg;
+                    ULONG name_wcs = (ULONG)wcslen(proc->box->name);
+                    ULONG msg_size = sizeof(SVC_REGHIVE_MSG) + name_wcs * sizeof(WCHAR);
+                    SVC_REGHIVE_MSG *msg = Mem_Alloc(Driver_Pool, msg_size);
+                    if (msg) {
+                        msg->process_id = (ULONG)(ULONG_PTR)proc->pid;
+                        msg->session_id = proc->box->session_id;
+                        msg->name_len = name_wcs;
+                        wmemcpy(msg->boxname, proc->box->name, name_wcs + 1);
 
-                    msg.process_id = (ULONG)(ULONG_PTR)proc->pid;
-                    msg.session_id = proc->box->session_id;
-                    wcscpy(msg.boxname, proc->box->name);
-
-                    Api_SendServiceMessage(SVC_MOUNTED_HIVE, sizeof(msg), &msg);
+                        Api_SendServiceMessage(SVC_MOUNTED_HIVE, msg_size, msg);
+                        Mem_Free(msg, msg_size);
+                    }
                 }
 
                 //
@@ -1242,13 +1247,18 @@ _FX BOOLEAN Key_MountHive4(
     else {
         ok = TRUE;
 
-        SVC_REGHIVE_MSG msg;
+        ULONG name_wcs = (ULONG)wcslen(proc->box->name);
+        ULONG msg_size = sizeof(SVC_REGHIVE_MSG) + name_wcs * sizeof(WCHAR);
+        SVC_REGHIVE_MSG *msg = Mem_Alloc(Driver_Pool, msg_size);
+        if (msg) {
+            msg->process_id = (ULONG)(ULONG_PTR)proc->pid;
+            msg->session_id = proc->box->session_id;
+            msg->name_len = name_wcs;
+            wmemcpy(msg->boxname, proc->box->name, name_wcs + 1);
 
-        msg.process_id = (ULONG)(ULONG_PTR)proc->pid;
-        msg.session_id = proc->box->session_id;
-        wcscpy(msg.boxname, proc->box->name);
-
-        Api_SendServiceMessage(SVC_MOUNTED_HIVE, sizeof(msg), &msg);
+            Api_SendServiceMessage(SVC_MOUNTED_HIVE, msg_size, msg);
+            Mem_Free(msg, msg_size);
+        }
     }
 
     return ok;
@@ -1296,13 +1306,18 @@ _FX void Key_UnmountHive(PROCESS *proc)
 
     if (send_msg) {
 
-        SVC_REGHIVE_MSG msg;
+        ULONG name_wcs = (ULONG)wcslen(proc->box->name);
+        ULONG msg_size = sizeof(SVC_REGHIVE_MSG) + name_wcs * sizeof(WCHAR);
+        SVC_REGHIVE_MSG *msg = Mem_Alloc(Driver_Pool, msg_size);
+        if (msg) {
+            msg->process_id = (ULONG)(ULONG_PTR)proc->pid;
+            msg->session_id = proc->box->session_id;
+            msg->name_len = name_wcs;
+            wmemcpy(msg->boxname, proc->box->name, name_wcs + 1);
 
-        msg.process_id = (ULONG)(ULONG_PTR)proc->pid;
-        msg.session_id = proc->box->session_id;
-        wcscpy(msg.boxname, proc->box->name);
-
-        Api_SendServiceMessage(SVC_UNMOUNT_HIVE, sizeof(msg), &msg);
+            Api_SendServiceMessage(SVC_UNMOUNT_HIVE, msg_size, msg);
+            Mem_Free(msg, msg_size);
+        }
     }
 }
 

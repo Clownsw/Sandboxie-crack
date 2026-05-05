@@ -470,7 +470,7 @@ _FX void *Scm_QueryBoxedServiceByName(
         //
 
         ULONG pid;
-        WCHAR boxname[BOXNAME_COUNT];
+        WCHAR boxname[BOXNAME_MAX_LEN + 1];
         WCHAR imagename[96];
         ULONG session_id;
         WCHAR *ptr, *ptr2;

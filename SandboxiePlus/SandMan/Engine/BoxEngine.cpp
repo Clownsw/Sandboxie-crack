@@ -398,7 +398,7 @@ QSharedPointer<CSbieIni> CWizardEngine::MakeShadow(const QSharedPointer<CSbieIni
     if (!pShadow.pShadow) {
         QString ShadowName = pIni->GetName();
         QString Suffix = "_Shadow"; // do not translate must be a valid sandbox name suffix
-        ShadowName.truncate(32 - (Suffix.length() + 3)); // BOXNAME_COUNT
+        ShadowName.truncate(BOXNAME_MAX_LEN - (Suffix.length() + 3));
         ShadowName = theAPI->MkNewName(ShadowName.append(Suffix));
 
 		QList<CSbieIni::SbieIniValue> Settings = pIni->GetIniSection();

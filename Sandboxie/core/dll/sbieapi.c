@@ -581,7 +581,7 @@ _FX LONG SbieApi_QueryProcessEx2(
 
     if (out_box_name_wchar34) {
         BoxName.Length = 0;
-        BoxName.MaximumLength = (USHORT)(sizeof(WCHAR) * BOXNAME_COUNT);
+        BoxName.MaximumLength = (USHORT)(sizeof(WCHAR) * (BOXNAME_MAX_LEN + 1));
         BoxName.Buffer = (ULONG64)(ULONG_PTR)out_box_name_wchar34;
         args->box_name.val64 = (ULONG64)(ULONG_PTR)&BoxName;
     }
@@ -725,7 +725,7 @@ _FX LONG SbieApi_QueryProcessInfoStr(
 
 
 _FX LONG SbieApi_QueryBoxPath(
-    const WCHAR *box_name,              // WCHAR [BOXNAME_COUNT]
+    const WCHAR *box_name,              // WCHAR [BOXNAME_MAX_LEN + 1]
     WCHAR *out_file_path,
     WCHAR *out_key_path,
     WCHAR *out_ipc_path,
@@ -886,7 +886,7 @@ _FX LONG SbieApi_QueryPathList(
 
 
 _FX LONG SbieApi_EnumProcessEx(
-    const WCHAR *box_name,          // WCHAR [BOXNAME_COUNT]
+    const WCHAR *box_name,          // WCHAR [BOXNAME_MAX_LEN + 1]
     BOOLEAN all_sessions,
     ULONG which_session,            // -1 for current session
     ULONG *boxed_pids,              // ULONG [512]
@@ -1583,7 +1583,7 @@ _FX ULONG64 SbieApi_QueryConfNumber64(
 
 _FX LONG SbieApi_EnumBoxes(
     LONG index,                     // initialize to -1
-    WCHAR *box_name)                // WCHAR [BOXNAME_COUNT]
+    WCHAR *box_name)                // WCHAR [BOXNAME_MAX_LEN + 1]
 {
     return SbieApi_EnumBoxesEx(index, box_name, FALSE);
 }
@@ -1596,14 +1596,14 @@ _FX LONG SbieApi_EnumBoxes(
 
 _FX LONG SbieApi_EnumBoxesEx(
     LONG index,                     // initialize to -1
-    WCHAR *box_name,                // WCHAR [BOXNAME_COUNT]
+    WCHAR *box_name,                // WCHAR [BOXNAME_MAX_LEN + 1]
     BOOLEAN return_all_sections)
 {
     LONG rc;
     while (1) {
         ++index;
         rc = SbieApi_QueryConf(NULL, NULL, index | CONF_GET_NO_TEMPLS | CONF_GET_NO_EXPAND,
-                               box_name, sizeof(WCHAR) * BOXNAME_COUNT);
+                               box_name, sizeof(WCHAR) * (BOXNAME_MAX_LEN + 1));
         if (rc == STATUS_BUFFER_TOO_SMALL)
             continue;
         if (! box_name[0])
@@ -1919,7 +1919,7 @@ _FX LONG SbieApi_SessionLeader(ULONG session_id, HANDLE *ProcessId)
 
 
 _FX LONG SbieApi_IsBoxEnabled(
-    const WCHAR *box_name)          // WCHAR [BOXNAME_COUNT]
+    const WCHAR *box_name)          // WCHAR [BOXNAME_MAX_LEN + 1]
 {
     NTSTATUS status;
     __declspec(align(8)) ULONG64 parms[API_NUM_ARGS];

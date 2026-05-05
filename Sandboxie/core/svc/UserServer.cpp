@@ -637,7 +637,7 @@ ULONG UserServer::OpenFile(WorkerArgs *args)
     //
 
     ULONG session_id;
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR boxname[BOXNAME_MAX_LEN + 1];
     if (!NT_SUCCESS(SbieApi_QueryProcess((HANDLE)(ULONG_PTR)args->pid, boxname, NULL, NULL, &session_id))
      || session_id != m_SessionId 
      || !SbieApi_QueryConfBool(boxname, L"EnableEFS", FALSE)) {
@@ -779,7 +779,7 @@ ULONG UserServer::OpenDocument(WorkerArgs *args)
     //
 
     ULONG session_id;
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR boxname[BOXNAME_MAX_LEN + 1];
     if (!NT_SUCCESS(SbieApi_QueryProcess((HANDLE)(ULONG_PTR)args->pid, boxname, NULL, NULL, &session_id))
      || session_id != m_SessionId) {
 

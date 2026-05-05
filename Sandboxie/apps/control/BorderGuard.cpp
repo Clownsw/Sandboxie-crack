@@ -35,7 +35,7 @@
 
 struct BoxBorderParms {
 
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR boxname[BOXNAME_MAX_LEN + 1];
     COLORREF color;
     BOOL title;
     int width;
@@ -178,7 +178,7 @@ void CBorderGuard::Refresh()
     HWND hwnd;
     ULONG style;
     ULONG pid = NULL;
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR boxname[BOXNAME_MAX_LEN + 1];
     boxname[0] = L'\0';
 
     hwnd = GetForegroundWindow();

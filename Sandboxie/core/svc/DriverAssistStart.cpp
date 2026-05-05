@@ -408,11 +408,11 @@ driver_started:
         // at system boot and run them on service start
         //
 
-        WCHAR boxname[BOXNAME_COUNT];
+        WCHAR boxname[BOXNAME_MAX_LEN + 1];
         for (ULONG i = 0; ; ++i) {
 
             rc = SbieApi_QueryConfAsIs(
-                NULL, L"StartSystemBox", i, boxname, (BOXNAME_COUNT - 2) * sizeof(WCHAR));
+                NULL, L"StartSystemBox", i, boxname, BOXNAME_MAX_LEN * sizeof(WCHAR));
             if (rc != 0)
                 break;
 

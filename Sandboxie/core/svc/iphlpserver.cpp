@@ -187,7 +187,7 @@ MSG_HEADER *IpHlpServer::CreateHandler(MSG_HEADER *msg, HANDLE idProcess)
     if ((! p_IcmpCreateFile) || (! m_IcmpCloseHandle))
         return SHORT_REPLY(ERROR_NOT_SUPPORTED);
 
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR boxname[BOXNAME_MAX_LEN + 1];
     WCHAR exename[99];
     if (!NT_SUCCESS(SbieApi_QueryProcess(idProcess, boxname, exename, NULL, NULL)))
         return SHORT_REPLY(E_FAIL);

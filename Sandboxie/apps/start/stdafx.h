@@ -32,3 +32,5 @@ typedef long NTSTATUS;
 #include <shlwapi.h>
 #include <Shlobj.h>
 #include <objbase.h>
+
+#include "common/defines.h"

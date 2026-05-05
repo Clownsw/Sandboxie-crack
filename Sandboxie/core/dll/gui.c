@@ -1206,7 +1206,7 @@ _FX BOOLEAN Gui_IsSameBox(
 {
     ULONG idProcess, idThread;
     NTSTATUS status;
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR boxname[BOXNAME_MAX_LEN + 1];
     ULONG session_id;
 
     idProcess = 0;

@@ -395,16 +395,22 @@ _FX BOOLEAN SbieDll_KillOne(ULONG ProcessId)
 
 _FX BOOLEAN SbieDll_KillAll(ULONG SessionId, const WCHAR *BoxName)
 {
-    PROCESS_KILL_ALL_REQ req;
     MSG_HEADER *rpl;
     BOOLEAN ok = FALSE;
 
-    req.h.length = sizeof(PROCESS_KILL_ALL_REQ);
-    req.h.msgid = MSGID_PROCESS_KILL_ALL;
-    req.session_id = SessionId;
-    wcscpy(req.boxname, BoxName ? BoxName : Dll_BoxName);
+    const WCHAR *name = BoxName ? BoxName : Dll_BoxName;
+    ULONG name_len = (ULONG)wcslen(name);
+    ULONG req_len = sizeof(PROCESS_KILL_ALL_REQ) + (name_len + 1) * sizeof(WCHAR);
+    PROCESS_KILL_ALL_REQ *req = (PROCESS_KILL_ALL_REQ *)Dll_AllocTemp(req_len);
 
-    rpl = SbieDll_CallServer(&req.h);
+    req->h.length = req_len;
+    req->h.msgid = MSGID_PROCESS_KILL_ALL;
+    req->session_id = SessionId;
+    req->box_ofs = sizeof(PROCESS_KILL_ALL_REQ);
+    req->box_len = name_len;
+    wmemcpy((WCHAR *)((UCHAR *)req + req->box_ofs), name, name_len + 1);
+
+    rpl = SbieDll_CallServer(&req->h);
 
     if (rpl) {
         if (rpl->status == 0)

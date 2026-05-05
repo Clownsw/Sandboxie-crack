@@ -47,7 +47,7 @@ void DoListSections(void)
 
     while (1) {
 
-        WCHAR section_name[BOXNAME_COUNT];
+        WCHAR section_name[BOXNAME_MAX_LEN + 1];
         index = SbieApi_EnumBoxesEx(
                     index, section_name, TRUE);
         if (index == -1)

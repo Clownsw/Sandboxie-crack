@@ -555,7 +555,7 @@ typedef struct GUI_JOB {
 
     LIST_ELEM list_elem;
     HANDLE handle;
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR boxname[BOXNAME_MAX_LEN + 1];
 
 } GUI_JOB;
 
@@ -1194,7 +1194,7 @@ HANDLE GuiServer::GetJobObjectForGrant(ULONG pid)
 {
     HANDLE hJobObject = NULL;
 
-    WCHAR BoxName[BOXNAME_COUNT];
+    WCHAR BoxName[BOXNAME_MAX_LEN + 1];
     ULONG SessionId;
     ULONG status = SbieApi_QueryProcess(
                     (HANDLE)(ULONG_PTR)pid, BoxName, NULL, NULL, &SessionId);
@@ -1416,7 +1416,7 @@ ULONG GuiServer::InitProcessSlave(SlaveArgs *args)
     ULONG errlvl;
     ULONG status;
     ULONG session_id;
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR boxname[BOXNAME_MAX_LEN + 1];
 
     //
     // validate the request
@@ -1641,7 +1641,7 @@ ULONG GuiServer::CreateConsoleSlave(SlaveArgs *args)
     if (! hProcess)
         return STATUS_INVALID_CID;
 
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR boxname[BOXNAME_MAX_LEN + 1];
     WCHAR image_name[99];
     WCHAR *cmdline = NULL;
     HANDLE hToken1 = NULL;
@@ -2214,7 +2214,7 @@ ULONG GuiServer::EnumWindowsFilterSlave(ULONG pid, void *rpl_buf)
     if (! rpl->num_hwnds)
         return 0;
 
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR boxname[BOXNAME_MAX_LEN + 1];
     ULONG status = SbieApi_QueryProcess((HANDLE)(ULONG_PTR)pid,
                                         boxname, NULL, NULL, NULL);
     if (status != 0)
@@ -2554,7 +2554,7 @@ ULONG GuiServer::GetClipboardDataSlave(SlaveArgs *args)
     rpl->result = 0;
 
     // fail if the calling process should not have clipboard access
-    WCHAR boxname[BOXNAME_COUNT] = { 0 };
+    WCHAR boxname[BOXNAME_MAX_LEN + 1] = { 0 };
     WCHAR exename[99] = { 0 };
     SbieApi_QueryProcess((HANDLE)args->pid, boxname, exename, NULL, NULL);
     if (!SbieApi_QueryConfBool(boxname, L"OpenClipboard", TRUE))
@@ -3301,7 +3301,7 @@ ULONG GuiServer::SplWow64Slave(SlaveArgs *args)
 
     static ULONG   _SplWow64Pid = 0;
     static ULONG64 _SplWow64CreateTime = 0;
-    static WCHAR   _SplWow64BoxName[BOXNAME_COUNT];
+    static WCHAR   _SplWow64BoxName[BOXNAME_MAX_LEN + 1];
 
     if (args->req_len != sizeof(GUI_SPLWOW64_REQ))
         return STATUS_INFO_LENGTH_MISMATCH;
@@ -3310,7 +3310,7 @@ ULONG GuiServer::SplWow64Slave(SlaveArgs *args)
 
     ULONG status;
     ULONG64 create_time;
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR boxname[BOXNAME_MAX_LEN + 1];
 
     //
     // scenario 1:  req->set == TRUE
@@ -3329,7 +3329,7 @@ ULONG GuiServer::SplWow64Slave(SlaveArgs *args)
         _SplWow64Pid = args->pid;
         _SplWow64CreateTime = create_time;
         memcpy(_SplWow64BoxName, boxname, sizeof(_SplWow64BoxName));
-        boxname[BOXNAME_COUNT - 1] = L'\0';
+        boxname[BOXNAME_MAX_LEN] = L'\0';
 
         return STATUS_SUCCESS;
     }
@@ -3917,14 +3917,14 @@ bool GuiServer::CheckSameProcessBoxes(
     if (*out_pid == in_pid)
         return true;
 
-    WCHAR boxname2[BOXNAME_COUNT];
+    WCHAR boxname2[BOXNAME_MAX_LEN + 1];
     ULONG status = SbieApi_QueryProcess((HANDLE)(ULONG_PTR)*out_pid,
                                         boxname2, NULL, NULL, NULL);
     if (! NT_SUCCESS(status))
         return false;
 
     if (! boxname) {
-        WCHAR boxname1[BOXNAME_COUNT];
+        WCHAR boxname1[BOXNAME_MAX_LEN + 1];
         status = SbieApi_QueryProcess((HANDLE)(ULONG_PTR)in_pid,
                                       boxname1, NULL, NULL, NULL);
         if (! NT_SUCCESS(status))
@@ -4786,11 +4786,15 @@ ULONG GuiServer::KillJob(SlaveArgs* args)
     if (args->pid != m_ParentPid)
         return STATUS_ACCESS_DENIED;
 
-    if (args->req_len != sizeof(GUI_KILL_JOB_REQ))
+    if (args->req_len < sizeof(GUI_KILL_JOB_REQ))
         return STATUS_INFO_LENGTH_MISMATCH;
 
+    // extract variable-length box name
+    if (req->box_ofs + req->box_len * sizeof(WCHAR) > args->req_len)
+        return STATUS_INFO_LENGTH_MISMATCH;
+    WCHAR *boxname = (WCHAR *)((UCHAR *)req + req->box_ofs);
 
-    hJobObject = GetJobObject(req->boxname);
+    hJobObject = GetJobObject(boxname);
     if (hJobObject) {
         if (!TerminateJobObject(hJobObject, 0))
             return STATUS_UNSUCCESSFUL;

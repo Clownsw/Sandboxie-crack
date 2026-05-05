@@ -387,7 +387,9 @@ MSG_HEADER *SbieIniServer::GetUser(MSG_HEADER *msg)
         return SHORT_REPLY(STATUS_NO_TOKEN);
 
     ULONG name_len = wcslen(m_username);
+    ULONG section_len = wcslen(m_sectionname);
     ULONG rpl_len  = sizeof(SBIE_INI_GET_USER_RPL)
+                   + (section_len + 1) * sizeof(WCHAR)
                    + (name_len + 1) * sizeof(WCHAR);
     SBIE_INI_GET_USER_RPL *rpl =
         (SBIE_INI_GET_USER_RPL *)LONG_REPLY(rpl_len);
@@ -395,9 +397,16 @@ MSG_HEADER *SbieIniServer::GetUser(MSG_HEADER *msg)
         return SHORT_REPLY(STATUS_INSUFFICIENT_RESOURCES);
 
     rpl->admin = admin;
-    wcscpy(rpl->section, m_sectionname);
-    wcscpy(rpl->name,    m_username);
-    rpl->name_len = name_len;
+
+    // place section name right after the fixed struct
+    rpl->section_ofs = sizeof(SBIE_INI_GET_USER_RPL);
+    rpl->section_len = (ULONG)section_len;
+    wmemcpy(rpl->name, m_sectionname, section_len + 1);  // rpl->name is at offset sizeof(SBIE_INI_GET_USER_RPL)
+
+    // place username after section name
+    ULONG username_ofs = sizeof(SBIE_INI_GET_USER_RPL) + (section_len + 1) * sizeof(WCHAR);
+    rpl->name_len = (ULONG)name_len;
+    wmemcpy((WCHAR *)((UCHAR *)rpl + username_ofs), m_username, name_len + 1);
 
     return &rpl->h;
 }

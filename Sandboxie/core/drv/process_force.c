@@ -80,7 +80,8 @@ typedef struct _FORCE_PROCESS_2 {
 typedef struct _FORCE_PROCESS_3 {
 
     HANDLE pid;
-    WCHAR boxname[BOXNAME_COUNT];
+    WCHAR *boxname;         // dynamically allocated
+    ULONG boxname_len;      // in bytes, including NULL
 
 } FORCE_PROCESS_3;
 
@@ -314,7 +315,7 @@ _FX BOX *Process_GetForcedStartBox(
 
         if (!box && !image_sbie && _wcsicmp(ImageName, L"conhost.exe") != 0) {
 
-            WCHAR boxname[BOXNAME_COUNT];
+            WCHAR boxname[BOXNAME_MAX_LEN + 1];
 
             if (Process_FcpCheck(ParentId, boxname)) {
 
@@ -1918,6 +1919,7 @@ _FX VOID Process_FcpInsert(HANDLE ProcessId, const WCHAR* boxname)
 {
     FORCE_PROCESS_3 *proc;
     KIRQL irql;
+    ULONG name_len;
 
     //
     // called by Session_Api_ForceChildren, process list not locked
@@ -1928,11 +1930,19 @@ _FX VOID Process_FcpInsert(HANDLE ProcessId, const WCHAR* boxname)
 
     Process_FcpDelete(ProcessId);
 
+    name_len = (wcslen(boxname) + 1) * sizeof(WCHAR);
     proc = Mem_Alloc(Driver_Pool, sizeof(FORCE_PROCESS_3));
-    proc->pid = ProcessId;
-    wmemcpy(proc->boxname, boxname, BOXNAME_COUNT);
-
-    map_insert(&Process_MapFcp, ProcessId, proc, 0);
+    if (proc) {
+        proc->pid = ProcessId;
+        proc->boxname = Mem_Alloc(Driver_Pool, name_len);
+        if (proc->boxname) {
+            memcpy(proc->boxname, boxname, name_len);
+            proc->boxname_len = name_len;
+        } else {
+            proc->boxname_len = 0;
+        }
+        map_insert(&Process_MapFcp, ProcessId, proc, 0);
+    }
 
     ExReleaseResourceLite(Process_ListLock);
     KeLowerIrql(irql);
@@ -1950,8 +1960,11 @@ _FX void Process_FcpDelete(HANDLE ProcessId)
 {
     FORCE_PROCESS_3 *proc;
 
-    if(map_take(&Process_MapFcp, ProcessId, &proc, 0))
+    if(map_take(&Process_MapFcp, ProcessId, &proc, 0)) {
+        if (proc->boxname)
+            Mem_Free(proc->boxname, proc->boxname_len);
         Mem_Free(proc, sizeof(FORCE_PROCESS_3));
+    }
 }
 
 
@@ -1972,8 +1985,8 @@ _FX BOOLEAN Process_FcpCheck(HANDLE ProcessId, WCHAR* boxname)
     proc = map_get(&Process_MapFcp, ProcessId);
     if (proc) {
 
-        if(boxname)
-            wmemcpy(boxname, proc->boxname, BOXNAME_COUNT);
+        if(boxname && proc->boxname)
+            wmemcpy(boxname, proc->boxname, proc->boxname_len / sizeof(WCHAR));
 
         found = TRUE;
     }

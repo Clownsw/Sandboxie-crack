@@ -4490,7 +4490,7 @@ QString CSandMan::FormatError(const SB_STATUS& Error)
 	case SB_FailedCopyConf:	Message = tr("Failed to copy configuration from sandbox %1: %2"); break;
 	case SB_AlreadyExists:  Message = tr("A sandbox of the name %1 already exists"); break;
 	case SB_DeleteFailed:	Message = tr("Failed to delete sandbox %1: %2"); break;
-	case SB_NameLenLimit:	Message = tr("The sandbox name can not be longer than 32 characters."); break;
+	case SB_NameLenLimit:	Message = tr("The sandbox name is too long or contains invalid characters."); break;
 	case SB_BadNameDev:		Message = tr("The sandbox name can not be a device name."); break;
 	case SB_BadNameChar:	Message = tr("The sandbox name can contain only letters, digits and underscores which are displayed as spaces."); break;
 	case SB_FailedKillAll:	Message = tr("Failed to terminate all processes"); break;
