@@ -54,21 +54,17 @@ static BOOLEAN Box_ExpandString(
 _FX BOOLEAN Box_IsValidName(const WCHAR *name)
 {
     const WCHAR *ptr = name;
-    SIZE_T len = 0;
 
     if (!ptr || !ptr[0])
         return FALSE;
 
     while (*ptr) {
-        if (*ptr >= L'0' && *ptr <= L'9') { ptr++; len++; continue; }
-        if (*ptr >= L'A' && *ptr <= L'Z') { ptr++; len++; continue; }
-        if (*ptr >= L'a' && *ptr <= L'z') { ptr++; len++; continue; }
-        if (*ptr == L'_')                { ptr++; len++; continue; }
+        if (*ptr >= L'0' && *ptr <= L'9') { ptr++; continue; }
+        if (*ptr >= L'A' && *ptr <= L'Z') { ptr++; continue; }
+        if (*ptr >= L'a' && *ptr <= L'z') { ptr++; continue; }
+        if (*ptr == L'_')                { ptr++; continue; }
         return FALSE;
     }
-
-    if (len > BOXNAME_MAX_LEN)
-        return FALSE;
 
     return TRUE;
 }
@@ -81,7 +77,17 @@ _FX BOOLEAN Box_IsValidName(const WCHAR *name)
 
 _FX BOX *Box_Alloc(POOL *pool, const WCHAR *boxname, ULONG session_id)
 {
-    BOX *box = Mem_Alloc(pool, sizeof(BOX));
+    BOX *box;
+    ULONG name_len = (ULONG)wcslen(boxname);
+
+    if (name_len > BOXNAME_MAX_LEN) {
+        Log_Status_Ex_Session(
+            MSG_BOX_CREATE, 0x10, STATUS_BUFFER_TOO_SMALL,
+            boxname, session_id);
+        return NULL;
+    }
+
+    box = Mem_Alloc(pool, sizeof(BOX));
     if (! box) {
 
         Log_Status_Ex_Session(
@@ -92,16 +98,8 @@ _FX BOX *Box_Alloc(POOL *pool, const WCHAR *boxname, ULONG session_id)
 
     memzero(box, sizeof(BOX));
 
-    box->name_len = (wcslen(boxname) + 1) * sizeof(WCHAR);
-    box->name = Mem_Alloc(pool, box->name_len);
-    if (! box->name) {
-        Mem_Free(box, sizeof(BOX));
-        Log_Status_Ex_Session(
-            MSG_BOX_CREATE, 0x10, STATUS_INSUFFICIENT_RESOURCES,
-            boxname, session_id);
-        return NULL;
-    }
-    wcscpy(box->name, boxname);
+    wmemcpy(box->name, boxname, name_len + 1);
+    box->name_len = (name_len + 1) * sizeof(WCHAR);
 
     return box;
 }
@@ -115,8 +113,6 @@ _FX BOX *Box_Alloc(POOL *pool, const WCHAR *boxname, ULONG session_id)
 _FX void Box_Free(BOX *box)
 {
     if (box) {
-        if (box->name)
-            Mem_Free(box->name, box->name_len);
         if (box->sid)
             Mem_Free(box->sid, box->sid_len);
         if (box->expand_args)
@@ -292,7 +288,7 @@ _FX BOOLEAN Box_InitPaths(POOL *pool, BOX *box)
         L"\\Sandbox\\%USER%\\%SANDBOX%\\Session_%SESSION%";
 
     const WCHAR *value;
-    WCHAR *suffix;
+    WCHAR suffix[80];
     BOOLEAN ok;
     WCHAR *ptr1;
     WCHAR KeyPath[256];
@@ -302,11 +298,6 @@ _FX BOOLEAN Box_InitPaths(POOL *pool, BOX *box)
     // we look for BoxRootFolder before reverting to the default.
     // if we find it, we use old-style suffix \Sandbox\BoxName.
     //
-
-    ULONG suffix_alloc_len = (wcslen(Driver_Sandbox) + 1 + wcslen(box->name) + 1) * sizeof(WCHAR);
-    suffix = Mem_Alloc(pool, suffix_alloc_len);
-    if (!suffix)
-        return FALSE;
 
     suffix[0] = L'\0';
 
@@ -414,8 +405,6 @@ _FX BOOLEAN Box_InitPaths(POOL *pool, BOX *box)
         } else
             ptr1 += wcslen(ptr1);
     }
-
-    Mem_Free(suffix, suffix_alloc_len);
 
     return TRUE;
 }

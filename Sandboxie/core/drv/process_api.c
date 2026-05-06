@@ -1080,14 +1080,9 @@ _FX NTSTATUS Process_Api_Enum(PROCESS *proc, ULONG64 *parms)
         wcscpy(boxname, proc->box->name);
     user_boxname = (WCHAR *)parms[2];
     if ((! boxname[0]) && user_boxname) {
-        SIZE_T n = 0;
-        ProbeForRead(user_boxname, sizeof(WCHAR), sizeof(UCHAR));
-        while (user_boxname[n] && n < BOXNAME_MAX_LEN) {
-            ProbeForRead((WCHAR *)(user_boxname + n), sizeof(WCHAR), sizeof(UCHAR));
-            boxname[n] = user_boxname[n];
-            n++;
-        }
-        boxname[n] = L'\0';
+        ProbeForRead(user_boxname, sizeof(WCHAR) * BOXNAME_MAX_LEN, sizeof(UCHAR));
+        if (user_boxname[0])
+            wcsncpy(boxname, user_boxname, BOXNAME_MAX_LEN);
     }
 
     // get "all users/current user only" flag from third parameter

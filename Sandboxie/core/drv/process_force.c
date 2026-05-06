@@ -80,8 +80,7 @@ typedef struct _FORCE_PROCESS_2 {
 typedef struct _FORCE_PROCESS_3 {
 
     HANDLE pid;
-    WCHAR *boxname;         // dynamically allocated
-    ULONG boxname_len;      // in bytes, including NULL
+    WCHAR boxname[BOXNAME_MAX_LEN + 1];
 
 } FORCE_PROCESS_3;
 
@@ -1919,7 +1918,6 @@ _FX VOID Process_FcpInsert(HANDLE ProcessId, const WCHAR* boxname)
 {
     FORCE_PROCESS_3 *proc;
     KIRQL irql;
-    ULONG name_len;
 
     //
     // called by Session_Api_ForceChildren, process list not locked
@@ -1930,17 +1928,10 @@ _FX VOID Process_FcpInsert(HANDLE ProcessId, const WCHAR* boxname)
 
     Process_FcpDelete(ProcessId);
 
-    name_len = (wcslen(boxname) + 1) * sizeof(WCHAR);
     proc = Mem_Alloc(Driver_Pool, sizeof(FORCE_PROCESS_3));
     if (proc) {
         proc->pid = ProcessId;
-        proc->boxname = Mem_Alloc(Driver_Pool, name_len);
-        if (proc->boxname) {
-            memcpy(proc->boxname, boxname, name_len);
-            proc->boxname_len = name_len;
-        } else {
-            proc->boxname_len = 0;
-        }
+        wcscpy(proc->boxname, boxname);
         map_insert(&Process_MapFcp, ProcessId, proc, 0);
     }
 
@@ -1960,11 +1951,8 @@ _FX void Process_FcpDelete(HANDLE ProcessId)
 {
     FORCE_PROCESS_3 *proc;
 
-    if(map_take(&Process_MapFcp, ProcessId, &proc, 0)) {
-        if (proc->boxname)
-            Mem_Free(proc->boxname, proc->boxname_len);
+    if(map_take(&Process_MapFcp, ProcessId, &proc, 0))
         Mem_Free(proc, sizeof(FORCE_PROCESS_3));
-    }
 }
 
 
@@ -1985,8 +1973,8 @@ _FX BOOLEAN Process_FcpCheck(HANDLE ProcessId, WCHAR* boxname)
     proc = map_get(&Process_MapFcp, ProcessId);
     if (proc) {
 
-        if(boxname && proc->boxname)
-            wmemcpy(boxname, proc->boxname, proc->boxname_len / sizeof(WCHAR));
+        if(boxname)
+            wmemcpy(boxname, proc->boxname, BOXNAME_MAX_LEN + 1);
 
         found = TRUE;
     }

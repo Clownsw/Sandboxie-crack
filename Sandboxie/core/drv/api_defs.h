@@ -537,8 +537,7 @@ typedef struct _SVC_REGHIVE_MSG {
 
     ULONG process_id;
     ULONG session_id;
-    ULONG name_len;             // in WCHARs, excluding NULL
-    WCHAR boxname[1];           // flexible array member
+    WCHAR boxname[BOXNAME_LPC_MAX + 1];     // limited by LPC message size
 
 } SVC_REGHIVE_MSG;
 

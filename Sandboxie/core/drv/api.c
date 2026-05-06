@@ -847,12 +847,11 @@ _FX void Api_ResetServiceProcess(void)
 
 _FX BOOLEAN Api_SendServiceMessage(ULONG msgid, ULONG data_len, void *data)
 {
-    UCHAR *space;
-    PORT_MESSAGE *msg;
+    UCHAR space[MAX_PORTMSG_LENGTH];
+    PORT_MESSAGE *msg = (PORT_MESSAGE *)space;
     void *PortObject;
     KIRQL irql;
     BOOLEAN ok;
-    ULONG total_len;
 
     //
     // abort if we know in advance that we won't have a service port
@@ -867,15 +866,8 @@ _FX BOOLEAN Api_SendServiceMessage(ULONG msgid, ULONG data_len, void *data)
     // followed by the rest of the caller data
     //
 
-    total_len = sizeof(PORT_MESSAGE) + sizeof(ULONG) + data_len;
-    if (total_len > MAX_PORTMSG_LENGTH)
+    if (data_len > API_MAX_SVC_DATA_LEN)
         return FALSE;
-
-    space = ExAllocatePoolWithTag(PagedPool, total_len, 'SbiM');
-    if (!space)
-        return FALSE;
-
-    msg = (PORT_MESSAGE *)space;
 
     memzero(msg, sizeof(PORT_MESSAGE));
     msg->u1.s1.DataLength = (USHORT)(data_len + sizeof(ULONG));
@@ -913,8 +905,6 @@ _FX BOOLEAN Api_SendServiceMessage(ULONG msgid, ULONG data_len, void *data)
 
     } else
         ok = FALSE;
-
-    ExFreePoolWithTag(space, 'SbiM');
 
     return ok;
 }
@@ -1031,32 +1021,13 @@ _FX NTSTATUS Api_SetServicePort(PROCESS *proc, ULONG64 *parms)
 _FX BOOLEAN Api_CopyBoxNameFromUser(
     WCHAR *boxname_buf, const WCHAR *user_boxname)
 {
-    SIZE_T len = 0;
-    const WCHAR *ptr;
-
     wmemzero(boxname_buf, (BOXNAME_MAX_LEN + 1) * sizeof(WCHAR));
     if (user_boxname) {
-        //
-        // Probe the first WCHAR to validate the pointer, then read up to
-        // BOXNAME_MAX_LEN characters.  We cannot probe the full length
-        // without knowing it first, so probe one page worth and rely on
-        // the Box_IsValidName length check.
-        //
         ProbeForRead((WCHAR *)user_boxname,
-                     sizeof(WCHAR),
+                     sizeof(WCHAR) * BOXNAME_MAX_LEN,
                      sizeof(UCHAR));
-        if (user_boxname[0]) {
-            ptr = user_boxname;
-            while (*ptr && len < BOXNAME_MAX_LEN) {
-                ProbeForRead((WCHAR *)ptr,
-                             sizeof(WCHAR),
-                             sizeof(UCHAR));
-                boxname_buf[len] = *ptr;
-                ptr++;
-                len++;
-            }
-            boxname_buf[len] = L'\0';
-        }
+        if (user_boxname[0])
+            wcsncpy(boxname_buf, user_boxname, BOXNAME_MAX_LEN);
     }
     if (boxname_buf[0] && Box_IsValidName(boxname_buf))
         return TRUE;

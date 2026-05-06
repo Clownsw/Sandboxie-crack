@@ -12,6 +12,10 @@
 #define BOXNAME_MAX_LEN (CONF_LINE_LEN - 1)
 #endif
 
+#ifndef BOXNAME_LPC_MAX
+#define BOXNAME_LPC_MAX 254
+#endif
+
 #define SBIESVC_PORT	L"\\RPC Control\\SbieSvcPort"
 
 //#define SANDBOXIE_INI   L"Sandboxie.ini"

@@ -45,7 +45,7 @@ struct _BOX {
     // a sandbox is identified by three components:
     // 1.  the name of this box
 
-    WCHAR *name;                        // dynamically allocated, no hard length limit
+    WCHAR name[BOXNAME_MAX_LEN + 1];
     ULONG name_len;                     // in bytes, including NULL
 
     // 2.  the user account that started this sandbox

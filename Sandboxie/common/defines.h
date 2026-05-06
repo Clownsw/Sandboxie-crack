@@ -57,8 +57,9 @@
 #define BOXNAME_COUNT				(38 + 2)
 
 #define CONF_LINE_LEN               2000
-#define BOXNAME_MAX_LEN             (CONF_LINE_LEN - 1)
 #define CONF_MAX_LINES              100000
+#define BOXNAME_MAX_LEN             (CONF_LINE_LEN - 1)
+#define BOXNAME_LPC_MAX             254     // max box name in LPC messages (driver<->service)
 
 #define CONF_UPDATE_VALUE		    1
 #define CONF_APPEND_VALUE		    2

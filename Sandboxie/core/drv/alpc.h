@@ -22,7 +22,7 @@
 #ifndef _ALPC_H
 #define _ALPC_H
 
-#define MAX_PORTMSG_LENGTH 2048
+#define MAX_PORTMSG_LENGTH 328
 
 typedef void *PPORT_VIEW;
 typedef void *PREMOTE_PORT_VIEW;
