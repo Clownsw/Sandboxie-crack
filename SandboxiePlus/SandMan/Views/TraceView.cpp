@@ -628,6 +628,12 @@ void CTraceView::OnObjTree()
 	theConf->SetValue("Options/UseObjectTree", m_pObjectTree->isChecked());
 }
 
+void CTraceView::SelectProcess(quint64 PID)
+{
+	int Index = m_pTracePid->findData(PID);
+	m_pTracePid->setItemCheckState(Index, m_pTracePid->itemCheckState(Index) == Qt::Checked ? Qt::Unchecked : Qt::Checked);
+}
+
 void CTraceView::UpdateFilters()
 {
 	m_bUpdatePending = false;

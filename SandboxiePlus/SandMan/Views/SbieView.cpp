@@ -545,7 +545,7 @@ void CSbieView::Refresh()
 
 	QList<QVariant> Added = m_pSbieModel->Sync(theAPI->GetAllBoxes(), m_Groups, theGUI->IsShowHidden());
 
-	if (m_pSbieModel->IsTree())
+	if (/*m_pSbieModel->IsTree() &&*/ theGUI->IsAutoExpand())
 	{
 		QTimer::singleShot(10, this, [this, Added]() {
 			foreach(const QVariant ID, Added) {
