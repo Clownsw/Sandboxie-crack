@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "CodeEdit.h"
 #include <QStyledItemDelegate>
+#include <QGuiApplication>
+#include <QScreen>
 
 
 #define TAB_SPACES "   "
@@ -23,6 +25,37 @@ public:
 		: QStyledItemDelegate(parent), m_tooltipCallback(tooltipCallback) {
 	}
 
+	static QPoint ComputePopupTooltipPosition(const QAbstractItemView* view, const QModelIndex& index, const QPoint& fallbackGlobalPos)
+	{
+		if (!view || !index.isValid())
+			return fallbackGlobalPos;
+
+		const QRect itemRect = view->visualRect(index);
+		if (!itemRect.isValid())
+			return fallbackGlobalPos;
+
+		const QRect popupGlobalRect(view->mapToGlobal(QPoint(0, 0)), view->size());
+		const QScreen* screen = QGuiApplication::screenAt(fallbackGlobalPos);
+		if (!screen)
+			screen = QGuiApplication::primaryScreen();
+		const QRect available = screen ? screen->availableGeometry() : QRect();
+
+		const int margin = 8;
+		const QPoint rightPos = view->mapToGlobal(QPoint(itemRect.right() + margin, itemRect.top()));
+		if (!available.isValid() || (rightPos.x() + 320 <= available.right()))
+			return rightPos;
+
+		const QPoint leftPos = view->mapToGlobal(QPoint(itemRect.left() - margin, itemRect.top()));
+		if (!available.isValid() || (leftPos.x() - 320 >= available.left()))
+			return leftPos;
+
+		// Last fallback: keep tooltip outside popup vertically to avoid drawing over it.
+		int y = popupGlobalRect.bottom() + margin;
+		if (available.isValid() && y > available.bottom())
+			y = popupGlobalRect.top() - margin;
+		return QPoint(popupGlobalRect.left(), y);
+	}
+
 	bool helpEvent(QHelpEvent* event, QAbstractItemView* view,
 		const QStyleOptionViewItem& option, const QModelIndex& index) override {
 		if (event->type() == QEvent::ToolTip) {
@@ -35,7 +68,8 @@ public:
 				// Use the callback instead of direct CIniHighlighter call
 				QString tooltipText = m_tooltipCallback(completionText);
 				if (!tooltipText.isEmpty()) {
-					QToolTip::showText(event->globalPos(), tooltipText, view);
+					const QPoint tooltipPos = ComputePopupTooltipPosition(view, index, event->globalPos());
+					QToolTip::showText(tooltipPos, tooltipText, view);
 					return true;
 				}
 				else {
@@ -323,7 +357,7 @@ namespace {
 	{
 		QStringList tmp;
 		if (!s_tokenCache.get(key, tmp)) {
-			// Miss — log concise info
+			// Miss - log concise info
 			LogCacheLocked(s_tokenCache, QStringLiteral("MISS"), key, nullptr, -1);
 			return false;
 		}
@@ -414,7 +448,7 @@ namespace {
 	{
 		QStringList tmp;
 		if (!s_fuzzyCache.get(key, tmp)) {
-			// Miss — log concise info
+			// Miss - log concise info
 			LogCacheLocked(s_fuzzyCache, QStringLiteral("MISS"), key, nullptr, -1);
 			return false;
 		}
@@ -1056,6 +1090,33 @@ CCodeEdit::CCodeEdit(QSyntaxHighlighter* pHighlighter, QWidget* pParent)
 			}
 		}
 		else {
+			QStringList popupCandidates = m_visibleCandidates;
+			if (m_completionFilterCallback) {
+				QStringList filtered;
+				filtered.reserve(popupCandidates.size());
+				for (const QString& candidate : popupCandidates) {
+					if (!m_completionFilterCallback(candidate, m_pendingPrefix))
+						filtered.append(candidate);
+				}
+				popupCandidates.swap(filtered);
+			}
+
+			if (popupCandidates == m_visibleCandidates) {
+				RestoreBaseCompletionModel();
+			}
+			else {
+				if (m_tempFuzzyModel) {
+					delete m_tempFuzzyModel;
+					m_tempFuzzyModel = nullptr;
+				}
+				// Replacing a completer-owned base model deletes it.
+				// Clear the pointer so it can be recreated later.
+				if (m_pCompleter->model() == m_baseModel)
+					m_baseModel = nullptr;
+				m_tempFuzzyModel = new QStringListModel(popupCandidates, this);
+				m_pCompleter->setModel(m_tempFuzzyModel);
+			}
+
 			// default behavior
 			m_pCompleter->setCompletionPrefix(m_pendingPrefix);
 
@@ -1139,15 +1200,15 @@ void CCodeEdit::SetCompleter(QCompleter* completer)
 	}
 }
 
-bool CCodeEdit::ShouldHideKeyFromCompletion(const QString& keyName) const
+bool CCodeEdit::ShouldHideKeyFromCompletion(const QString& keyName, const QString& activeInput) const
 {
 	if (m_completionFilterCallback) {
-		return m_completionFilterCallback(keyName);
+		return m_completionFilterCallback(keyName, activeInput);
 	}
 	return false;
 }
 
-void CCodeEdit::SetCaseCorrectionFilterCallback(std::function<bool(const QString&)> callback)
+void CCodeEdit::SetCaseCorrectionFilterCallback(std::function<bool(const QString&, const QString&)> callback)
 {
 	m_caseCorrectionFilterCallback = std::move(callback);
 }
@@ -1158,6 +1219,7 @@ void CCodeEdit::UpdateCompletionModel(const QStringList& candidates)
 		return;
 
 	QStringList filteredCandidates;
+	QStringList popupSourceCandidates; // Non-underscore keys used as runtime popup source
 	QStringList caseCorrectionCandidates; // Keys available for case correction (all non-underscore keys)
 	bool correctionStillValid = false;
 	int maxWidth = 0; // Track maximum width during filtering
@@ -1165,20 +1227,20 @@ void CCodeEdit::UpdateCompletionModel(const QStringList& candidates)
 
 	// Single loop to filter candidates, check correction validity, and calculate width
 	foreach(const QString & candidate, candidates) {
-		bool shouldHideFromPopup = ShouldHideKeyFromCompletion(candidate);
 		bool startsWithUnderscore = candidate.startsWith('_');
 
-		if (!startsWithUnderscore && !shouldHideFromPopup) {
-			// Normal candidates that appear in popup
-			filteredCandidates.append(candidate);
-			int width = metrics.horizontalAdvance(candidate);
-			if (width > maxWidth)
-				maxWidth = width;
-		}
-
-		// ALL non-underscore candidates are available for case correction
 		if (!startsWithUnderscore) {
+			popupSourceCandidates.append(candidate);
 			caseCorrectionCandidates.append(candidate);
+
+			// Build initial global popup list from runtime source using empty input.
+			bool shouldHideFromPopup = ShouldHideKeyFromCompletion(candidate, QString());
+			if (!shouldHideFromPopup) {
+				filteredCandidates.append(candidate);
+				int width = metrics.horizontalAdvance(candidate);
+				if (width > maxWidth)
+					maxWidth = width;
+			}
 		}
 
 		// Check if correction is still valid (regardless of visibility)
@@ -1193,13 +1255,20 @@ void CCodeEdit::UpdateCompletionModel(const QStringList& candidates)
 	}
 
 	// Store both lists for different purposes
-	m_visibleCandidates = filteredCandidates;
+	m_visibleCandidates = popupSourceCandidates;
 	m_caseCorrectionCandidates = caseCorrectionCandidates;
 
 	// Keep token cache consistent with new candidate set
 	ClearTokenCache();
 
 	QStringListModel* model = qobject_cast<QStringListModel*>(m_pCompleter->model());
+	// Rebuild the base model if a temporary fuzzy model is active.
+	if (model && model == m_tempFuzzyModel) {
+		// Free the temporary model and force a full base model rebuild below.
+		delete m_tempFuzzyModel;
+		m_tempFuzzyModel = nullptr;
+		model = nullptr;
+	}
 	if (model) {
 		if (model->stringList() == filteredCandidates)
 			return; // No change, skip update
@@ -1209,6 +1278,8 @@ void CCodeEdit::UpdateCompletionModel(const QStringList& candidates)
 		model = new QStringListModel(filteredCandidates, m_pCompleter);
 		m_pCompleter->setModel(model);
 	}
+	// Keep the restorable base model in sync.
+	m_baseModel = model;
 
 	// Adjust popup width based on visible candidates only
 	if (m_pCompleter && m_pCompleter->popup()) {
@@ -1295,17 +1366,17 @@ QString CCodeEdit::ExtractWordAtCursor(const CursorContext& context) const
 	cursor.setPosition(endPos, QTextCursor::KeepAnchor);
 	QString word = cursor.selectedText();
 
-	// Extend the word to include dots and underscores that Qt might not include
+	// Extend to full INI key token using the editor's word-character rules.
 	int relativeStart = startPos - context.block.position();
 	int relativeEnd = endPos - context.block.position();
 
 	// Extend backward
-	while (relativeStart > 0 && (context.text[relativeStart - 1] == '_' || context.text[relativeStart - 1] == '.')) {
+	while (relativeStart > 0 && IsWordCharacter(context.text[relativeStart - 1])) {
 		relativeStart--;
 	}
 
 	// Extend forward
-	while (relativeEnd < context.text.length() && (context.text[relativeEnd] == '_' || context.text[relativeEnd] == '.')) {
+	while (relativeEnd < context.text.length() && IsWordCharacter(context.text[relativeEnd])) {
 		relativeEnd++;
 	}
 
@@ -1447,7 +1518,7 @@ void CCodeEdit::SetCaseCorrectionCallback(std::function<QString(const QString&)>
 	m_caseCorrectionCallback = std::move(callback);
 }
 
-void CCodeEdit::SetCompletionFilterCallback(std::function<bool(const QString&)> callback)
+void CCodeEdit::SetCompletionFilterCallback(std::function<bool(const QString&, const QString&)> callback)
 {
 	m_completionFilterCallback = std::move(callback);
 }
@@ -1511,6 +1582,16 @@ void CCodeEdit::HandleCaseCorrection(const QString& word, bool wasPopupVisible)
 			if (!found) all.append(v);
 		}
 
+		if (m_caseCorrectionFilterCallback) {
+			QStringList filtered;
+			filtered.reserve(all.size());
+			for (const QString& candidate : all) {
+				if (!m_caseCorrectionFilterCallback(candidate, word))
+					filtered.append(candidate);
+			}
+			all.swap(filtered);
+		}
+
 		if (!all.isEmpty()) {
 			// BuildFuzzyMatches returns sorted candidates by fuzzy distance.
 			QStringList fuzzy = BuildFuzzyMatches(all, NormalizePrefixForFuzzy(word));
@@ -1529,7 +1610,7 @@ void CCodeEdit::HandleCaseCorrection(const QString& word, bool wasPopupVisible)
 
 	if (!correctedWord.isEmpty() && IsKeyAvailableConsideringFuzzy(correctedWord, word)) {
 		// Check if the corrected word should be hidden from case correction using callback
-		if (m_caseCorrectionFilterCallback && m_caseCorrectionFilterCallback(correctedWord)) {
+		if (m_caseCorrectionFilterCallback && m_caseCorrectionFilterCallback(correctedWord, word)) {
 			return; // Don't show case correction for hidden keys
 		}
 
@@ -1803,8 +1884,19 @@ bool CCodeEdit::HandleManualCompletionTrigger(QKeyEvent* keyEvent)
 
 		// Even if word is empty, show all completions for manual trigger
 		if (GetFuzzyMatchingEnabled()) {
+			QStringList popupCandidates = m_visibleCandidates;
+			if (m_completionFilterCallback) {
+				QStringList filtered;
+				filtered.reserve(popupCandidates.size());
+				for (const QString& candidate : popupCandidates) {
+					if (!m_completionFilterCallback(candidate, fuzzyPrefix))
+						filtered.append(candidate);
+				}
+				popupCandidates.swap(filtered);
+			}
+
 			// Build fuzzy matches (fuzzy-ranked)
-			QStringList fuzzy = BuildFuzzyMatches(m_visibleCandidates, fuzzyPrefix);
+			QStringList fuzzy = BuildFuzzyMatches(popupCandidates, fuzzyPrefix);
 
 			// Preserve fuzzy ranking when the user has typed a prefix.
 			// Only present an alphabetical list for the "show all" case (empty fuzzyPrefix).
@@ -1820,14 +1912,44 @@ bool CCodeEdit::HandleManualCompletionTrigger(QKeyEvent* keyEvent)
 					delete m_tempFuzzyModel;
 					m_tempFuzzyModel = nullptr;
 				}
+				// Replacing a completer-owned base model deletes it.
+				// Clear the pointer so it can be recreated later.
+				if (m_pCompleter->model() == m_baseModel)
+					m_baseModel = nullptr;
 				m_tempFuzzyModel = new QStringListModel(fuzzy, this);
 				m_pCompleter->setModel(m_tempFuzzyModel);
+				m_pCompleter->setCompletionPrefix(QString());
 
 				ShowCompletionPopup(/*resetScroll=*/true);
 				return true;
 			}
 		}
 		else {
+			QStringList popupCandidates = m_visibleCandidates;
+			if (m_completionFilterCallback) {
+				QStringList filtered;
+				filtered.reserve(popupCandidates.size());
+				for (const QString& candidate : popupCandidates) {
+					if (!m_completionFilterCallback(candidate, wordUnderCursor))
+						filtered.append(candidate);
+				}
+				popupCandidates.swap(filtered);
+			}
+
+			if (popupCandidates == m_visibleCandidates) {
+				RestoreBaseCompletionModel();
+			}
+			else {
+				if (m_tempFuzzyModel) {
+					delete m_tempFuzzyModel;
+					m_tempFuzzyModel = nullptr;
+				}
+				if (m_pCompleter->model() == m_baseModel)
+					m_baseModel = nullptr;
+				m_tempFuzzyModel = new QStringListModel(popupCandidates, this);
+				m_pCompleter->setModel(m_tempFuzzyModel);
+			}
+
 			m_pCompleter->setCompletionPrefix(wordUnderCursor);
 			if (m_pCompleter->completionCount() > 0) {
 				ShowCompletionPopup(/*resetScroll=*/true);
@@ -1961,7 +2083,7 @@ bool CCodeEdit::HandleDeleteForCompletion(QKeyEvent* keyEvent)
 
 		// If current line is empty and cursor is at column 0,
 		// the user pressed Delete to remove the empty line (merge next line up).
-		// Suppress any immediate autocompletion and hide popup — do not trigger popup.
+		// Suppress any immediate autocompletion and hide popup, do not trigger popup.
 		if (relPos == 0 && lineText.isEmpty()) {
 			m_suppressNextAutoCompletion = true;
 			HidePopupSafely();
@@ -2554,15 +2676,32 @@ QStringList CCodeEdit::ApplyFuzzyModelForPrefix(const QString& prefix)
 	}
 
 	// Build fuzzy matches from visible candidates
-	QStringList fuzzy = BuildFuzzyMatches(m_visibleCandidates, usePrefix);
+	QStringList popupCandidates = m_visibleCandidates;
+	if (m_completionFilterCallback) {
+		QStringList filtered;
+		filtered.reserve(popupCandidates.size());
+		for (const QString& candidate : popupCandidates) {
+			if (!m_completionFilterCallback(candidate, usePrefix))
+				filtered.append(candidate);
+		}
+		popupCandidates.swap(filtered);
+	}
+
+	QStringList fuzzy = BuildFuzzyMatches(popupCandidates, usePrefix);
 
 	// Create temporary model parented to this so we can control its lifetime
 	if (m_tempFuzzyModel) {
 		delete m_tempFuzzyModel;
 		m_tempFuzzyModel = nullptr;
 	}
+	// Replacing a completer-owned base model deletes it.
+	// Clear the pointer so it can be recreated later.
+	if (m_pCompleter->model() == m_baseModel)
+		m_baseModel = nullptr;
 	m_tempFuzzyModel = new QStringListModel(fuzzy, this);
 	m_pCompleter->setModel(m_tempFuzzyModel);
+	// Prevent a stale prefix from filtering the ranked fuzzy results again.
+	m_pCompleter->setCompletionPrefix(QString());
 	return fuzzy;
 }
 
@@ -2572,11 +2711,16 @@ void CCodeEdit::RestoreBaseCompletionModel()
 	if (!m_pCompleter)
 		return;
 
-	// If a temp fuzzy model is active, remove it and restore base model
+	// If a temp fuzzy model is active, restore the base model.
 	if (m_tempFuzzyModel) {
-		m_pCompleter->setModel(m_baseModel);
-		delete m_tempFuzzyModel;
+		QStringListModel* stale = m_tempFuzzyModel;
 		m_tempFuzzyModel = nullptr;
+		// Recreate a base model deleted when the temporary model was installed.
+		if (!m_baseModel) {
+			m_baseModel = new QStringListModel(m_visibleCandidates, m_pCompleter);
+		}
+		m_pCompleter->setModel(m_baseModel);
+		delete stale;
 	}
 }
 
@@ -2595,6 +2739,19 @@ bool CCodeEdit::IsKeyAvailableConsideringFuzzy(const QString& key, const QString
 	for (const QString& c : m_caseCorrectionCandidates) {
 		if (!all.contains(c, Qt::CaseInsensitive))
 			all.append(c);
+	}
+
+	if (all.isEmpty())
+		return false;
+
+	if (m_caseCorrectionFilterCallback) {
+		QStringList filtered;
+		filtered.reserve(all.size());
+		for (const QString& candidate : all) {
+			if (!m_caseCorrectionFilterCallback(candidate, wordForFuzzy))
+				filtered.append(candidate);
+		}
+		all.swap(filtered);
 	}
 
 	if (all.isEmpty())
@@ -2634,6 +2791,8 @@ int CCodeEdit::GetMinFuzzyPrefixLength()
 
 void CCodeEdit::SetFuzzyMatchingEnabled(bool bEnabled)
 {
+	if (s_fuzzyMatchingEnabled == bEnabled)
+		return;
 	s_fuzzyMatchingEnabled = bEnabled;
 }
 
@@ -2683,10 +2842,10 @@ void CCodeEdit::ShowPopupTooltipForCurrentItem()
 		QString tooltipText = m_tooltipCallback(completionText);
 
 		if (!tooltipText.isEmpty()) {
-			// Calculate position - place tooltip below the selected item
-			QRect itemRect = m_pCompleter->popup()->visualRect(currentIndex);
-			QPoint globalPos = m_pCompleter->popup()->mapToGlobal(
-				QPoint(itemRect.right(), itemRect.bottom()));
+			QPoint globalPos = CompletionItemDelegate::ComputePopupTooltipPosition(
+				m_pCompleter->popup(),
+				currentIndex,
+				m_pCompleter->popup()->mapToGlobal(m_pCompleter->popup()->visualRect(currentIndex).bottomRight()));
 
 			// Show the tooltip
 			QToolTip::showText(globalPos, tooltipText, m_pCompleter->popup());
