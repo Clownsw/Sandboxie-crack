@@ -7,7 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 
 
-## [1.17.7 / 5.72.7] - 2026-06-??
+## [1.17.7 / 5.72.7] - 2026-06-07
 
 ### Added
 - added a Global Settings checkbox for `ForceBoxDocs` under Program Control > Force Process Options
@@ -23,6 +23,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - fixed Starting from version 1.17.4, using the 'Sandbox with Data Protection' type box causes PowerShell to wait indefinitely, while there is no such bug with other types. [#5408](https://github.com/sandboxie-plus/Sandboxie/issues/5408)
 - fixed Importing encrypted box no longer creates encrypted image in v1.17.6 [#5399](https://github.com/sandboxie-plus/Sandboxie/issues/5399)
 - fixed EditorSettings fuzzy matching not applied, showing few/no completion entries, and table cell highlighting not updating
+- fixed Error enumerating and deleting folder. [#5406](https://github.com/sandboxie-plus/Sandboxie/issues/5406)
+- fixed black box import/export when 'ProtectAdminOnly=y' (default) and SandMan does not run as admin
+
 
 
 
