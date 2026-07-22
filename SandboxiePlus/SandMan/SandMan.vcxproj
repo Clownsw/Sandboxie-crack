@@ -305,6 +305,7 @@
     <ClCompile Include="Helpers\WinAdmin.cpp" />
     <ClCompile Include="Helpers\WindowFromPointEx.cpp" />
     <ClCompile Include="Helpers\WinHelper.cpp" />
+    <ClCompile Include="Helpers\MiniDumpFilter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Models\MonitorModel.cpp" />
     <ClCompile Include="Models\NtObjectModel.cpp" />
@@ -551,12 +552,14 @@
     <ClInclude Include="Helpers\ReadDirectoryChanges.h" />
     <ClInclude Include="Helpers\ReadDirectoryChangesPrivate.h" />
     <ClInclude Include="Helpers\StorageInfo.h" />
+    <ClInclude Include="Windows\PendingChanges.h" />
     <ClInclude Include="Helpers\TabOrder.h" />
     <ClInclude Include="Helpers\ThreadSafeQueue.h" />
     <ClInclude Include="Helpers\WinAdmin.h" />
     <QtMoc Include="Models\MonitorModel.h" />
     <QtMoc Include="Models\NtObjectModel.h" />
     <ClInclude Include="Helpers\WinHelper.h" />
+    <ClInclude Include="Helpers\MiniDumpFilter.h" />
     <QtMoc Include="AddonManager.h" />
     <QtMoc Include="BoxTransfer.h" />
     <ClInclude Include="resource.h" />

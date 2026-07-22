@@ -79,7 +79,6 @@ static int CGetDisplayNumberForScreen(QScreen* screen)
 
 static constexpr int c_MonitorLabelBaseRole = Qt::UserRole + 100;
 static constexpr int c_MonitorLabelDefaultRole = Qt::UserRole + 101;
-
 static QString CBuildMonitorOptionLabel(const QString& baseLabel, bool isDefault, bool isFallback)
 {
 	QString label = baseLabel;
@@ -171,6 +170,13 @@ Qt::CheckState CSettingsWindow__Int2Chk(int state)
 	default:
 	case 2: return Qt::PartiallyChecked;
 	}
+}
+
+static bool CSettingsWindow__IsPendingHighlightEnabled(Qt::CheckState state)
+{
+	if (state == Qt::PartiallyChecked)
+		return theConf->GetInt("Options/ViewMode", 1) != 2;
+	return state == Qt::Checked;
 }
 
 quint32 g_FeatureFlags = 0;
@@ -596,6 +602,7 @@ CSettingsWindow::CSettingsWindow(QWidget* parent)
 	connect(ui.chkColorIcons, SIGNAL(stateChanged(int)), this, SLOT(OnChangeGUI()));
 	connect(ui.chkOverlayIcons, SIGNAL(stateChanged(int)), this, SLOT(OnChangeGUI()));
 	connect(ui.chkHideCore, SIGNAL(stateChanged(int)), this, SLOT(OnOptChanged()));
+	connect(ui.chkHighlightPendingChanges, SIGNAL(stateChanged(int)), this, SLOT(OnOptChanged()));
 	connect(ui.cmbGrouping, SIGNAL(currentIndexChanged(int)), this, SLOT(OnOptChanged()));
 	connect(ui.cmbLaunchMonitor, SIGNAL(currentIndexChanged(int)), this, SLOT(OnOptChanged()));
 	connect(ui.cmbNonMainLaunchMonitor, SIGNAL(currentIndexChanged(int)), this, SLOT(OnOptChanged()));
@@ -844,7 +851,6 @@ CSettingsWindow::CSettingsWindow(QWidget* parent)
 	QCompleter* completer = new QCompleter(this);
 	completer->setModelSorting(QCompleter::CaseInsensitivelySortedModel);
 	completer->setFilterMode(Qt::MatchContains);
-	m_pCodeEdit->SetCompleter(CCodeEdit::GetAutoCompletionMode() != CCodeEdit::AutoCompletionMode::Disabled ? completer : nullptr);
 
 	// Set completer based on mode
 	if (CCodeEdit::GetAutoCompletionMode() != CCodeEdit::AutoCompletionMode::Disabled) {
@@ -857,7 +863,13 @@ CSettingsWindow::CSettingsWindow(QWidget* parent)
 	m_pCodeEdit->SetCompletionFilterCallback([](const QString& keyName, const QString& inputKey) -> bool {
 		return CIniHighlighter::IsKeyHiddenFromPopup(keyName)
 			|| CIniHighlighter::ShouldHideCompletionCandidate(inputKey, keyName, 'p');
-		});
+	});
+	m_pCodeEdit->SetCompletionInsertionCallback([](const QString& candidateKey) -> QString {
+		return CIniHighlighter::GetCompletionInsertionText(candidateKey);
+	});
+	m_pCodeEdit->SetCompletionMatchTextCallback([](const QString& candidateKey) -> QString {
+		return CIniHighlighter::GetCompletionMatchText(candidateKey);
+	});
 	m_pCodeEdit->SetCaseCorrectionCallback([](const QString& wrongKey) -> QString {
 		return CIniHighlighter::FindCaseCorrectedKey(wrongKey);
 		});
@@ -866,7 +878,7 @@ CSettingsWindow::CSettingsWindow(QWidget* parent)
 			|| CIniHighlighter::ShouldHideCompletionCandidate(inputKey, keyName, 'c');
 		});
 	m_pCodeEdit->SetPopupTooltipCallback([](const QString& keyName) -> QString {
-		return CIniHighlighter::GetSettingTooltipForPopup(keyName);
+		return CIniHighlighter::GetSettingTooltipForPopup(keyName, QString(), 'g');
 		});
 	
 	// Update completion model with current settings if auto completion is enabled
@@ -1078,6 +1090,7 @@ bool CSettingsWindow::eventFilter(QObject *source, QEvent *event)
 		static bool m_bRightButtonPressed = false;
 
 		if (event->type() == QEvent::FocusIn && ui.txtCertificate->property("hidden").toBool())	{
+			QSignalBlocker Blocker(ui.txtCertificate);
 			ui.txtCertificate->setProperty("hidden", false);
 			ui.txtCertificate->setPlainText(g_Certificate);
 			ui.txtCertificate->setProperty("modified", false);
@@ -1087,6 +1100,7 @@ bool CSettingsWindow::eventFilter(QObject *source, QEvent *event)
 		}
 		else if (event->type() == QEvent::FocusOut && !ui.txtCertificate->property("hidden").toBool()) {
 			if (!ui.txtCertificate->property("modified").toBool() && !m_bRightButtonPressed) {
+				QSignalBlocker Blocker(ui.txtCertificate);
 				ui.txtCertificate->setProperty("hidden", true);
 				int Pos = g_Certificate.indexOf("HWID:");
 				if (Pos == -1)
@@ -1115,7 +1129,7 @@ bool CSettingsWindow::eventFilter(QObject *source, QEvent *event)
 		QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
 
 		// Find the text edit widget inside CCodeEdit
-		QTextEdit* pTextEdit = m_pCodeEdit->findChild<QTextEdit*>();
+		QTextEdit* pTextEdit = m_pCodeEdit->GetTextEdit();
 		if (pTextEdit) {
 			// Convert mouse position to text cursor position
 			QPoint pos = pTextEdit->viewport()->mapFrom(m_pCodeEdit, helpEvent->pos());
@@ -1129,10 +1143,26 @@ bool CSettingsWindow::eventFilter(QObject *source, QEvent *event)
 			if (CIniHighlighter::IsCommentLine(currentLine))
 				return false;
 
-			// Check if we're on the value side of the equals sign (after the =)
+			// Template values can identify specialized template metadata.
 			int equalsPos = currentLine.indexOf('=');
 			if (equalsPos >= 0 && (cursor.position() - block.position()) > equalsPos) {
-				// We're in the value part, don't show tooltip
+				const QString settingName = currentLine.left(equalsPos).trimmed();
+				const bool isTemplateValue = settingName.compare("Template", Qt::CaseInsensitive) == 0
+					|| settingName.compare("TemplateReject", Qt::CaseInsensitive) == 0;
+				if (!isTemplateValue || !CIniHighlighter::IsValidTooltipContext(currentLine.left(equalsPos + 1))) {
+					QToolTip::hideText();
+					return false;
+				}
+
+				if (CIniHighlighter::IsSettingsLoaded()) {
+					const QString settingValue = currentLine.mid(equalsPos + 1).trimmed();
+					QString tooltipText = CIniHighlighter::GetSettingTooltip(settingName, settingValue, 'g');
+					if (!tooltipText.isEmpty()) {
+						QToolTip::showText(helpEvent->globalPos(), tooltipText, pTextEdit);
+						return true;
+					}
+				}
+
 				QToolTip::hideText();
 				return false;
 			}
@@ -1167,7 +1197,9 @@ bool CSettingsWindow::eventFilter(QObject *source, QEvent *event)
 					QString settingName = currentLine.mid(startPos, endPos - startPos);
 					if (settingName.endsWith('='))
 						settingName.chop(1);
-					QString tooltipText = CIniHighlighter::GetSettingTooltip(settingName);
+					const int equalsIndex = currentLine.indexOf('=');
+					const QString settingValue = equalsIndex >= 0 ? currentLine.mid(equalsIndex + 1).trimmed() : QString();
+					QString tooltipText = CIniHighlighter::GetSettingTooltip(settingName, settingValue, 'g');
 					if (!tooltipText.isEmpty()) {
 						QToolTip::showText(helpEvent->globalPos(), tooltipText, pTextEdit);
 						return true;
@@ -1379,6 +1411,8 @@ void CSettingsWindow::LoadSettings()
 	ui.chkColorIcons->setChecked(theConf->GetBool("Options/ColorBoxIcons", false));
 	ui.chkOverlayIcons->setChecked(theConf->GetBool("Options/UseOverlayIcons", true));
 	ui.chkHideCore->setChecked(theConf->GetBool("Options/HideSbieProcesses", false));
+	ui.chkHighlightPendingChanges->setCheckState(CSettingsWindow__Int2Chk(theConf->GetInt("Options/HighlightPendingChanges", 2)));
+	m_PendingChanges.SetEnabled(CSettingsWindow__IsPendingHighlightEnabled(ui.chkHighlightPendingChanges->checkState()), m_pTree);
 	ui.cmbGrouping->setCurrentIndex(theConf->GetInt("Options/BoxGroupHandling", 0));
 	
 
@@ -1734,6 +1768,10 @@ void CSettingsWindow::LoadSettings()
 
 	//ui.chkUpdateTemplates->setEnabled(g_CertInfo.active && !g_CertInfo.expired);
 	ui.chkUpdateIssues->setEnabled(g_CertInfo.active && !g_CertInfo.expired);
+	m_PendingChanges.CaptureItemBaselines(m_pTree);
+	m_PendingChanges.CaptureCheckboxBaselines();
+	m_PendingChanges.CaptureRadioButtonBaselines();
+	m_PendingChanges.CaptureValueBaselines();
 }
 
 void CSettingsWindow::OnRamDiskChange()
@@ -1957,6 +1995,7 @@ void CSettingsWindow::SaveSettings()
 	theConf->SetValue("Options/ColorBoxIcons", ui.chkColorIcons->isChecked());
 	theConf->SetValue("Options/UseOverlayIcons", ui.chkOverlayIcons->isChecked());
 	theConf->SetValue("Options/HideSbieProcesses", ui.chkHideCore->isChecked());
+	theConf->SetValue("Options/HighlightPendingChanges", CSettingsWindow__Chk2Int(ui.chkHighlightPendingChanges->checkState()));
 	theConf->SetValue("Options/BoxGroupHandling", ui.cmbGrouping->currentIndex());
 
 	CIniHighlighter::ClearLanguageCache();
@@ -2370,6 +2409,14 @@ void CSettingsWindow::OnOptChanged()
 	item = model->item(3);
 	item->setFlags((ui.cmbSysTray->currentIndex() != 0) ? item->flags() & ~Qt::ItemIsEnabled : item->flags() | Qt::ItemIsEnabled);
 
+	if (sender() == ui.chkHighlightPendingChanges) {
+		m_PendingChanges.SetEnabled(CSettingsWindow__IsPendingHighlightEnabled(ui.chkHighlightPendingChanges->checkState()), m_pTree);
+		if (!m_HoldChange)
+			m_PendingChanges.UpdateAll(m_pTree);
+	}
+	else if (!m_HoldChange)
+		m_PendingChanges.Update(sender(), m_pTree);
+
 	if (m_HoldChange)
 		return;
 	ui.buttonBox->button(QDialogButtonBox::Apply)->setEnabled(true);
@@ -2408,6 +2455,7 @@ void CSettingsWindow::OnLoadAddon()
 		connect(pLabel, SIGNAL(linkActivated(const QString&)), theGUI, SLOT(OpenUrl(const QString&)));
 		ui.treeAddons->setItemWidget(pItem, 3, pLabel);
 	}
+	m_PendingChanges.CaptureItemBaselines(m_pTree, ui.treeAddons);
 }
 
 void CSettingsWindow::OnInstallAddon()
@@ -2531,6 +2579,7 @@ void CSettingsWindow::OnCompat()
 	}
 
 	m_CompatLoaded = 1;
+	m_PendingChanges.CaptureItemBaselines(m_pTree, ui.treeCompat);
 	if(bNew)
 		OnCompatChanged();
 
@@ -2800,6 +2849,8 @@ void CSettingsWindow::LoadTemplates()
 		pItem->setText(0, Title);
 		ui.treeTemplates->addTopLevelItem(pItem);
 	}
+
+	m_PendingChanges.CaptureItemBaselines(m_pTree, ui.treeTemplates);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2852,10 +2903,11 @@ void CSettingsWindow::OnIniValidationToggled(int state)
 	}
 
 	// Attach new highlighter to the code editor's document
-	QTextEdit* pTextEdit = m_pCodeEdit->findChild<QTextEdit*>();
+	QTextEdit* pTextEdit = m_pCodeEdit->GetTextEdit();
 	if (pTextEdit) {
 		m_pIniHighlighter = new CIniHighlighter(theGUI->m_DarkTheme, pTextEdit->document(), m_IniValidationEnabled);
 		m_pIniHighlighter->rehighlight();
+		UpdateAutoCompletion();
 	}
 
 	m_HoldChange = false;
@@ -3122,6 +3174,8 @@ void CSettingsWindow::InitSupport()
 	connect(ui.lblInsiderInfo, SIGNAL(linkActivated(const QString&)), theGUI, SLOT(OpenUrl(const QString&)));
 
 	m_CertChanged = false;
+	m_PendingChanges.ExcludeValue(ui.txtCertificate);
+	m_PendingChanges.ExcludeValue(ui.txtSerial);
 	connect(ui.txtCertificate, SIGNAL(textChanged()), this, SLOT(CertChanged()));
 	ui.txtCertificate->installEventFilter(this);
 	connect(ui.txtSerial, SIGNAL(textChanged(const QString&)), this, SLOT(KeyChanged()));
@@ -3215,7 +3269,9 @@ void CSettingsWindow::UpdateCert()
 		int datePos = truncatedCert.indexOf("DATE:");
 		if (namePos != -1 && datePos != -1 && datePos > namePos)
 			truncatedCert = truncatedCert.mid(0, namePos + 5) + " ...\n" + truncatedCert.mid(datePos);
+		QSignalBlocker Blocker(ui.txtCertificate);
 		ui.txtCertificate->setPlainText(truncatedCert);
+		ui.txtCertificate->setProperty("modified", false);
 		//ui.lblSupport->setVisible(false);
 
 		QString ReNewUrl = "https://sandboxie-plus.com/go.php?to=sbie-renew-cert";

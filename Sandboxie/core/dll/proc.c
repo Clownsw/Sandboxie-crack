@@ -1678,6 +1678,12 @@ finish:
         hook NtQueryInformationProcess if env var SBIE_OVERRIDE_PARENT_PID exists
     }*/
 
+    {
+        WCHAR msg[1024];
+        Sbie_snwprintf(msg, 1024, L"CreateProcess: %s (%s); err=%d", lpApplicationName ? lpApplicationName : L"[noName]", lpCommandLine ? lpCommandLine : L"[noCmd]", ok ? 0 : err);
+        SbieApi_MonitorPutMsg(MONITOR_OTHER | MONITOR_TRACE, msg);
+    }
+
     //
     // free work areas and return
     //
@@ -1699,12 +1705,6 @@ finish:
     if (TlsData->proc_command_line) {
         Dll_Free(TlsData->proc_command_line);
         TlsData->proc_command_line = NULL;
-    }
-
-    {
-        WCHAR msg[1024];
-        Sbie_snwprintf(msg, 1024, L"CreateProcess: %s (%s); err=%d", lpApplicationName ? lpApplicationName : L"[noName]", lpCommandLine ? lpCommandLine : L"[noCmd]", ok ? 0 : err);
-        SbieApi_MonitorPutMsg(MONITOR_OTHER | MONITOR_TRACE, msg);
     }
 
     SetLastError(err);
@@ -2785,7 +2785,7 @@ _FX BOOLEAN Proc_IsSoftwareUpdateW(const WCHAR *path)
     //
     //    for (WCHAR** MatchDir = MatchDirs; (*MatchDir)[0] != L'\0'; MatchDir++) {
     //
-    //        if (wcsstr(path2, *MatchDir)) {
+    //        if (wcsistr(path2, *MatchDir)) {
     //
     //            IsUpdate = TRUE;
     //            break;
