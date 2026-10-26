@@ -443,6 +443,7 @@ COptionsWindow::COptionsWindow(const QSharedPointer<CSbieIni>& pBox, const QStri
 	// Create initial highlighter and editor
 	m_pIniHighlighter = new CIniHighlighter(theGUI->m_DarkTheme, nullptr, m_IniValidationEnabled);
 	m_pCodeEdit = new CCodeEdit(m_pIniHighlighter);
+	m_pCodeEdit->SetLineNumbersVisible(theConf->GetBool("Options/ShowIniLineNumbers", true));
 	m_pCodeEdit->installEventFilter(this);
 	ui.txtIniSection->parentWidget()->layout()->replaceWidget(ui.txtIniSection, m_pCodeEdit);
 	delete ui.txtIniSection;
@@ -1304,6 +1305,9 @@ bool COptionsWindow::apply()
 		return false;
 	}
 
+	if (!ui.btnEditIni->isEnabled() && !CIniHighlighter::ValidateIniComments(m_pCodeEdit->GetCode(), this))
+		return false;
+
 	CloseINetEdit();
 	CloseNetFwEdit();
 	CloseAccessEdit();
@@ -1311,8 +1315,10 @@ bool COptionsWindow::apply()
 	CloseCopyEdit();
     CloseNetProxyEdit();
 
-	if (!ui.btnEditIni->isEnabled())
-		SaveIniSection();
+	if (!ui.btnEditIni->isEnabled()) {
+		if (!SaveIniSection())
+			return false;
+	}
 	else
 	{
 		if (m_GeneralChanged) {
@@ -1652,8 +1658,8 @@ void COptionsWindow::OnEditorSettings()
 		// - ValidateIniKeys (ui.chkValidateIniKeys)
 		// - EnableIniTooltips (ui.chkEnableTooltips)
 		// - EnableAutoCompletion (ui.chkEnableAutoCompletion)
-		// The other 4 settings (EnablePopupTooltips, EnableFuzzyMatching, AutoCompletionConsent,
-		// ShowFutureSettings)
+		// The other 5 settings (EnablePopupTooltips, EnableFuzzyMatching, AutoCompletionConsent,
+		// ShowFutureSettings, ShowIniLineNumbers)
 		// are managed by EditorSettings but don't have corresponding UI in OptionsWindow
 		
 		// Block signals while updating checkboxes to prevent toggle handlers from being called prematurely
@@ -1706,6 +1712,7 @@ void COptionsWindow::OnEditorSettings()
 		// These are managed via EditorSettings only
 		bool fuzzyEnabled = theConf->GetBool("Options/EnableFuzzyMatching", false);
 		m_pCodeEdit->SetFuzzyMatchingEnabled(fuzzyEnabled);
+		m_pCodeEdit->SetLineNumbersVisible(theConf->GetBool("Options/ShowIniLineNumbers", true));
 		
 		// Always update autocompletion list regardless of reset status
 		UpdateAutoCompletion();
@@ -1714,7 +1721,8 @@ void COptionsWindow::OnEditorSettings()
 
 void COptionsWindow::OnSaveIni()
 {
-	SaveIniSection();
+	if (!SaveIniSection())
+		return;
 	SetIniEdit(false);
 }
 
@@ -1754,8 +1762,12 @@ void COptionsWindow::LoadIniSection()
 	m_HoldChange = false;
 }
 
-void COptionsWindow::SaveIniSection()
+bool COptionsWindow::SaveIniSection()
 {
+	const QString Section = m_pCodeEdit->GetCode();
+	if (!CIniHighlighter::ValidateIniComments(Section, this))
+		return false;
+
 	m_ConfigDirty = true;
 
 	/*m_pBox->SetRefreshOnChange(false);
@@ -1792,9 +1804,10 @@ void COptionsWindow::SaveIniSection()
 	m_pBox->CommitIniChanges();*/
 
 	//m_pBox->GetAPI()->SbieIniSet(m_pBox->GetName(), "", ui.txtIniSection->toPlainText());
-	m_pBox->SbieIniSet(m_pBox->GetName(), "", m_pCodeEdit->GetCode());
+	m_pBox->SbieIniSet(m_pBox->GetName(), "", Section);
 
 	//LoadIniSection();
+	return true;
 }
 
 #include "OptionsAccess.cpp"

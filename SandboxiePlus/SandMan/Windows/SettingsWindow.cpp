@@ -837,6 +837,7 @@ CSettingsWindow::CSettingsWindow(QWidget* parent)
 	// Create initial highlighter and editor
 	m_pIniHighlighter = new CIniHighlighter(theGUI->m_DarkTheme, nullptr, m_IniValidationEnabled);
 	m_pCodeEdit = new CCodeEdit(m_pIniHighlighter);
+	m_pCodeEdit->SetLineNumbersVisible(theConf->GetBool("Options/ShowIniLineNumbers", true));
 	m_pCodeEdit->installEventFilter(this);
 	ui.txtIniSection->parentWidget()->layout()->replaceWidget(ui.txtIniSection, m_pCodeEdit);
 	delete ui.txtIniSection;
@@ -2387,20 +2388,22 @@ void CSettingsWindow::SaveSettings()
 }
 
 
-void CSettingsWindow::apply()
+bool CSettingsWindow::apply()
 {
-	if (!ui.btnEditIni->isEnabled())
-		SaveIniSection();
+	if (!ui.btnEditIni->isEnabled()) {
+		if (!SaveIniSection())
+			return false;
+	}
 	else
 		SaveSettings();
 	LoadSettings();
+	return true;
 }
 
 void CSettingsWindow::ok()
 {
-	apply();
-
-	this->close();
+	if (apply())
+		this->close();
 }
 
 void CSettingsWindow::reject()
@@ -2981,7 +2984,8 @@ void CSettingsWindow::OnAutoCompletionToggled(int state)
 
 void CSettingsWindow::OnSaveIni()
 {
-	SaveIniSection();
+	if (!SaveIniSection())
+		return;
 	SetIniEdit(false);
 	LoadSettings();
 }
@@ -3016,13 +3020,18 @@ void CSettingsWindow::LoadIniSection()
 	m_HoldChange = false;
 }
 
-void CSettingsWindow::SaveIniSection()
+bool CSettingsWindow::SaveIniSection()
 {
+	const QString Section = m_pCodeEdit->GetCode();
+	if (!CIniHighlighter::ValidateIniComments(Section, this))
+		return false;
+
 	if(theAPI->IsConnected())
 		//theAPI->SbieIniSet("GlobalSettings", "", ui.txtIniSection->toPlainText());
-		theAPI->SbieIniSet("GlobalSettings", "", m_pCodeEdit->GetCode());
+		theAPI->SbieIniSet("GlobalSettings", "", Section);
 
 	//LoadIniSection();
+	return true;
 }
 
 QVariantMap GetRunEntry(const QString& sEntry)
@@ -3774,8 +3783,8 @@ void CSettingsWindow::OnEditorSettings()
 		// - ValidateIniKeys (ui.chkValidateIniKeys)
 		// - EnableIniTooltips (ui.chkEnableTooltips)
 		// - EnableAutoCompletion (ui.chkEnableAutoCompletion)
-		// The other 4 settings (EnablePopupTooltips, EnableFuzzyMatching, AutoCompletionConsent,
-		// ShowFutureSettings)
+		// The other 5 settings (EnablePopupTooltips, EnableFuzzyMatching, AutoCompletionConsent,
+		// ShowFutureSettings, ShowIniLineNumbers)
 		// are managed by EditorSettings but don't have corresponding UI in SettingsWindow
 		
 		// Block signals while updating checkboxes to prevent toggle handlers from being called prematurely
@@ -3828,6 +3837,7 @@ void CSettingsWindow::OnEditorSettings()
 		// These are managed via EditorSettings only
 		bool fuzzyEnabled = theConf->GetBool("Options/EnableFuzzyMatching", false);
 		m_pCodeEdit->SetFuzzyMatchingEnabled(fuzzyEnabled);
+		m_pCodeEdit->SetLineNumbersVisible(theConf->GetBool("Options/ShowIniLineNumbers", true));
 		
 		// Always update autocompletion list regardless of reset status
 		UpdateAutoCompletion();
