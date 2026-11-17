@@ -4,5 +4,5 @@ DATE: 01.04.2099  //非必需
 TYPE: CONTRIBUTOR  //或PERSONAL-HUGE
 SOFTWARE: Sandboxie-Plus
 UPDATEKEY: 123456789  //非必需
-SIGNATURE: www.52pojie.cn  //任意
+SIGNATURE: d3d3LjUycG9qaWUuY24=  //任意
 ```
