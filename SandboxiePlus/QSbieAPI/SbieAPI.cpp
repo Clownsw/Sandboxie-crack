@@ -274,12 +274,22 @@ std::wstring GetWindowTextTimeout(HWND hWnd, UINT timeout)
 	if (SendMessageTimeoutW(hWnd, WM_GETTEXTLENGTH, 0, 0, SMTO_ABORTIFHUNG, timeout, &length) == 0)
 		return L""; 
 	if (length == 0)
-		return L""; 
+		return L"";
+	// WM_GETTEXTLENGTH is answered by foreign windows and may return garbage (e.g. a huge or "negative" value),
+	// allocating length + 1 then throws std::bad_alloc through the EnumWindows callback and kills SandMan.
+	// We only need the title, so cap it.
+	const DWORD_PTR maxLength = 0x1000;
+	if (length > maxLength)
+		length = maxLength;
 
 	std::vector<wchar_t> buffer(length + 1);
-	if (SendMessageTimeoutW(hWnd, WM_GETTEXT, length + 1, reinterpret_cast<LPARAM>(buffer.data()), SMTO_ABORTIFHUNG, timeout, &length) == 0)
-		return L""; 
-	return std::wstring(buffer.data(), length); 
+	DWORD_PTR copied = 0;
+	if (SendMessageTimeoutW(hWnd, WM_GETTEXT, length + 1, reinterpret_cast<LPARAM>(buffer.data()), SMTO_ABORTIFHUNG, timeout, &copied) == 0)
+		return L"";
+	if (copied > length)
+		copied = length;
+	buffer[length] = L'\0';
+	return std::wstring(buffer.data(), copied);
 }
 
 BOOL CALLBACK CSbiePlusAPI__WindowEnum(HWND hwnd, LPARAM lParam)
@@ -413,8 +423,16 @@ SB_STATUS CSbieAPI::Disconnect()
 		m->SbieMsgDll = NULL;
 	}
 
-	m_SandBoxes.clear();
-	m_BoxedProxesses.clear();
+	{
+		QMap<QString, CSandBoxPtr> OldSandBoxes;
+		QMap<quint32, CBoxedProcessPtr> OldProcesses;
+		{
+			QWriteLocker Lock(&m_BoxesLock);
+			OldSandBoxes.swap(m_SandBoxes);
+			OldProcesses.swap(m_BoxedProxesses);
+		}
+		// the old objects are released here, outside of the lock
+	}
 	m->ProcessListInitialized = false;
 	m_bBoxesDirty = true;
 
@@ -1194,7 +1212,10 @@ SB_STATUS CSbieAPI::ReloadBoxes(bool bForceUpdate)
 		if (!pBox)
 		{
 			pBox = CSandBoxPtr(NewSandBox(BoxName, this));
-			m_SandBoxes.insert(BoxName.toLower(), pBox);
+			{
+				QWriteLocker Lock(&m_BoxesLock);
+				m_SandBoxes.insert(BoxName.toLower(), pBox);
+			}
 			emit BoxAdded(pBox);
 		}
 		UpdateBoxPaths(pBox.data());
@@ -1205,7 +1226,19 @@ SB_STATUS CSbieAPI::ReloadBoxes(bool bForceUpdate)
 	}
 
 	foreach(const QString & BoxName, OldSandBoxes.keys()) {
-		CSandBoxPtr pBox = m_SandBoxes.take(BoxName);
+		CSandBoxPtr pBox;
+		{
+			QWriteLocker Lock(&m_BoxesLock);
+			pBox = m_SandBoxes.take(BoxName);
+			// the processes of a removed box hold a raw pointer to it (CBoxedProcess::m_pBox),
+			// they must not outlive it in the global process map, else a later lookup by PID
+			// (e.g. OnProcessBoxed, GetProcessById) would hand out a process with a dangling box
+			for (auto I = pBox->m_ProcessList.begin(); I != pBox->m_ProcessList.end(); ++I) {
+				auto J = m_BoxedProxesses.find(I.key());
+				if (J != m_BoxedProxesses.end() && J.value() == I.value())
+					m_BoxedProxesses.erase(J);
+			}
+		}
 		pBox->SetBoxPaths(QString(), QString(), QString());
 		emit BoxRemoved(pBox);
 	}
@@ -1474,7 +1507,9 @@ SB_STATUS CSbieAPI::CreateBox(const QString& BoxName, bool bReLoad)
 
 	if (bReLoad) {
 		ReloadConfig();
-		ReloadBoxes();
+		// force: if the driver reload failed m_bBoxesDirty stays false and a plain ReloadBoxes()
+		// would skip the update, leaving the just created box missing from m_SandBoxes
+		ReloadBoxes(true);
 	}
 	return Status;
 }
@@ -1546,7 +1581,10 @@ SB_STATUS CSbieAPI::UpdateProcesses(int iKeep, bool bAllSessions)
 
 			pProcess->m_pBox = pBox.data();
 			pBox->m_ProcessList.insert(ProcessId, pProcess);
-			m_BoxedProxesses.insert(ProcessId, pProcess);
+			{
+				QWriteLocker Lock(&m_BoxesLock);
+				m_BoxedProxesses.insert(ProcessId, pProcess);
+			}
 			pBox->m_ActiveProcessDirty = true;
 
 			pProcess->InitProcessInfo();
@@ -1563,7 +1601,10 @@ SB_STATUS CSbieAPI::UpdateProcesses(int iKeep, bool bAllSessions)
 		}
 		else if (iKeep != -1 && pProcess->IsTerminated(iKeep)) {
 			pProcess->m_pBox->m_ProcessList.remove(pProcess->m_ProcessId);
-			m_BoxedProxesses.remove(pProcess->m_ProcessId);
+			{
+				QWriteLocker Lock(&m_BoxesLock);
+				m_BoxedProxesses.remove(pProcess->m_ProcessId);
+			}
 		}
 	}
 
@@ -1732,7 +1773,7 @@ SB_STATUS CSbieAPI::GetProcessInfo(quint32 ProcessId, quint32* pParentId, quint3
 
 CSandBoxPtr CSbieAPI::GetBoxByProcessId(quint32 ProcessId) const
 {
-	CBoxedProcessPtr pProcess = m_BoxedProxesses.value(ProcessId);
+	CBoxedProcessPtr pProcess = GetProcessById(ProcessId);
 	if (!pProcess || pProcess->IsTerminated())
 		return CSandBoxPtr();
 	return GetBoxByName(pProcess->GetBoxName());
@@ -1740,6 +1781,7 @@ CSandBoxPtr CSbieAPI::GetBoxByProcessId(quint32 ProcessId) const
 
 CBoxedProcessPtr CSbieAPI::GetProcessById(quint32 ProcessId) const
 {
+	QReadLocker Lock(&m_BoxesLock);
 	return m_BoxedProxesses.value(ProcessId);
 }
 
@@ -2619,6 +2661,29 @@ bool CSbieAPI::GetLog()
 CBoxedProcessPtr CSbieAPI::OnProcessBoxed(quint32 ProcessId, const QString& Path, const QString& Box, quint32 ParentId, const QString& CmdLine)
 {
 	CBoxedProcessPtr pProcess = m_BoxedProxesses.value(ProcessId);
+	if (pProcess)
+	{
+		// the cached entry may be stale: a terminated process whose PID got reused,
+		// or a process whose box is no longer listed (its m_pBox would be dangling)
+		CSandBoxPtr pOldBox;
+		foreach(const CSandBoxPtr& pCurBox, m_SandBoxes) {
+			if (pCurBox.data() == pProcess->m_pBox) {
+				pOldBox = pCurBox;
+				break;
+			}
+		}
+		if (!pOldBox || pProcess->IsTerminated()) {
+			if (pOldBox && pOldBox->m_ProcessList.value(ProcessId) == pProcess) {
+				pOldBox->m_ProcessList.remove(ProcessId);
+				pOldBox->m_ActiveProcessDirty = true;
+			}
+			{
+				QWriteLocker Lock(&m_BoxesLock);
+				m_BoxedProxesses.remove(ProcessId);
+			}
+			pProcess.clear();
+		}
+	}
 	if (!pProcess)
 	{
 		CSandBoxPtr pBox = GetBoxByName(Box);
@@ -2634,7 +2699,10 @@ CBoxedProcessPtr CSbieAPI::OnProcessBoxed(quint32 ProcessId, const QString& Path
 
 		pProcess = CBoxedProcessPtr(NewBoxedProcess(ProcessId, pBox.data()));
 		pBox->m_ProcessList.insert(ProcessId, pProcess);
-		m_BoxedProxesses.insert(ProcessId, pProcess);
+		{
+			QWriteLocker Lock(&m_BoxesLock);
+			m_BoxedProxesses.insert(ProcessId, pProcess);
+		}
 		pBox->m_ActiveProcessDirty = true;
 
 		UpdateProcessInfo(pProcess);

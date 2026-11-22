@@ -57,6 +57,7 @@ CSbiePlusAPI* theAPI = NULL;
 
 #include <wtypes.h>
 #include <QAbstractNativeEventFilter>
+#include <QWindow>
 #include <dbt.h>
 
 class CNativeEventFilter : public QAbstractNativeEventFilter
@@ -104,6 +105,20 @@ public:
 			{
 				if (theGUI && theConf->GetInt("Options/UseDarkTheme", 2) == 2)
 					theGUI->UpdateTheme();
+			}
+			else if (msg->message == WM_ACTIVATE && LOWORD(msg->wParam) != WA_INACTIVE)
+			{
+				// Qt 6.8 qwindows: activating a window that is blocked by a modal one calls
+				// QWindowsWindow::windowsWindowOf(QGuiApplication::modalWindow())->alertWindow()
+				// without a null check, so it crashes when the current modal window has no
+				// platform window (yet / any more). Qt would only call DefWindowProc for a
+				// blocked window, so do just that and keep the message away from it.
+				QWindow* pModal = QGuiApplication::modalWindow();
+				if (pModal && !pModal->handle()) {
+					if (result)
+						*result = DefWindowProcW(msg->hwnd, msg->message, msg->wParam, msg->lParam);
+					return true;
+				}
 			}
 			else if (msg->message == WM_SHOWWINDOW && msg->wParam)
 			{
@@ -660,6 +675,12 @@ CSandMan::~CSandMan()
 	StoreState();
 
 	CBoxEngine::StopAll();
+
+	// A Box Assistant still open owns a CWizardEngine whose shadow boxes must be
+	// discarded through theAPI; as our child it would only be destroyed after
+	// theAPI is gone (QObject children are deleted after this body runs).
+	foreach(CBoxAssistant* pWizard, findChildren<CBoxAssistant*>(Qt::FindDirectChildrenOnly))
+		delete pWizard;
 
 	theAPI = NULL;
 
@@ -3119,6 +3140,9 @@ void CSandMan::OnStatusChanged()
 
 void CSandMan::CheckCompat(QObject* receiver, const char* member)
 {
+	++m_CompatChecks;
+	emit CompatCheckChanged();
+
 	QElapsedTimer* timer = new QElapsedTimer();
 	timer->start();
 
@@ -3126,7 +3150,6 @@ void CSandMan::CheckCompat(QObject* receiver, const char* member)
 		QString Script = theGUI->GetScripts()->GetScript("AppCompatibility");
 		if (!Script.isEmpty()) {
 			CBoxEngine* pEngine = new CBoxEngine(this);
-			pEngine->RunScript(Script, "AppCompatibility.js"); // note: script runs asynchronously
 			QPointer<QObject> pObj = receiver; // QPointer tracks lifetime of receiver
 			connect(pEngine, &CBoxEngine::finished, this, [pEngine, this, timer, pObj, member]() {
 
@@ -3135,9 +3158,12 @@ void CSandMan::CheckCompat(QObject* receiver, const char* member)
 				qDebug() << "Compatibility Check took" << timer->elapsed() << "ms";
 				delete timer;
 				pEngine->deleteLater(); // script done
+				--m_CompatChecks;
+				emit CompatCheckChanged();
 
 				if (pObj) QMetaObject::invokeMethod(pObj, member);
 			});
+			pEngine->RunScript(Script, "AppCompatibility.js"); // note: script runs asynchronously
 			return;
 		}
 	}
@@ -3146,8 +3172,10 @@ void CSandMan::CheckCompat(QObject* receiver, const char* member)
 
 	qDebug() << "Template Check took" << timer->elapsed() << "ms";
 	delete timer;
+	--m_CompatChecks;
+	emit CompatCheckChanged();
 
-	QMetaObject::invokeMethod(receiver, member);
+	if (receiver) QMetaObject::invokeMethod(receiver, member);
 }
 
 void CSandMan::OpenCompat()
@@ -3784,6 +3812,12 @@ void CSandMan::OnFlushMessageLog()
 		if (ProcessedCount >= MinMessagesPerFlush && FlushTimer.nsecsElapsed() >= MaxFlushTimeNs)
 			break;
 	}
+
+	// keep the view bounded like m_MessageLog, every entry may carry a rich text QLabel
+	// (with its own QTextDocument), an unbounded view eventually runs out of memory
+	int Excess = pTree->topLevelItemCount() - m_MessageLogLimit;
+	while (Excess-- > 0)
+		delete pTree->takeTopLevelItem(0);
 
 	pTree->setUpdatesEnabled(UpdatesEnabled);
 	if (ScrollToBottom)
